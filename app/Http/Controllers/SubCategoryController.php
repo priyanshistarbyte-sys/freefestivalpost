@@ -166,8 +166,6 @@ class SubCategoryController extends Controller
      */
     public function update(Request $request, SubCategory $subCategory)
     {
-        
-
         // Validation
         $validator = Validator::make($request->all(), [
             'mtitle'  => ['required', 'string', 'max:255'],

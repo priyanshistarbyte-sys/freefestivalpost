@@ -80,6 +80,7 @@ class CategoryController extends Controller
         $category = new Category();
         $category->title = $request->title;
         $category->icon = $path_icon ?? '';
+        $category->sort = $request->sort ?? 0;
         $category->save();
 
         return redirect()->route('category.index')->with('success', 'Category created successfully.');
@@ -107,7 +108,6 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         
-
         $validator = Validator::make($request->all(), [
             'title'  => ['required', 'string', 'max:255'],
             'icon'   => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
@@ -121,7 +121,6 @@ class CategoryController extends Controller
         $data = [
             'title' => $request->title,
             'sort'      => $request->sort ?? 0,
-            'sub'       => $request->sub ?? 0,
         ];
         if ($request->hasFile('icon')) {
             // Delete old icon if exists

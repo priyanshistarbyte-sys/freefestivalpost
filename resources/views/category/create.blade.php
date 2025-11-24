@@ -21,6 +21,12 @@
                     </div>
                 </div>
             </div>
+            <div class="mb-3">
+                <div class="form-group">
+                    <label for="sort" class="form-label">Sort</label> 
+                    <input type="number" name="sort" id="sort" class="form-control" min="0"  value="0" placeholder="Enter Sort Order" required>
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal-footer">

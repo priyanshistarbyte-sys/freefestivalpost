@@ -13,8 +13,11 @@
                 <table class="table" id="plan-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
+                            <th>No</th>
+                            <th>Plan Name</th>
+                            <th>Title</th>
+                            <th>Discount</th>
+                            <th>Price</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -42,6 +45,12 @@
                         data: 'plan_name',
                         name: 'plan_name'
                     },
+                    {
+                        data: 'title',
+                        name: 'descriptionsItem.title'  // IMPORTANT!
+                    },
+                    { data: 'discount', name: 'discount' },
+                    { data: 'price_section', name: 'price_section', orderable: false, searchable: false },
                     {
                         data: 'status',
                         name: 'status',

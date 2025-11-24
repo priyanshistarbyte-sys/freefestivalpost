@@ -18,9 +18,62 @@ class SubscriptionPlanController extends Controller
     public function index(Request $request)
     {
          if ($request->ajax()) {
-            $query = SubscriptionPlan::orderBy('id', 'desc');
+            $query = SubscriptionPlan::with('descriptionsItem')->orderBy('id', 'desc');
             return DataTables::of($query)
                 ->addIndexColumn()
+                ->addColumn('title', function ($plan) {
+                    if (!$plan->descriptionsItem || $plan->descriptionsItem->count() == 0) {
+                        return '<div>No Titles</div>';
+                    }
+                    return $plan->descriptionsItem
+                        ->map(function ($item) {
+                            $icon = $item->sign == 1 
+                                ? '<i class="fa fa-check fa-2x text-success"></i>' 
+                                : '<i class="fa fa-times fa-2x text-primary"></i>';
+
+                            return '
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                                    '.$icon.'
+                                    <span>'.e($item->title).'</span>
+                                </div>
+                            ';
+                        })
+                        ->implode('');
+                })
+                ->filterColumn('title', function ($query, $keyword) {
+                    $query->whereHas('descriptionsItem', function ($q) use ($keyword) {
+                        $q->where('title', 'like', "%{$keyword}%");
+                    });
+                })
+
+                ->addColumn('discount', function ($plan) {
+                    return $plan->discount . '%';
+                })
+               ->addColumn('price_section', function ($plan) {
+                    $price = number_format($plan->price, 2);
+                    // if discount is 0 or discount_price = price → show only normal price
+                    if ($plan->discount == 0 || $plan->discount_price == $plan->price) {
+                        return '
+                            <span style="color: black; font-weight: 600;">
+                                ₹'.$price.'
+                            </span>
+                        ';
+                    }
+                    // discount applied → show strike + red price
+                    $discountPrice = number_format($plan->discount_price, 2);
+
+                    return '
+                        <div>
+                            <span style="text-decoration: line-through; color: black; font-weight: 600;">
+                                ₹'.$price.'
+                            </span>
+                            <br>
+                            <span style="color: red; font-weight: bold; font-size: 15px;">
+                                ₹'.$discountPrice.'
+                            </span>
+                        </div>
+                    ';
+                })
                 ->addColumn('status', function ($plan) {
                         $checked = $plan->status == 1 ? 'checked' : '';
                         return '
@@ -48,7 +101,7 @@ class SubscriptionPlanController extends Controller
 
                     return $buttons;
                 })
-                ->rawColumns(['status', 'actions'])
+                ->rawColumns(['title','price_section','status','actions'])
                 ->make(true);
         }
         return view('plan.index');
