@@ -53,7 +53,7 @@
                         <i class="fa fa-home"></i> <span>Dashboard</span>
                     </a>
                 </li>
-
+              
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropdown-toggle">
                         <i class="fa fa-tags"></i> <span>Category</span>
@@ -65,7 +65,7 @@
                         <li class="{{ request()->routeIs('home-category.*') ? 'active' : '' }}"><a href="{{ route('home-category.index') }}"><span>Home Category</span></a></li>
                     </ul>
                 </li>
-
+              
                 <li>
                     <a href="#">
                         <i class="fa fa-users"></i> <span>Users</span>
@@ -82,7 +82,16 @@
                         <i class="fa fa-paw"></i><span>Subscription Plan</span>
                     </a>
                 </li>
-
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle">
+                        <i class="fa fa-user-circle"></i> <span>Admin</span>
+                        <i class="fa fa-angle-right arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="{{ request()->routeIs('admin-user.*') ? 'active' : '' }}"><a href="{{ route('admin-user.index') }}"><span>Users</span></a></li>
+                        <li class="{{ request()->routeIs('roles.index') ? 'active' : '' }}"><a href="{{ route('roles.index') }}"><span>Roles</span></a></li>
+                    </ul>
+                </li>
                 <li>
                     <a href="#">
                         <i class="fa fa-cog"></i> <span>Settings</span>

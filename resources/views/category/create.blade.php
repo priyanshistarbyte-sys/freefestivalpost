@@ -33,4 +33,4 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
         <button class="btn btn-primary" type="submit">{{__('Submit')}}</button>
     </div>
-  </form>
+</form>

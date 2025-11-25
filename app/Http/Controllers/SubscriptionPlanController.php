@@ -86,13 +86,13 @@ class SubscriptionPlanController extends Controller
                     $buttons = '';
                     $editUrl = route('plan.edit', $plan->id);
                     $buttons .= '
-                             <a href="' . $editUrl . '" class="btn btn-sm btn-primary me-2">
+                             <a href="' . $editUrl . '" class="btn btn-sm">
                                 <i class="fa fa-edit me-2"></i> Edit
                              </a>
                             ';
                     $deleteUrl = route('plan.destroy', $plan->id);
                     $buttons .= '
-                            <button type="button" class="btn btn-sm btn-danger delete-btn"
+                            <button type="button" class="btn btn-sm delete-btn"
                                 data-url="' . $deleteUrl . '"
                                 title="Delete">
                                 <i class="fa fa-trash me-2"></i> Delete

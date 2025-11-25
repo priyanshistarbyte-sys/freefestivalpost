@@ -4,9 +4,11 @@
     <div class="page-header">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="card-title">All Category</h4>
-            <a href="#" class="btn btn-sm btn-success btn-icon action-btn" data-ajax-popup="true" data-size="md"
+            <a href="#" class="btn btn-primary" data-ajax-popup="true" data-size="md"
                 data-title="{{ __('Create Category') }}" data-url="{{ route('category.create') }}" data-bs-toggle="tooltip"
-                data-bs-original-title="{{ __('Create') }}">Add New </a>
+                data-bs-original-title="{{ __('Create') }}"><i class="fa fa-plus me-2"></i>Add</a>
+
+               
         </div>
     </div>
 

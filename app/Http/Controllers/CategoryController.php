@@ -30,19 +30,19 @@ class CategoryController extends Controller
                     $buttons = '';
                     $editUrl = route('category.edit', $category->id);
                     $buttons .= '
-                            <a href="#" class="btn btn-sm btn-primary me-2" 
+                            <a href="#" class="btn btn-sm" 
                             data-ajax-popup="true" data-size="md"
                             data-title="Edit Category" data-url="' . $editUrl . '"
                             data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                <i class="fa fa-edit me-2"></i>Edit
+                                <i class="fa fa-edit me-2"></i>
                             </a>
                             ';
                     $deleteUrl = route('category.destroy', $category->id);
                     $buttons .= '
-                            <button type="button" class="btn btn-sm btn-danger delete-btn"
+                            <button type="button" class="btn btn-sm delete-btn"
                                 data-url="' . $deleteUrl . '"
                                 title="Delete">
-                                <i class="fa fa-trash me-2"></i> Delete
+                                <i class="fa fa-trash me-2"></i>
                             </button>
                             ';
 

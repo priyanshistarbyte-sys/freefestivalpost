@@ -56,16 +56,16 @@ class SubCategoryController extends Controller
                     $buttons = '';
                     $editUrl = route('sub-category.edit', $subCategory->id);
                     $buttons .= '
-                             <a href="' . $editUrl . '" class="btn btn-sm btn-primary me-2">
-                                <i class="fa fa-edit me-2"></i> Edit
+                             <a href="' . $editUrl . '" class="btn btn-sm">
+                                <i class="fa fa-edit me-2"></i>
                              </a>
                             ';
                     $deleteUrl = route('sub-category.destroy', $subCategory->id);
                     $buttons .= '
-                            <button type="button" class="btn btn-sm btn-danger delete-btn"
+                            <button type="button" class="btn btn-sm delete-btn"
                                 data-url="' . $deleteUrl . '"
                                 title="Delete">
-                                <i class="fa fa-trash me-2"></i> Delete
+                                <i class="fa fa-trash me-2"></i> 
                             </button>
                             ';
 

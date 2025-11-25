@@ -4,7 +4,7 @@
     <div class="page-header">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="card-title">All Subscription Plan</h4>
-            <a href="{{ route('plan.create') }}" class="btn btn-success">Add New</a>
+            <a href="{{ route('plan.create') }}" class="btn btn-primary"><i class="fa fa-plus me-2"></i>Add</a>
         </div>
     </div>
     <div class="card">

@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeCategoryController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\SubscriptionPlanController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +26,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('sub-category', SubCategoryController::class);
     Route::get('/category/{cid}/subcategories', [SubCategoryController::class, 'getSubcategories'])->name('subcategories.Category');
     Route::post('/sub-category/status/update', [SubCategoryController::class, 'updateStatus'])->name('subcategory.updateStatus');
+
+     // Role
+     Route::resource('roles', RoleController::class);
+
+     // admin-user
+    Route::resource('admin-user', AdminController::class);
 
 
     // home-category
