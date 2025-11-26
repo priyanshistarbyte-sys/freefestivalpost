@@ -14,8 +14,45 @@ class UserController extends Controller
           /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+         if ($request->ajax()) {
+            $query = Admin::from('admin as a')
+            ->leftJoin('notification as n', 'a.id', '=', 'n.user_id')
+            ->where('a.role', '>', 0)
+            ->select('a.*', 'n.app_version')
+            ->groupBy('a.id')
+            ->get();
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->editColumn('created_at', function ($user) {
+                    return $user->created_at ? with(new \Carbon\Carbon($user->created_at))->format('d-m-Y') : '';
+                })
+                ->addColumn('actions', function ($user) {
+                    $buttons = '';
+                    $editUrl = route('user.edit', $user->id);
+                    $buttons .= '
+                            <a href="#" class="btn btn-sm" 
+                            data-ajax-popup="true" data-size="lg"
+                            data-title="Edit User" data-url="' . $editUrl . '"
+                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                <i class="fa fa-edit me-2"></i>
+                            </a>
+                            ';
+                    $deleteUrl = route('user.destroy', $user->id);
+                    $buttons .= '
+                            <button type="button" class="btn btn-sm  delete-btn"
+                                data-url="' . $deleteUrl . '"
+                                title="Delete">
+                                <i class="fa fa-trash me-2"></i>
+                            </button>
+                            ';
+
+                    return $buttons;
+                })
+                ->rawColumns(['created_at','actions'])
+                ->make(true);
+        }
         return view('users.index');
     }
 

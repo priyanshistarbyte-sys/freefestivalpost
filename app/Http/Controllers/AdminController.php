@@ -20,7 +20,7 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Admin::orderBy('id', 'desc');
+            $query = Admin::where('role', '!=' ,'0')->orderBy('id', 'desc');
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->editColumn('created_at', function ($user) {

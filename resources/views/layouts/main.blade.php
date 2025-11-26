@@ -75,6 +75,7 @@
                         <li class="{{ request()->routeIs('user.*') ? 'active' : '' }}"><a href="{{ route('user.index') }}"><span>Users List</span></a></li>
                     </ul>
                 </li>
+               
 
                 <li>
                     <a href="#">
