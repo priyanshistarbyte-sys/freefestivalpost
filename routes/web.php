@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeCategoryController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\SubscriptionPlanController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,6 +33,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
      // admin-user
     Route::resource('admin-user', AdminController::class);
+
+    // users
+    Route::resource('user', UserController::class);
 
 
     // home-category

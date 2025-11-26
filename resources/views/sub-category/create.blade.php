@@ -5,7 +5,6 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-
             <a href="{{ route('sub-category.index') }}" class="btn btn-secondary btn-sm float-end">Back to List</a>
         </div>
         <div class="card-body">

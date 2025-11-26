@@ -65,11 +65,15 @@
                         <li class="{{ request()->routeIs('home-category.*') ? 'active' : '' }}"><a href="{{ route('home-category.index') }}"><span>Home Category</span></a></li>
                     </ul>
                 </li>
-              
-                <li>
-                    <a href="#">
+                
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle">
                         <i class="fa fa-users"></i> <span>Users</span>
+                        <i class="fa fa-angle-right arrow"></i>
                     </a>
+                    <ul class="submenu">
+                        <li class="{{ request()->routeIs('user.*') ? 'active' : '' }}"><a href="{{ route('user.index') }}"><span>Users List</span></a></li>
+                    </ul>
                 </li>
 
                 <li>
