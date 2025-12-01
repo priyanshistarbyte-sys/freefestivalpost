@@ -16,14 +16,12 @@
                         <tr>
                             <th>Id</th>
                             <th>Reg. Date</th>
-                            <th>Version</th>
+                            {{-- <th>App Version</th> --}}
                             <th>Logo</th>
-                            <th>Name</th>
+                            <th>Business Name</th>
                             <th>Mobile</th>
-                            <th>IsPaid</th>
                             <th>Status</th>
                             <th>OTP</th>
-                            <th>Expiry</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -49,24 +47,16 @@
                         name: 'created_at'
                     },
                     {
-                        data: 'app_version',
-                        name: 'app_version'
+                        data: 'photo',
+                        name: 'photo'
                     },
                     {
-                        data: 'logo',
-                        name: 'logo'
-                    },
-                    {
-                        data: 'name',
-                        name: 'name'
+                        data: 'business_name',
+                        name: 'business_name'
                     },
                     {
                         data: 'mobile',
                         name: 'mobile'
-                    },
-                    {
-                        data: 'is_paid',
-                        name: 'is_paid'
                     },
                     {
                         data: 'status',
@@ -77,16 +67,36 @@
                         name: 'otp'
                     },
                     {
-                        data: 'otp_expiry',
-                        name: 'otp_expiry'
-                    }
-                    {
                         data: 'actions',
                         name: 'actions',
                         orderable: false,
                         searchable: false
                     }
                 ]
+            });
+        });
+        $(document).on('change', '.status-toggle', function () {
+            let status = $(this).is(':checked') ? 1 : 0;
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: "{{ route('admin.updateStatus') }}",
+                type: "POST",
+                data: {
+                    id: id,
+                    status: status,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success('Status updated successfully');
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function () {
+                    toastr.error('Something went wrong!');
+                }
             });
         });
     </script>

@@ -1,0 +1,425 @@
+/* Compact Layout - Remove Extra Spaces and Margins */
+
+/* Global Reset for Compact Layout */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and Container Adjustments */
+body {
+    line-height: 1.4;
+    font-size: 14px;
+}
+
+/* Content Area Compact */
+.content {
+    padding: 1rem !important;
+}
+
+.content-area {
+    padding: 1rem !important;
+}
+
+/* Card Compact Styles */
+.card {
+    margin-bottom: 1rem !important;
+    border-radius: 4px !important;
+}
+
+.card-header {
+    padding: 0.75rem 1rem !important;
+    background: #f8f9fa !important;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+.card-body {
+    padding: 1rem !important;
+}
+
+.card-title {
+    margin-bottom: 0.5rem !important;
+    font-size: 1.1rem !important;
+}
+
+/* Form Compact Styles */
+.form-group {
+    margin-bottom: 0.75rem !important;
+}
+
+.form-label {
+    margin-bottom: 0.25rem !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+
+.form-control {
+    padding: 0.375rem 0.5rem !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    border-radius: 4px !important;
+    margin-bottom: 0 !important;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.15rem rgba(52, 152, 219, 0.25) !important;
+}
+
+/* Select Dropdown Compact */
+select.form-control {
+    padding: 0.375rem 2rem 0.375rem 0.5rem !important;
+    background-size: 12px 10px !important;
+    background-position: right 0.5rem center !important;
+}
+
+/* Textarea Compact */
+textarea.form-control {
+    min-height: 80px !important;
+    padding: 0.375rem 0.5rem !important;
+}
+
+/* Input Group Compact */
+.input-group {
+    margin-bottom: 0 !important;
+}
+
+.input-group .form-control {
+    margin-bottom: 0 !important;
+}
+
+/* Button Compact Styles */
+.btn {
+    padding: 0.375rem 0.75rem !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    border-radius: 4px !important;
+    margin: 0.125rem !important;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 12px !important;
+}
+
+.btn-lg {
+    padding: 0.5rem 1rem !important;
+    font-size: 14px !important;
+}
+
+/* DataTable Compact Styles */
+.dataTables_wrapper {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.dataTables_length {
+    margin-bottom: 0.5rem !important;
+}
+
+.dataTables_length select {
+    padding: 0.25rem 0.5rem !important;
+    margin: 0 0.25rem !important;
+    font-size: 12px !important;
+}
+
+.dataTables_filter {
+    margin-bottom: 0.5rem !important;
+}
+
+.dataTables_filter input {
+    padding: 0.25rem 0.5rem !important;
+    margin-left: 0.25rem !important;
+    font-size: 12px !important;
+}
+
+.dataTables_info {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0 !important;
+    font-size: 12px !important;
+}
+
+.dataTables_paginate {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0 !important;
+}
+
+.dataTables_paginate .paginate_button {
+    padding: 0.25rem 0.5rem !important;
+    margin: 0 0.125rem !important;
+    font-size: 12px !important;
+}
+
+/* Table Compact Styles */
+.table {
+    margin-bottom: 0.5rem !important;
+    font-size: 13px !important;
+}
+
+.table thead th {
+    padding: 0.5rem !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    background-color: #f8f9fa !important;
+}
+
+.table tbody td {
+    padding: 0.5rem !important;
+    font-size: 13px !important;
+    border-bottom: 1px solid #f1f1f1 !important;
+    vertical-align: middle !important;
+}
+
+.table-responsive {
+    margin-bottom: 0.5rem !important;
+}
+
+/* Action Buttons in Tables */
+.table .btn {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 11px !important;
+    margin: 0.125rem !important;
+}
+
+/* Modal Compact Styles */
+.modal-header {
+    padding: 0.75rem 1rem !important;
+}
+
+.modal-body {
+    padding: 1rem !important;
+}
+
+.modal-footer {
+    padding: 0.75rem 1rem !important;
+}
+
+/* Alert Compact Styles */
+.alert {
+    padding: 0.5rem 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+    font-size: 13px !important;
+}
+
+/* Badge Compact Styles */
+.badge {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 11px !important;
+}
+
+/* Navigation Compact */
+.nav-tabs {
+    margin-bottom: 0.75rem !important;
+}
+
+.nav-tabs .nav-link {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 13px !important;
+}
+
+/* Breadcrumb Compact */
+.breadcrumb {
+    padding: 0.5rem 0 !important;
+    margin-bottom: 0.75rem !important;
+    font-size: 12px !important;
+}
+
+.breadcrumb-item {
+    font-size: 12px !important;
+}
+
+/* Header Compact */
+.header, .admin-header {
+    padding: 0.75rem 1.5rem !important;
+}
+
+.header-title, .page-title {
+    font-size: 1.25rem !important;
+    margin: 0 !important;
+}
+
+/* Sidebar Compact */
+.sidebar-menu li a {
+    padding: 0.75rem 1rem !important;
+    font-size: 13px !important;
+}
+
+.submenu li a {
+    padding: 0.5rem 1rem 0.5rem 2.5rem !important;
+    font-size: 12px !important;
+}
+
+/* File Input Compact */
+.file-input-label {
+    min-height: 80px !important;
+    padding: 1rem !important;
+}
+
+.file-input-icon {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.25rem !important;
+}
+
+.file-input-text {
+    font-size: 12px !important;
+}
+
+/* Stats Card Compact */
+.stats-card {
+    padding: 1rem !important;
+    margin-bottom: 1rem !important;
+}
+
+.stats-card .stats-number {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.25rem !important;
+}
+
+.stats-card .stats-label {
+    font-size: 12px !important;
+}
+
+/* Radio and Checkbox Compact */
+.radio-custom {
+    margin-right: 0.75rem !important;
+    margin-bottom: 0.25rem !important;
+}
+
+.radio-custom label {
+    font-size: 13px !important;
+    padding-left: 20px !important;
+}
+
+.radio-custom label:before {
+    width: 14px !important;
+    height: 14px !important;
+}
+
+.radio-custom input[type="radio"]:checked + label:after {
+    left: 3px !important;
+    top: 5px !important;
+    width: 6px !important;
+    height: 6px !important;
+}
+
+/* Switch styles moved to custom-switch-fix.css */
+
+/* Utility Classes for Compact Layout */
+.mb-compact {
+    margin-bottom: 0.5rem !important;
+}
+
+.mt-compact {
+    margin-top: 0.5rem !important;
+}
+
+.p-compact {
+    padding: 0.5rem !important;
+}
+
+.px-compact {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}
+
+.py-compact {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+}
+
+/* Remove Bootstrap Default Margins */
+.row {
+    margin-left: -0.5rem !important;
+    margin-right: -0.5rem !important;
+}
+
+.col, .col-1, .col-2, .col-3, .col-4, .col-5, .col-6,
+.col-7, .col-8, .col-9, .col-10, .col-11, .col-12,
+.col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6,
+.col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12,
+.col-md, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6,
+.col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12,
+.col-lg, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6,
+.col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12,
+.col-xl, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6,
+.col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}
+
+/* Container Compact */
+.container, .container-fluid {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+/* Remove Extra Spacing from Lists */
+ul, ol {
+    margin-bottom: 0.5rem !important;
+}
+
+li {
+    margin-bottom: 0.125rem !important;
+}
+
+/* Paragraph Compact */
+p {
+    margin-bottom: 0.5rem !important;
+}
+
+/* Heading Compact */
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.5rem !important;
+    margin-top: 0 !important;
+}
+
+h1 { font-size: 1.75rem !important; }
+h2 { font-size: 1.5rem !important; }
+h3 { font-size: 1.25rem !important; }
+h4 { font-size: 1.1rem !important; }
+h5 { font-size: 1rem !important; }
+h6 { font-size: 0.9rem !important; }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .content, .content-area {
+        padding: 0.75rem !important;
+    }
+    
+    .card-body {
+        padding: 0.75rem !important;
+    }
+    
+    .table thead th,
+    .table tbody td {
+        padding: 0.375rem !important;
+        font-size: 12px !important;
+    }
+    
+    .btn {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 12px !important;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .content, .content-area {
+        padding: 0.5rem !important;
+    }
+    
+    .card {
+        margin-bottom: 0.5rem !important;
+        box-shadow: none !important;
+    }
+    
+    .table {
+        font-size: 11px !important;
+    }
+    
+    .table thead th,
+    .table tbody td {
+        padding: 0.25rem !important;
+    }
+}

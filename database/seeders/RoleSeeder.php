@@ -9,8 +9,10 @@ class RoleSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = Role::firstOrCreate(['name' => 'Admin']);
-        $user  = Role::firstOrCreate(['name' => 'Sub Admin']);
+        $admin     = Role::firstOrCreate(['name' => 'Admin']);
+        $sub_admin = Role::firstOrCreate(['name' => 'Sub Admin']);
+        // $user      = Role::firstOrCreate(['name' => 'User']);
+
 
         $admin->syncPermissions([
             'role-manage',
@@ -31,7 +33,7 @@ class RoleSeeder extends Seeder
             'plan-delete',
         ]);
 
-        $user->syncPermissions([
+        $sub_admin->syncPermissions([
            'category-manage',
            'category-create',
            'category-edit',

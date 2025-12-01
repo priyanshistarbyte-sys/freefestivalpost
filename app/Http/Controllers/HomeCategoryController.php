@@ -25,6 +25,11 @@ class HomeCategoryController extends Controller
                 ->addColumn('category', function ($category) {
                     return $category->category ? $category->category->mtitle : '-';
                 })
+                ->filterColumn('category', function($query, $keyword) {
+                    $query->whereHas('category', function($q) use ($keyword) {
+                        $q->where('mtitle', 'like', "%{$keyword}%");
+                    });
+                })
                 ->addColumn('status', function ($category) {
                       $checked = $category->status == 1 ? 'checked' : '';
                         return '
@@ -81,7 +86,7 @@ class HomeCategoryController extends Controller
      */
     public function create()
     {
-        $categories = SubCategory::get();
+        $categories = SubCategory::where('status','1')->get();
         return view('home-category.create', compact('categories'));
     }
 

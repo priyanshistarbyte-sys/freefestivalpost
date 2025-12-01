@@ -19,6 +19,7 @@
                             <th>Discount</th>
                             <th>Price</th>
                             <th>Status</th>
+                            <th>Free/Paid</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -56,6 +57,10 @@
                         name: 'status',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'is_free',
+                        name: 'is_free'
                     },
                     {
                         data: 'actions',

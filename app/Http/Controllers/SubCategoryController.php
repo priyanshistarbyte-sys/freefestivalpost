@@ -34,7 +34,11 @@ class SubCategoryController extends Controller
                     $imagePath = $subCategory->image
                         ? asset('storage/' . ltrim($subCategory->image, '/'))
                         : asset('assets/images/defaultApp.png');
-                    return '<img src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="40" height="40">';
+                    return '
+                    <a class="image-popup-no-margins" href="' . $imagePath . '">
+						<img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">
+					</a>
+                    ';
                 })
                 ->addColumn('noti_banner', function ($subCategory) {
                     if ($subCategory->noti_banner) {

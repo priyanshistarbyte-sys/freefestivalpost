@@ -25,8 +25,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-
-       
+    
         // Instead of authenticating, send OTP
         $otpController = new OtpController();
         return $otpController->sendOtp($request);

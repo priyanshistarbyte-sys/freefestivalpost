@@ -23,6 +23,7 @@ return new class extends Migration
                 $table->float('discount')->default(0.0);
                 $table->integer('status');
                 $table->integer('sequence');
+                $table->integer('is_free')->default(0); // 1 for paid, 0 for free
                 $table->timestamps();
             });
         }

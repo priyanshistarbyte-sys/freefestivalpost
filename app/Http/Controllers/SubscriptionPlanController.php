@@ -17,7 +17,7 @@ class SubscriptionPlanController extends Controller
      */
     public function index(Request $request)
     {
-         if ($request->ajax()) {
+        if ($request->ajax()) {
             $query = SubscriptionPlan::with('descriptionsItem')->orderBy('id', 'desc');
             return DataTables::of($query)
                 ->addIndexColumn()
@@ -45,7 +45,9 @@ class SubscriptionPlanController extends Controller
                         $q->where('title', 'like', "%{$keyword}%");
                     });
                 })
-
+                ->editcolumn('is_free', function ($plan) {
+                    return $plan->is_free == '0' ? 'Free' : 'Paid';
+                })
                 ->addColumn('discount', function ($plan) {
                     return $plan->discount . '%';
                 })
@@ -87,7 +89,7 @@ class SubscriptionPlanController extends Controller
                     $editUrl = route('plan.edit', $plan->id);
                     $buttons .= '
                              <a href="' . $editUrl . '" class="btn btn-sm">
-                                <i class="fa fa-edit me-2"></i> Edit
+                                <i class="fa fa-edit me-2"></i> 
                              </a>
                             ';
                     $deleteUrl = route('plan.destroy', $plan->id);
@@ -95,13 +97,13 @@ class SubscriptionPlanController extends Controller
                             <button type="button" class="btn btn-sm delete-btn"
                                 data-url="' . $deleteUrl . '"
                                 title="Delete">
-                                <i class="fa fa-trash me-2"></i> Delete
+                                <i class="fa fa-trash me-2"></i> 
                             </button>
                             ';
 
                     return $buttons;
                 })
-                ->rawColumns(['title','price_section','status','actions'])
+                ->rawColumns(['title','is_free','price_section','status','actions'])
                 ->make(true);
         }
         return view('plan.index');
@@ -146,6 +148,7 @@ class SubscriptionPlanController extends Controller
         $plan->discount       = $request->discount ?? '0';
         $plan->status         = $request->status;
         $plan->sequence       = $request->sequence ?? '0';
+        $plan->is_free        = $request->is_free;
         $plan->save();
 
             // Description Items
@@ -208,6 +211,7 @@ class SubscriptionPlanController extends Controller
         $subscriptionPlan->discount       = $request->discount ?? '0';
         $subscriptionPlan->status         = $request->status;
         $subscriptionPlan->sequence       = $request->sequence ?? '0';
+        $subscriptionPlan->is_free        = $request->is_free;
         $subscriptionPlan->save();
 
         // Description Items

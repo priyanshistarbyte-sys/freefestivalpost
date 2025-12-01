@@ -17,6 +17,8 @@
         <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/auth.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/tailwind-essential.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/compact-layout.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/spacing-override.css') }}">
         <script src="{{ asset('assets/js/jquery.min.js') }}" defer></script>
         <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}" defer></script>
         <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>

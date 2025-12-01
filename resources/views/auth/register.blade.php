@@ -18,9 +18,9 @@
 
         <!-- Mobile Number -->
         <div class="mt-4">
-            <x-input-label for="mobile_number" :value="__('Mobile Number')" />
-            <x-text-input id="mobile_number" class="block mt-1 w-full" type="text" name="mobile_number" :value="old('mobile_number')" required />
-            <x-input-error :messages="$errors->get('mobile_number')" class="mt-2" />
+            <x-input-label for="mobile" :value="__('Mobile Number')" />
+            <x-text-input id="mobile" class="block mt-1 w-full" type="text" name="mobile" :value="old('mobile')" required />
+            <x-input-error :messages="$errors->get('mobile')" class="mt-2" />
         </div>
 
         <!-- Password -->

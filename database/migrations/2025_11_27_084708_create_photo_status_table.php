@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('otps')) {
-            Schema::create('otps', function (Blueprint $table) {
+        if (!Schema::hasTable('photo_status')) {
+            Schema::create('photo_status', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('user_id')->constrained()->onDelete('cascade');
-                $table->string('mobile_number');
-                $table->string('otp_code');
-                $table->timestamp('expires_at');
-                $table->boolean('is_verified')->default(false);
+                $table->string('title');
+                $table->string('image');
+                $table->string('lable')->nullable();
+                $table->string('lablebg')->nullable();
                 $table->timestamps();
             });
         }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('otps');
+        Schema::dropIfExists('photo_status');
     }
 };

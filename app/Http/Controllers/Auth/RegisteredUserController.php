@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -29,21 +30,22 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'mobile_number' => ['required', 'string', 'max:15', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Admin::class],
+            'mobile' => ['required', 'string', 'max:15', 'unique:'.Admin::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
+        $user = Admin::create([
             'name' => $request->name,
             'email' => $request->email,
-            'mobile_number' => $request->mobile_number,
+            'mobile' => $request->mobile,
             'password' => Hash::make($request->password),
+            'role' => 3,
         ]);
-
-        event(new Registered($user));
+        // event(new Registered($user));
 
         // Don't auto-login, redirect to login for OTP verification
         return redirect()->route('login')->with('success', 'Registration successful! Please login with your mobile number.');

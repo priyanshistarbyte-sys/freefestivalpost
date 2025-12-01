@@ -2,7 +2,7 @@
     @csrf
      <div class="modal-body">
         <div class="row">
-             <div class="mb-3">
+            <div class="mb-3">
                 <div class="form-group">
                     <label for="sub_category_id" class="form-label">Category</label>
                     <select class="form-select" name="sub_category_id" id="sub_category_id" required>

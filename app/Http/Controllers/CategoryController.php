@@ -24,7 +24,11 @@ class CategoryController extends Controller
                     $imagePath = $category->icon
                         ? asset('storage/' . ltrim($category->icon, '/'))
                         : asset('assets/images/defaultApp.png');
-                    return '<img src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="40" height="40">';
+                    return '
+                    <a class="image-popup-no-margins" href="' . $imagePath . '">
+						<img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">
+					</a>
+                    ';
                 })
                 ->addColumn('actions', function ($category) {
                     $buttons = '';
@@ -91,7 +95,7 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return redirect()->back();
     }
 
     /**

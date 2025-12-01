@@ -31,6 +31,13 @@
 
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/jquery.dataTables.min.css') }}">
+    <!-- Compact Layout CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/css/compact-layout.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/datatables-compact.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/spacing-override.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/custom-switch-fix.css') }}">
+
+    @stack('styles')
 
     @stack('styles')
 </head>
@@ -73,14 +80,31 @@
                     </a>
                     <ul class="submenu">
                         <li class="{{ request()->routeIs('user.*') ? 'active' : '' }}"><a href="{{ route('user.index') }}"><span>Users List</span></a></li>
+                        <li class="#"><a href="#"><span>User Transaction</span></a></li>
+                        <li class="#"><a href="#"><span>User Post</span></a></li>
+                        <li class="{{ request()->routeIs('feedback.*') ? 'active' : '' }}"><a href="{{ route('feedback.list') }}"><span>User Feedback</span></a></li>
+                        <li class="#"><a href="#"><span>OTP List</span></a></li>
                     </ul>
                 </li>
-               
-
-                <li>
-                    <a href="#">
-                        <i class="fa fa-image"></i> <span>Photos List</span>
+                <li class="{{ request()->routeIs('tamplet.*') ? 'active' : '' }}">
+                    <a href="{{ route('tamplet.index') }}">
+                        <i class="fa fa-image"></i> <span>Template List</span>
                     </a>
+                </li>
+                <li class="{{ request()->routeIs('videogif.*') ? 'active' : '' }}">
+                    <a href="{{ route('videogif.index') }}">
+                        <i class="fa fa-film"></i> <span>Video/GIF</span>
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle">
+                        <i class="fa fa-user-circle"></i> <span>Photos List</span>
+                        <i class="fa fa-angle-right arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="{{ request()->routeIs('photo-status.*') ? 'active' : '' }}"><a href="{{ route('photo-status.index') }}"><span>Photo Status</span></a></li>
+                        <li class="{{ request()->routeIs('photo.index') ? 'active' : '' }}"><a href="{{ route('photo.index') }}"><span>Photos</span></a></li>
+                    </ul>
                 </li>
                 <li class="{{ request()->routeIs('plan.*') ? 'active' : '' }}">
                     <a href="{{ route('plan.index') }}">
@@ -97,10 +121,14 @@
                         <li class="{{ request()->routeIs('roles.index') ? 'active' : '' }}"><a href="{{ route('roles.index') }}"><span>Roles</span></a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#">
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle">
                         <i class="fa fa-cog"></i> <span>Settings</span>
+                        <i class="fa fa-angle-right arrow"></i>
                     </a>
+                    <ul class="submenu">
+                        <li class="{{ request()->routeIs('position.*') ? 'active' : '' }}"><a href="{{ route('position.index') }}"><span>Position</span></a></li>
+                    </ul>
                 </li>
             </ul>
         </nav>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Otp;
-use App\Models\User;
+use App\Models\Admin;
 use App\Services\SmsService;
 use App\Services\Msg91Service;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class OtpController extends Controller
 {
     public function sendOtp(Request $request)
     {
-        $user = User::where('email',$request->email)->first();
+        $user = Admin::where('email',$request->email)->first();
          if (!$user) {
             return back()->withErrors('User not found');
         }
@@ -25,18 +25,18 @@ class OtpController extends Controller
         $otpCode = rand(100000, 999999);
 
        
-        if(!empty($user->mobile_number))
+        if(!empty($user->mobile))
         {
             // Create new OTP
             Otp::create([
                 'user_id' => $user->id,
-                'mobile_number' => $user->mobile_number,
+                'mobile_number' => $user->mobile,
                 'otp_code' => $otpCode,
                 'expires_at' => Carbon::now()->addMinutes(5)
             ]);
 
             // Format mobile number with country code
-            $formattedNumber = $this->formatMobileNumber($user->mobile_number);
+            $formattedNumber = $this->formatMobileNumber($user->mobile);
           
 
             if (!$formattedNumber) {
@@ -48,7 +48,7 @@ class OtpController extends Controller
             // $sent = $msg91Service->sendOtp($formattedNumber, $otpCode);
             
             // For local testing - log OTP
-            \Log::info("OTP for {$user->mobile_number}: {$otpCode}");
+            \Log::info("OTP for {$user->mobile}: {$otpCode}");
             
             session(['otp_user_id' => $user->id]);
             

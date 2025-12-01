@@ -18,6 +18,7 @@ class SubscriptionPlan extends Model
         'discount',
         'status',
         'sequence',
+        'is_free',
         'created_at',
         'updated_at'
     ];

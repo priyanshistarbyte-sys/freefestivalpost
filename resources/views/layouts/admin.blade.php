@@ -19,9 +19,12 @@
     <link rel="stylesheet" href="{{ asset('assets/css/admin.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- DataTables CSS -->
-    {{-- <link rel="stylesheet" href="{{ asset('assets/css/responsive.bootstrap5.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/file-input.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('assets/css/jquery.dataTables.min.css') }}">
+    <!-- Compact Layout CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/css/compact-layout.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/datatables-compact.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/spacing-override.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/custom-switch-fix.css') }}">
     @stack('styles')
 </head>
 <body>

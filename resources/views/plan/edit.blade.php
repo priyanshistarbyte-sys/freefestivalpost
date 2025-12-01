@@ -77,12 +77,12 @@
                         <div class="mb-3 col-md-12 form-group">
                             <label for="discount_price" class="form-label">Discount Price</label>
                             <input type="number" step="0.01" name="discount_price" id="discount_price"
-                                class="form-control" value="{{ $subscriptionPlan->discount_price }}" readonly>
+                                class="form-control" value="{{ $subscriptionPlan->discount_price }}" >
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="mb-3 col-md-12 form-group">
                             <label for="status" class="form-label">Status</label>
                             <select name="status" id="status" class="form-select" required>
@@ -91,11 +91,27 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                   
+                    <div class="col-md-4">
                         <div class="mb-3 col-md-12 form-group">
                             <label for="sequence" class="form-label">sequence</label> 
                             <input type="number" name="sequence" id="sequence" class="form-control" min="0"
                                 value="{{ $subscriptionPlan->sequence }}" placeholder="Enter Sequence" required>
+                        </div>
+                    </div>
+                     <div class="col-md-4">
+                        <div class="mb-3 col-md-12 form-group">
+                            <label for="is_free" class="form-label">Is Free</label> 
+                            <div class="radio-group">
+                                <label class="radio-container">Free
+                                    <input type="radio" name="is_free" value="0" {{ $subscriptionPlan->is_free == 0 ? 'checked' : '' }}>
+                                    <span class="radio-checkmark"></span>
+                                </label>
+                                <label class="radio-container">Paid
+                                    <input type="radio" name="is_free" value="1" {{ $subscriptionPlan->is_free == 1 ? 'checked' : '' }}>
+                                    <span class="radio-checkmark"></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -20,7 +21,7 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Admin::where('role', '!=' ,'0')->orderBy('id', 'desc');
+            $query = Admin::where('role', '!=' ,'3')->orderBy('id', 'desc');
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->editColumn('created_at', function ($user) {
@@ -28,6 +29,14 @@ class AdminController extends Controller
                 })
                ->editColumn('role', function ($user) {
                     return $user->getRoleNames()->implode(', ');
+                })
+                ->addColumn('status', function ($user) {
+                    $checked = $user->status == 1 ? 'checked' : '';
+                    return '
+                        <label class="custom-switch">
+                            <input type="checkbox" class="status-toggle" data-id="'.$user->id.'" '.$checked.'>
+                            <span class="switch-slider"></span>
+                        </label>';
                 })
                 ->addColumn('actions', function ($user) {
                     $buttons = '';
@@ -51,7 +60,7 @@ class AdminController extends Controller
 
                     return $buttons;
                 })
-                ->rawColumns(['created_at','role','actions'])
+                ->rawColumns(['created_at','role','status','actions'])
                 ->make(true);
         }
         return view('admin-user.index');
@@ -133,11 +142,12 @@ class AdminController extends Controller
         $admin = Admin::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'name'  => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:admin,email,' . $admin->id,
-            'mobile' => 'required|string|max:15|unique:admin,mobile,' . $admin->id,
-            'password' => 'nullable|string|min:8',
-            'role' => 'required|exists:roles,name',
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'email', 'max:255', Rule::unique('admin')->ignore($admin->id)],
+            'mobile'   => ['required', 'string', 'max:15', Rule::unique('admin')->ignore($admin->id)],
+            'password' => ['required', 'string', 'min:8'],
+            'role'     => ['required', 'exists:roles,name'],
+
         ]);
 
         if ($validator->fails()) {
@@ -165,8 +175,10 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Admin $admin)
     {
-        //
+        $admin->delete();
+        return redirect()->route('admin-user.index')->with('success', 'Admin deleted successfully.');
+        
     }
 }
