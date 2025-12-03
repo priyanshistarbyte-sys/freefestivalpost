@@ -129,30 +129,30 @@
             <div class="mt-5">
                 <hr>
                 <h5 class="mb-3">Bulk Upload</h5>
-                <form class="form-horizontal" id="import_form" enctype="multipart/form-data">
+                <form action="{{ route('subcategory.import') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="bulk_file" class="form-label">Upload Excel File</label>
                                 <input type="file" name="file" class="form-control" id="bulk_file"
-                                    accept=".xls,.xlsx" required>
-                                <div class="form-text">Upload Excel file with sub categories data</div>
+                                    accept=".csv" required>
+                                <div class="form-text">Upload CSV file with sub categories data</div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Sample Template</label>
                                 <div>
-                                    <a href="#" class="btn btn-outline-secondary btn-sm">
+                                    <a href="{{ route('subcategory.template') }}" class="btn btn-outline-secondary btn-sm">
                                         <i class="fas fa-download"></i> Download Sample Template
                                     </a>
                                 </div>
-                            </div>
+                            </div>  
                         </div>
                     </div>
                     <div class="d-flex justify-content-start">
-                        <button type="submit" name="import" class="btn btn-success">
+                        <button type="submit" class="btn btn-success">
                             <i class="fas fa-upload"></i> Upload File
                         </button>
                     </div>

@@ -33,6 +33,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('sub-category', SubCategoryController::class);
     Route::get('/category/{cid}/subcategories', [SubCategoryController::class, 'getSubcategories'])->name('subcategories.Category');
     Route::post('/sub-category/status/update', [SubCategoryController::class, 'updateStatus'])->name('subcategory.updateStatus');
+    Route::get('/sub-category-export', [SubCategoryController::class, 'export'])->name('subcategory.export');
+    Route::post('/sub-category-import', [SubCategoryController::class, 'import'])->name('subcategory.import');
+    Route::get('/sub-category-template', [SubCategoryController::class, 'downloadTemplate'])->name('subcategory.template');
 
     // Role
      Route::resource('roles', RoleController::class);

@@ -30,15 +30,18 @@ class SubCategoryController extends Controller
                         $q->where('title', 'like', "%{$keyword}%");
                     });
                 })
+               
                 ->addColumn('image', function ($subCategory) {
-                    $imagePath = $subCategory->image
-                        ? asset('storage/' . ltrim($subCategory->image, '/'))
-                        : asset('assets/images/defaultApp.png');
-                    return '
-                    <a class="image-popup-no-margins" href="' . $imagePath . '">
-						<img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">
-					</a>
-                    ';
+                    $imagePath = $subCategory->image ? asset('storage/' . ltrim($subCategory->image, '/')) : null;
+                    if (!empty($subCategory->image)) {
+                        return '
+                            <a class="image-popup-no-margins" href="' . $imagePath . '">
+                                <img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">
+                            </a>
+                            ';
+                    } else {
+                        return '<img src="' . asset('assets/images/default.jpg') . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">';
+                    }
                 })
                 ->addColumn('noti_banner', function ($subCategory) {
                     if ($subCategory->noti_banner) {
@@ -264,5 +267,92 @@ class SubCategoryController extends Controller
         $subCategory->save();
 
         return response()->json(['success' => true, 'message' => 'Status updated successfully']);
+    }
+
+    public function export()
+    {
+        $subcategories = SubCategory::with('category')->get();
+        
+        $csvData = "ID,Category,Name,Event Date,Label,Label BG,Status,Plan Auto,Notification Quote,Mask,Created At\n";
+        
+        foreach ($subcategories as $sub) {
+            $csvData .= sprintf(
+                "%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"\n",
+                $sub->id,
+                $sub->category ? $sub->category->title : '',
+                $sub->mtitle,
+                $sub->event_date ?? '',
+                $sub->lable ?? '',
+                $sub->lablebg ?? '',
+                $sub->status ? 'Active' : 'Inactive',
+                $sub->plan_auto ? 'Plan Only' : 'Both',
+                $sub->noti_quote ?? '',
+                $sub->mask ?? '',
+                $sub->created_at->format('Y-m-d H:i:s')
+            );
+        }
+        
+        return response($csvData)
+            ->header('Content-Type', 'text/csv')
+            ->header('Content-Disposition', 'attachment; filename="subcategories.csv"');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,txt'
+        ]);
+
+        try {
+            $handle = fopen($request->file('file')->getRealPath(), 'r');
+            $header = fgetcsv($handle);
+            
+            $imported = 0;
+            while (($row = fgetcsv($handle)) !== false) {
+                if (empty($row[0]) || empty($row[1])) continue;
+                
+                $category = Category::where('title', trim($row[0]))->first();
+                if (!$category) continue;
+                
+                SubCategory::create([
+                    'category_id' => $category->id,
+                    'is_parent' => 0,
+                    'is_child' => null,
+                    'parent_category' => null,
+                    'image' => '',
+                    'event_date' => !empty($row[2]) ? date('Y-m-d', strtotime($row[2])) : null,
+                    'mtitle' => trim($row[1]),
+                    'mslug' => SubCategory::slug_string(trim($row[1])),
+                    'status' => isset($row[5]) && $row[5] === 'Active' ? 1 : 0,
+                    'lable' => $row[3] ?? '',
+                    'lablebg' => $row[4] ?? '',
+                    'noti_banner' => '',
+                    'mask' => $row[8] ?? '',
+                    'noti_quote' => $row[7] ?? '',
+                    'plan_auto' => isset($row[6]) && $row[6] === 'Plan Only' ? 1 : 0,
+                ]);
+                $imported++;
+            }
+            fclose($handle);
+            
+            if ($imported == 0) {
+                return redirect()->back()->with('error', 'No valid records imported.');
+            }
+            
+            return redirect()->back()->with('success', 'Sub categories imported successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Import failed: ' . $e->getMessage());
+        }
+    }
+
+    public function downloadTemplate()
+    {
+        $filePath = storage_path('app/templates/subcategory_template.csv');
+        
+        if (!file_exists($filePath)) {
+            abort(404, 'Template file not found');
+        }
+        
+        return response()->download($filePath, 'subcategory_template.csv');
     }
 }

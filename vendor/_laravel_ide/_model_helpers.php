@@ -3463,8 +3463,8 @@ namespace App\Models {
      * @property string|null $noti_quote
      * @property string|null $mask
      * @property string|null $noti_banner
-     * @property string $lablebg
-     * @property string $lable
+     * @property string|null $lablebg
+     * @property string|null $lable
      * @property mixed $status
      * @property string $mslug
      * @property string $mtitle

@@ -3,7 +3,7 @@
 @section('content')
     <div class="page-header">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="card-title">All CustomFrame</h4>
+            <h4 class="card-title">All Custom Frame</h4>
             <a href="#" class="btn btn-primary" data-ajax-popup="true" data-size="md"
                 data-title="{{ __('Create Custom Frame') }}" data-url="{{ route('create.customframe', $user->id) }}"
                 data-bs-toggle="tooltip" data-bs-original-title="{{ __('Create') }}"><i class="fa fa-plus me-2"></i>Add</a>

@@ -5,7 +5,14 @@
     <div class="page-header">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="card-title">All Sub Category</h4>
-            <a href="{{ route('sub-category.create') }}" class="btn btn-primary"><i class="fa fa-plus me-2"></i>Add</a>
+            <div>
+                <a href="{{ route('subcategory.export') }}" class="btn btn-success me-2">
+                    <i class="fa fa-download me-2"></i>Export Excel
+                </a>
+                <a href="{{ route('sub-category.create') }}" class="btn btn-primary">
+                    <i class="fa fa-plus me-2"></i>Add
+                </a>
+            </div>
         </div>
     </div>
 
