@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomframeController;
 use App\Http\Controllers\HomeCategoryController;
 use App\Http\Controllers\PhotoStatusController;
 use App\Http\Controllers\PhotoController;
@@ -42,8 +43,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // users
     Route::resource('user', UserController::class);
     Route::post('/user/status/update', [UserController::class, 'updateStatus'])->name('admin.updateStatus');
+   
+    // change-password
+    Route::get('/user/{id}/change-password', [UserController::class, 'changePassword'])->name('user.changePassword');
+    Route::post('/user/{id}/update-password', [UserController::class, 'updatePassword'])->name('user.updatePassword');
+    
+    
+    // Custom Frame Routes
+    Route::get('/user/{id}/customframe', [CustomframeController::class, 'index'])->name('user.customframe');
+    Route::get('/user/{id}/customframe/create', [CustomframeController::class, 'create'])->name('create.customframe');
+    Route::post('/user/{id}/customframe/store', [CustomframeController::class, 'store'])->name('store.customframe');
+    Route::get('/user/{id}/customframe/edit/{cid}', [CustomframeController::class, 'edit'])->name('edit.customframe');
+    Route::put('/user/{id}/customframe/update/{cid}', [CustomframeController::class, 'update'])->name('update.customframe');
+    Route::delete('/user/{id}/customframe/delete/{cid}', [CustomframeController::class, 'destroy'])->name('delete.customframe');
+    Route::post('/customframe/status/update', [CustomframeController::class, 'updateStatus'])->name('customframe.updateStatus');
 
-    // feedback list
+
+
+    // feedback list    
     Route::get('/feedback', [UserController::class, 'feedbackList'])->name('feedback.list');
     Route::delete('/feedback/{id}', [UserController::class, 'deleteFeedback'])->name('feedback.delete');
 

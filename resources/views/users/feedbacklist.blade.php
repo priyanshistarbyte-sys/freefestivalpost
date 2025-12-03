@@ -67,6 +67,41 @@
                     }
                 ]
             });
+
+            $(document).on('click', '.delete-btn', function(e) {
+                e.preventDefault();
+                const deleteUrl = $(this).attr('data-url');
+                
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You want to delete this record?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Continue',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const form = $('<form>', {
+                            'method': 'POST',
+                            'action': deleteUrl
+                        });
+                        form.append($('<input>', {
+                            'type': 'hidden',
+                            'name': '_token',
+                            'value': '{{ csrf_token() }}'
+                        }));
+                        form.append($('<input>', {
+                            'type': 'hidden',
+                            'name': '_method',
+                            'value': 'DELETE'
+                        }));
+                        $('body').append(form);
+                        form.submit();
+                    }
+                });
+            });
         });
     </script>
 @endpush

@@ -21,20 +21,20 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Admin::where('role', '!=' ,'3')->orderBy('id', 'desc');
+            $query = Admin::where('role', '!=', '3')->orderBy('id', 'desc');
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->editColumn('created_at', function ($user) {
                     return $user->created_at ? with(new \Carbon\Carbon($user->created_at))->format('d-m-Y') : '';
                 })
-               ->editColumn('role', function ($user) {
+                ->editColumn('role', function ($user) {
                     return $user->getRoleNames()->implode(', ');
                 })
                 ->addColumn('status', function ($user) {
                     $checked = $user->status == 1 ? 'checked' : '';
                     return '
                         <label class="custom-switch">
-                            <input type="checkbox" class="status-toggle" data-id="'.$user->id.'" '.$checked.'>
+                            <input type="checkbox" class="status-toggle" data-id="' . $user->id . '" ' . $checked . '>
                             <span class="switch-slider"></span>
                         </label>';
                 })
@@ -60,7 +60,7 @@ class AdminController extends Controller
 
                     return $buttons;
                 })
-                ->rawColumns(['created_at','role','status','actions'])
+                ->rawColumns(['created_at', 'role', 'status', 'actions'])
                 ->make(true);
         }
         return view('admin-user.index');
@@ -72,8 +72,8 @@ class AdminController extends Controller
     public function create()
     {
         //  if (auth()->user()->can('user-create')) {
-            $roles = Role::pluck('name', 'name')->all();
-            return view('admin-user.create', compact('roles'));
+        $roles = Role::pluck('name', 'name')->all();
+        return view('admin-user.create', compact('roles'));
         // } else {
         //     return response()->json(['error' => __('Permission denied.')], 401);
         // }
@@ -84,33 +84,33 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-         //  if (auth()->user()->can('user-create')) {
-            $validator = Validator::make($request->all(), [
-                'name'  => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:admin'],
-                'mobile' => ['required', 'string', 'max:15', 'unique:admin'],
-                'password' => ['required', 'string', 'min:8'],
-                'role' => ['required', 'exists:roles,name'],
-            ]);
+        //  if (auth()->user()->can('user-create')) {
+        $validator = Validator::make($request->all(), [
+            'name'  => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:admin'],
+            'mobile' => ['required', 'string', 'max:15', 'unique:admin'],
+            'password' => ['required', 'string', 'min:8'],
+            'role' => ['required', 'exists:roles,name'],
+        ]);
 
-            
-            if ($validator->fails()) {
-                $messages = $validator->getMessageBag();
-                return redirect()->back()->with('error', $messages->first());
-            }
-            $admin = new Admin();
-            $admin->name = $request->name;
-            $admin->email = $request->email;
-            $admin->mobile = $request->mobile;
-            $admin->password = Hash::make($request->password);
-            $admin->note = $request->note ?? '';
-            $admin->status = $request->status ?? '';
-            $admin->save();
 
-            // Assign Role directly 
-            $admin->assignRole($request->role);
+        if ($validator->fails()) {
+            $messages = $validator->getMessageBag();
+            return redirect()->back()->with('error', $messages->first());
+        }
+        $admin = new Admin();
+        $admin->name = $request->name;
+        $admin->email = $request->email ?: null;
+        $admin->mobile = $request->mobile;
+        $admin->password = Hash::make($request->password);
+        $admin->note = $request->note ?? '';
+        $admin->status = $request->status ?? '';
+        $admin->save();
 
-            return redirect()->route('admin-user.index')->with('success', 'Admin user created successfully.');
+        // Assign Role directly 
+        $admin->assignRole($request->role);
+
+        return redirect()->route('admin-user.index')->with('success', 'Admin user created successfully.');
         // } else {
         //     return response()->json(['error' => __('Permission denied.')], 401);
         // }
@@ -131,7 +131,7 @@ class AdminController extends Controller
     {
         $roles = Role::pluck('name', 'name')->all();
         $admin = Admin::findOrFail($id);
-        return view('admin-user.edit', compact('roles','admin'));
+        return view('admin-user.edit', compact('roles', 'admin'));
     }
 
     /**
@@ -155,7 +155,7 @@ class AdminController extends Controller
         }
 
         $admin->name = $request->name;
-        $admin->email = $request->email;
+        $admin->email = $request->email ?: null;
         $admin->mobile = $request->mobile;
         $admin->note = $request->note ?? '';
         $admin->status = $request->status ?? 0;
@@ -179,6 +179,5 @@ class AdminController extends Controller
     {
         $admin->delete();
         return redirect()->route('admin-user.index')->with('success', 'Admin deleted successfully.');
-        
     }
 }

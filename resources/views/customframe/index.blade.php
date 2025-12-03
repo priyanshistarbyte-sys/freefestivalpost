@@ -1,60 +1,27 @@
 @extends('layouts.main')
-@section('title', 'User')
+@section('title', 'CustomFrame')
 @section('content')
     <div class="page-header">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="card-title">All Users List</h4>
-            <a href="{{ route('user.create') }}" class="btn btn-primary"><i class="fa fa-plus me-2"></i>Add</a>
+            <h4 class="card-title">All CustomFrame</h4>
+            <a href="#" class="btn btn-primary" data-ajax-popup="true" data-size="md"
+                data-title="{{ __('Create Custom Frame') }}" data-url="{{ route('create.customframe', $user->id) }}"
+                data-bs-toggle="tooltip" data-bs-original-title="{{ __('Create') }}"><i class="fa fa-plus me-2"></i>Add</a>
         </div>
     </div>
 
     <div class="card">
         <div class="card-body">
-            <div class="row mb-4">
-                <div class="col-md-3">
-                    <label>Version Code</label>
-                    <input type="text" id="filter_version" class="form-control" placeholder="Enter Version Code">
-                </div>
-
-                <div class="col-md-3">
-                    <label>Select Plan</label>
-                    <select id="filter_plan" class="form-select">
-                        <option value="">All</option>
-                        <option value="free">Free</option>
-                        <option value="trial">Trial</option>
-                        <option value="premium">Premium</option>
-                    </select>
-                </div>
-
-                <div class="col-md-3">
-                    <label>Start Date</label>
-                    <input type="date" id="filter_start" class="form-control">
-                </div>
-
-                <div class="col-md-3">
-                    <label>End Date</label>
-                    <input type="date" id="filter_end" class="form-control">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-12 text-end">
-                    <button type="button" id="search-btn" class="btn btn-primary me-2">Filter</button>
-                    <button type="button" id="reset-btn" class="btn btn-danger">Reset</button>
-                </div>
-            </div>
-            <hr class="mb-5">
             <div class="table-container">
-                <table class="table" id="users-table">
+                <table class="table" id="custom-frame-table">
                     <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Reg. Date</th>
-                            {{-- <th>App Version</th> --}}
-                            <th>Logo</th>
-                            <th>Business Name</th>
-                            <th>Mobile</th>
+                            <th>No</th>
+                            <th>Photo</th>
+                            <th>Title</th>
                             <th>Status</th>
-                            <th>OTP</th>
+                            <th>Created</th>
+                            <th>Updated</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -66,45 +33,64 @@
 @push('scripts')
     <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
     <script>
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            const label = input.nextElementSibling;
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    label.classList.add('has-file');
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.style.display = 'none';
+                label.classList.remove('has-file');
+            }
+        }
+    </script>
+    <script>
         $(document).ready(function() {
-            var table = $('#users-table').DataTable({
+            $('#custom-frame-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('user.index') }}',
+                ajax: '{{ route('user.customframe',$user->id) }}',
                 columns: [{
                         data: 'id',
                         name: 'id'
                     },
                     {
-                        data: 'created_at',
-                        name: 'created_at'
+                        data: 'image',
+                        name: 'image',
+                        orderable: false,
+                        searchable: false
                     },
                     {
-                        data: 'photo',
-                        name: 'photo'
-                    },
-                    {
-                        data: 'business_name',
-                        name: 'business_name'
-                    },
-                    {
-                        data: 'mobile',
-                        name: 'mobile'
+                        data: 'frame_name',
+                        name: 'frame_name'
                     },
                     {
                         data: 'status',
                         name: 'status'
                     },
                     {
-                        data: 'otp',
-                        name: 'otp'
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
+                    {
+                        data: 'updated_at',
+                        name: 'updated_at'
                     },
                     {
                         data: 'actions',
                         name: 'actions',
                         orderable: false,
                         searchable: false
-                    }
+                    },
                 ]
             });
 
@@ -143,41 +129,29 @@
                 });
             });
         });
-        $(document).on('change', '.status-toggle', function() {
+        $(document).on('change', '.status-toggle', function () {
             let status = $(this).is(':checked') ? 1 : 0;
             let id = $(this).data('id');
 
             $.ajax({
-                url: "{{ route('admin.updateStatus') }}",
+                url: "{{ route('customframe.updateStatus') }}",
                 type: "POST",
                 data: {
                     id: id,
                     status: status,
                     _token: "{{ csrf_token() }}"
                 },
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         toastr.success('Status updated successfully');
                     } else {
                         toastr.error(response.message);
                     }
                 },
-                error: function() {
+                error: function () {
                     toastr.error('Something went wrong!');
                 }
             });
-        });
-
-        $('#reset-btn').click(function() {
-            $('#filter_version').val('');
-            $('#filter_plan').val('');
-            $('#filter_start').val('');
-            $('#filter_end').val('');
-            table.ajax.reload();
-        });
-
-        $('#search-btn').click(function() {
-            table.ajax.reload();
         });
     </script>
 @endpush
