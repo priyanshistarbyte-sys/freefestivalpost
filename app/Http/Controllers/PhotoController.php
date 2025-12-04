@@ -27,7 +27,7 @@ class PhotoController extends Controller
                         :  asset('assets/images/defaultApp.png');
                     return '
                     <a class="image-popup-no-margins" href="' . $imagePath . '">
-						<img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">
+						<img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">
 					</a>
                     ';
                 })

@@ -5,12 +5,15 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomframeController;
+use App\Http\Controllers\FontController;
+use App\Http\Controllers\FrameController;
 use App\Http\Controllers\HomeCategoryController;
 use App\Http\Controllers\PhotoStatusController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubCategoryController;
+use App\Http\Controllers\SubFrameController;
 use App\Http\Controllers\SubscriptionPlanController;
 use App\Http\Controllers\TampletController;
 use App\Http\Controllers\UserController;
@@ -92,6 +95,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //photo
     Route::resource('photo', PhotoController::class);
+
+    // frames
+    Route::resource('frame', FrameController::class);
+    Route::post('/frame/status/update', [FrameController::class, 'updateStatus'])->name('frame.updateStatus');
+    Route::post('/frame/pay/update', [FrameController::class, 'updateFreePaid'])->name('frame.updateFreePaid');
+
+     // sub-frames
+    Route::resource('sub-frame', SubFrameController::class);
+    Route::post('/subframe/status/update', [SubFrameController::class, 'updateStatus'])->name('sub-frame.updateStatus');
+
+    // fonts
+    Route::resource('fonts', FontController::class);
 
 });
 

@@ -34,7 +34,7 @@ class TampletController extends Controller
                     $imagePath = $tamplet->image
                         ? asset('storage/' . ltrim($tamplet->image, '/'))
                         : asset('assets/images/defaultApp.png');
-                    return '<img src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="30">';
+                    return '<img src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">';
                 })
                 ->addColumn('mask', function ($tamplet) {
                     if(!$tamplet->planImgName){
@@ -43,7 +43,7 @@ class TampletController extends Controller
                         $imagePath = $tamplet->planImgName
                             ? asset('storage/' . ltrim($tamplet->planImgName, '/'))
                             : asset('assets/images/defaultApp.png');
-                        return '<img src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="30">';
+                        return '<img src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">';
                     }
                 })
                 ->addColumn('free_paid', function ($tamplet) {

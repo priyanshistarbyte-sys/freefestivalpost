@@ -123,11 +123,12 @@
                 </li>
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropdown-toggle">
-                        <i class="fa fa-cog"></i> <span>Settings</span>
+                        <i class="fa fa-cog"></i> <span>Site Settings</span>
                         <i class="fa fa-angle-right arrow"></i>
                     </a>
                     <ul class="submenu">
-                        <li class="{{ request()->routeIs('position.*') ? 'active' : '' }}"><a href="{{ route('position.index') }}"><span>Position</span></a></li>
+                        <li class="{{ request()->routeIs('frame.*') ? 'active' : '' }}"><a href="{{ route('frame.index') }}"><span>Frames</span></a></li>
+                        <li class="{{ request()->routeIs('sub-frame.*') ? 'active' : '' }}"><a href="{{ route('sub-frame.index') }}"><span>Sub Frames</span></a></li>
                     </ul>
                 </li>
             </ul>

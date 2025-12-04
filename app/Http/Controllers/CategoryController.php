@@ -26,7 +26,7 @@ class CategoryController extends Controller
                         : asset('assets/images/defaultApp.png');
                     return '
                     <a class="image-popup-no-margins" href="' . $imagePath . '">
-						<img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">
+						<img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">
 					</a>
                     ';
                 })
@@ -131,7 +131,6 @@ class CategoryController extends Controller
             if ($category->icon && Storage::disk('public')->exists($category->icon)) {
                 Storage::disk('public')->delete($category->icon);
             }
-
             // Upload new icon
             $data['icon'] = $request->file('icon')->store('uploads/images/category_icon', 'public');
         }

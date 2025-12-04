@@ -1,0 +1,56 @@
+<form action="{{  route('frame.store') }}" enctype="multipart/form-data" method="POST">
+    @csrf
+     <div class="modal-body">
+        <div class="row">
+            <div class="mb-3">
+                <div class="form-group">
+                    <label for="frame_name" class="form-label">Frame Name</label>
+                    <input type="text" name="frame_name" id="frame_name" class="form-control" placeholder="Enter Frame Name" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-group">
+                    <label for="data" class="form-label">Frame Code</label>
+                     <textarea rows="8" name="data" id="data" placeholder="Enter Frame Source Code" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-group">
+                    <label for="logosection" class="form-label">Logo Code</label>
+                     <textarea rows="8" name="logosection" id="logosection" placeholder="Enter Logo Code" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="mb-3 col-md-4 form-group">
+                <label class="form-label" for="status">Status</label></br>
+                <label class="custom-switch">
+                    <input type="checkbox" name="status" value="1" checked>
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+           
+             <div class="mb-3 col-md-4 form-group">
+                <label class="form-label" for="free_paid">Free / Paid</label></br>
+                <label class="custom-switch">
+                    <input type="checkbox" name="free_paid" value="1" checked>
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+
+            <div class="mb-3 col-md-12 form-group">
+                <label for="image" class="form-label">Frame Image</label>
+                <div class="file-input-wrapper">
+                    <input type="file" name="image" id="image" class="file-input" accept="image/*" onchange="previewImage(this, 'image-preview')">
+                    <label for="image" class="file-input-label">
+                        <img id="image-preview" class="file-preview" alt="image preview">
+                        <i class="fas fa-cloud-upload-alt file-input-icon"></i>
+                        <span class="file-input-text">Choose Image file or drag and drop</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+        <button class="btn btn-primary" type="submit">{{__('Submit')}}</button>
+    </div>
+  </form>

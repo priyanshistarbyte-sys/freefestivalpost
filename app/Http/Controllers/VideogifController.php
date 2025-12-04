@@ -64,7 +64,7 @@ class VideogifController extends Controller
                     $imagePath = $Videogif->thumb
                         ? asset('storage/' . ltrim($Videogif->thumb, '/'))
                         : asset('assets/images/defaultApp.png');
-                    return '<img src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">';
+                    return '<img src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">';
                 })
                 ->editColumn('created_at', function ($user) {
                     return $user->created_at ? with(new \Carbon\Carbon($user->created_at))->format('d-m-Y') : '';

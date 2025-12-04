@@ -33,11 +33,11 @@ class CustomframeController extends Controller
                     if (!empty($customframe->image)) {
                         return '
                             <a class="image-popup-no-margins" href="' . e($imagePath) . '">
-                                <img class="img-responsive" src="' . e($imagePath) . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">
+                                <img class="img-responsive" src="' . e($imagePath) . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">
                             </a>
                             ';
                     } else {
-                        return '<img src="' . asset('assets/images/default.jpg') . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">';
+                        return '<img src="' . asset('assets/images/default.jpg') . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">';
                     }
                 })
                 ->editColumn('created_at', function ($feedback) {

@@ -36,11 +36,11 @@ class SubCategoryController extends Controller
                     if (!empty($subCategory->image)) {
                         return '
                             <a class="image-popup-no-margins" href="' . $imagePath . '">
-                                <img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">
+                                <img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">
                             </a>
                             ';
                     } else {
-                        return '<img src="' . asset('assets/images/default.jpg') . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">';
+                        return '<img src="' . asset('assets/images/default.jpg') . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">';
                     }
                 })
                 ->addColumn('noti_banner', function ($subCategory) {
@@ -191,7 +191,6 @@ class SubCategoryController extends Controller
         }
 
         if ($request->hasFile('image')) {
-
             // Delete old image
             if ($subCategory->image && Storage::disk('public')->exists($subCategory->image)) {
                 Storage::disk('public')->delete($subCategory->image);
