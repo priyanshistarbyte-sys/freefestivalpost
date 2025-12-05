@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AppSliderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
@@ -107,6 +108,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // fonts
     Route::resource('fonts', FontController::class);
+
+    // app-slider
+    Route::resource('app-slider',AppSliderController::class);
+    Route::post('/app-slider/status/update', [AppSliderController::class, 'updateStatus'])->name('app-slider.updateStatus');
+
 
 });
 

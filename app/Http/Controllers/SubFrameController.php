@@ -160,8 +160,13 @@ class SubFrameController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SubFrame $subFrame)
+    public function destroy($id)
     {
+        $subFrame = SubFrame::findOrFail($id);
+        // Delete image
+        if ($subFrame->image && Storage::disk('public')->exists($subFrame->image)) {
+            Storage::disk('public')->delete($subFrame->image);
+        }
         $subFrame->delete();
         return redirect()->route('sub-frame.index')->with('success', 'Sub Frame deleted successfully.');
     }

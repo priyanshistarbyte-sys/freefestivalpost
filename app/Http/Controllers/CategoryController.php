@@ -142,9 +142,14 @@ class CategoryController extends Controller
      * Remove the specified resource from storage.
      */
   
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-         $category->delete();
+        $category = Category::findOrFail($id);
+        // Delete image
+        if ($category->icon && Storage::disk('public')->exists($category->icon)) {
+            Storage::disk('public')->delete($category->icon);
+        }
+        $category->delete();
         return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
     }
 }

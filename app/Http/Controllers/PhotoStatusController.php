@@ -145,8 +145,13 @@ class PhotoStatusController extends Controller
     /**
      * Remove the specified resource from storage.
     */
-    public function destroy(PhotoStatus $photoStatus)
+    public function destroy($id)
     {
+        $photoStatus = PhotoStatus::findOrFail($id);
+        // Delete image
+        if ($photoStatus->image && Storage::disk('public')->exists($photoStatus->image)) {
+            Storage::disk('public')->delete($photoStatus->image);
+        }
         $photoStatus->delete();
         return redirect()->route('photo-status.index')->with('success', 'Photo Status deleted successfully.');
     }

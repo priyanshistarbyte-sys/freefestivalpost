@@ -151,8 +151,13 @@ class PhotoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Photo $photo)
+    public function destroy($id)
     {
+        $photo = Photo::findOrFail($id);
+        // Delete image
+        if ($photo->image && Storage::disk('public')->exists($photo->image)) {
+            Storage::disk('public')->delete($photo->image);
+        }
         $photo->delete();
         return redirect()->route('photo.index')->with('success', 'Photo deleted successfully.');
     }

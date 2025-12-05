@@ -129,6 +129,9 @@
                     <ul class="submenu">
                         <li class="{{ request()->routeIs('frame.*') ? 'active' : '' }}"><a href="{{ route('frame.index') }}"><span>Frames</span></a></li>
                         <li class="{{ request()->routeIs('sub-frame.*') ? 'active' : '' }}"><a href="{{ route('sub-frame.index') }}"><span>Sub Frames</span></a></li>
+                        <li class=""><a href="#"><span>Settings</span></a></li>
+                        <li class="{{ request()->routeIs('fonts.*') ? 'active' : '' }}"><a href="{{ route('fonts.index') }}"><span>Fonts</span></a></li>
+                        <li class="{{ request()->routeIs('app-slider.*') ? 'active' : '' }}"><a href="{{ route('app-slider.index') }}"><span>Slider</span></a></li>
                     </ul>
                 </li>
             </ul>

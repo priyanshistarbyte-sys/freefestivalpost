@@ -86,53 +86,53 @@
             });
         });
     });
-     $(document).on('change', '.status-toggle', function () {
-            let status = $(this).is(':checked') ? 1 : 0;
-            let id = $(this).data('id');
+    $(document).on('change', '.status-toggle', function () {
+        let status = $(this).is(':checked') ? 1 : 0;
+        let id = $(this).data('id');
 
-            $.ajax({
-                url: "{{ route('homecategory.updateStatus') }}",
-                type: "POST",
-                data: {
-                    id: id,
-                    status: status,
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function (response) {
-                    if (response.success) {
-                        toastr.success('Status updated successfully');
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function () {
-                    toastr.error('Something went wrong!');
+        $.ajax({
+            url: "{{ route('homecategory.updateStatus') }}",
+            type: "POST",
+            data: {
+                id: id,
+                status: status,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (response) {
+                if (response.success) {
+                    toastr.success('Status updated successfully');
+                } else {
+                    toastr.error(response.message);
                 }
-            });
+            },
+            error: function () {
+                toastr.error('Something went wrong!');
+            }
         });
-         $(document).on('change', '.home-status-toggle', function () {
-            let is_show_on_home = $(this).is(':checked') ? 1 : 0;
-            let id = $(this).data('id');
+    });
+        $(document).on('change', '.home-status-toggle', function () {
+        let is_show_on_home = $(this).is(':checked') ? 1 : 0;
+        let id = $(this).data('id');
 
-            $.ajax({
-                url: "{{ route('homecategory.showHome') }}",
-                type: "POST",
-                data: {
-                    id: id,
-                    is_show_on_home: is_show_on_home,
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function (response) {
-                    if (response.success) {
-                        toastr.success('Show on home updated successfully');
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function () {
-                    toastr.error('Something went wrong!');
+        $.ajax({
+            url: "{{ route('homecategory.showHome') }}",
+            type: "POST",
+            data: {
+                id: id,
+                is_show_on_home: is_show_on_home,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (response) {
+                if (response.success) {
+                    toastr.success('Show on home updated successfully');
+                } else {
+                    toastr.error(response.message);
                 }
-            });
+            },
+            error: function () {
+                toastr.error('Something went wrong!');
+            }
         });
+    });
 </script>
 @endpush

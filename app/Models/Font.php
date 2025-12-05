@@ -10,6 +10,7 @@ class Font extends Model
  
     protected $fillable = [
         'font_name',
+        'file_path',
         'created_at',
         'updated_at'
     ];

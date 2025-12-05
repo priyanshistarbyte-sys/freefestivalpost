@@ -58,7 +58,7 @@ class SubCategoryController extends Controller
                                 <input type="checkbox" class="status-toggle" data-id="'.$subCategory->id.'" '.$checked.'>
                                 <span class="switch-slider"></span>
                             </label>';
-                    })
+                })
                 ->addColumn('actions', function ($subCategory) {
                     $buttons = '';
                     $editUrl = route('sub-category.edit', $subCategory->id);
@@ -240,10 +240,18 @@ class SubCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SubCategory $subCategory)
+    public function destroy($id)
     {
+        $subCategory = SubCategory::findOrFail($id);
+        // Delete image
+        if ($subCategory->image && Storage::disk('public')->exists($subCategory->image)) {
+            Storage::disk('public')->delete($subCategory->image);
+        }
+        if ($subCategory->noti_banner && Storage::disk('public')->exists($subCategory->noti_banner)) {
+            Storage::disk('public')->delete($subCategory->noti_banner);
+        }
         $subCategory->delete();
-        return redirect()->route('category.index')->with('success', 'Sub Category deleted successfully.');
+        return redirect()->route('sub-category.index')->with('success', 'Sub Category deleted successfully.');
     }
 
     public function getSubcategories($cid)

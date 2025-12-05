@@ -172,8 +172,13 @@ class FrameController extends Controller
         return redirect()->route('frame.index')->with('success', 'Frame updated successfully.');
     }
 
-    public function destroy(Frame $frame)
+    public function destroy($id)
     {
+        $frame = Frame::findOrFail($id);
+        // Delete image
+        if ($frame->image && Storage::disk('public')->exists($frame->image)) {
+            Storage::disk('public')->delete($frame->image);
+        }
         $frame->delete();
         return redirect()->route('frame.index')->with('success', 'Frame deleted successfully.');
     }

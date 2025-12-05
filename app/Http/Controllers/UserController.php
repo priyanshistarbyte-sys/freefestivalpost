@@ -234,6 +234,10 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = Admin::findOrFail($id);
+        // Delete image
+        if ($user->business_logo && Storage::disk('public')->exists($user->business_logo)) {
+            Storage::disk('public')->delete($user->business_logo);
+        }
         $user->delete();
         return redirect()->route('user.index')->with('success', 'User deleted successfully.');
     }
