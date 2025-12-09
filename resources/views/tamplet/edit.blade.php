@@ -34,12 +34,10 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="image" class="form-label">Image</label></br>
-                        <input type="file" name="image[]" id="image" multiple accept="image/*">
+                        <input type="file" name="image" id="image"  accept="image/*">
                         @if($tamplet->path)
                             <div class="mt-2">
-                                @foreach(json_decode($tamplet->path) as $img)
-                                    <img src="{{ asset('storage/' . $img) }}" width="50" height="50" class="me-2">
-                                @endforeach
+                                <img src="{{ asset('storage/' . $tamplet->path) }}" width="50" height="50">
                             </div>
                         @endif
                     </div>

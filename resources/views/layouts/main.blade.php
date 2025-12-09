@@ -80,10 +80,9 @@
                     </a>
                     <ul class="submenu">
                         <li class="{{ request()->routeIs('user.*') ? 'active' : '' }}"><a href="{{ route('user.index') }}"><span>Users List</span></a></li>
-                        <li class="#"><a href="#"><span>User Transaction</span></a></li>
+                        <li class="{{ request()->routeIs('users-transactions.*') ? 'active' : '' }}"><a href="{{ route('users.transactions.list') }}"><span>User Transaction</span></a></li>     
                         <li class="#"><a href="#"><span>User Post</span></a></li>
                         <li class="{{ request()->routeIs('feedback.*') ? 'active' : '' }}"><a href="{{ route('feedback.list') }}"><span>User Feedback</span></a></li>
-                        <li class="#"><a href="#"><span>OTP List</span></a></li>
                     </ul>
                 </li>
                 <li class="{{ request()->routeIs('tamplet.*') ? 'active' : '' }}">
@@ -132,7 +131,23 @@
                         <li class=""><a href="#"><span>Settings</span></a></li>
                         <li class="{{ request()->routeIs('fonts.*') ? 'active' : '' }}"><a href="{{ route('fonts.index') }}"><span>Fonts</span></a></li>
                         <li class="{{ request()->routeIs('app-slider.*') ? 'active' : '' }}"><a href="{{ route('app-slider.index') }}"><span>Slider</span></a></li>
+                        <li class="{{ request()->routeIs('faqs.*') ? 'active' : '' }}"><a href="{{ route('faqs.index') }}"><span>FAQ</span></a></li>
                     </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle">
+                        <i class="fa fa-user-circle"></i> <span>Payment</span>
+                        <i class="fa fa-angle-right arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="{{ request()->routeIs('payment-failed.*') ? 'active' : '' }}"><a href="{{ route('payment.failed') }}"><span>Payment Failed</span></a></li>
+                        <li class="#"><a href="#"><span>Trial Subscription</span></a></li>
+                    </ul>
+                </li>
+                <li class="{{ request()->routeIs('complain.*') ? 'active' : '' }}">
+                    <a href="{{ route('complain.list') }}">
+                        <i class="fa fa-comments"></i> <span>Complain</span>
+                    </a>
                 </li>
             </ul>
         </nav>
@@ -290,6 +305,14 @@
         
         // Auto-open dropdown if submenu is active
         $('.submenu li.active').closest('.dropdown').addClass('open').find('.submenu').show();
+        
+        // Position submenu on hover for collapsed sidebar
+        $('.sidebar.collapsed .dropdown').hover(function() {
+            if ($('.sidebar').hasClass('collapsed')) {
+                const rect = this.getBoundingClientRect();
+                $(this).find('.submenu').css('top', rect.top + 'px');
+            }
+        });
     </script>
     @stack('scripts')
 </body>

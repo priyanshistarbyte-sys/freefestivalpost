@@ -31,10 +31,14 @@ class TampletController extends Controller
                     return $tamplet->event_date ? with(new \Carbon\Carbon($tamplet->event_date))->format('d-m-Y') : '';
                 })
                 ->addColumn('image', function ($tamplet) {
-                    $imagePath = $tamplet->image
-                        ? asset('storage/' . ltrim($tamplet->image, '/'))
+                    $imagePath = $tamplet->path
+                        ? asset('storage/' . ltrim($tamplet->path, '/'))
                         : asset('assets/images/defaultApp.png');
-                    return '<img src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">';
+                    return '
+                    <a class="image-popup-no-margins" href="' . $imagePath . '">
+						<img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">
+					</a>
+                    ';
                 })
                 ->addColumn('mask', function ($tamplet) {
                     if(!$tamplet->planImgName){
@@ -96,36 +100,34 @@ class TampletController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->with('error', $validator->errors()->first());
         }
-        $tamplet                  = new Tamplet();
-        $tamplet->sub_category_id = $request->sub_category_id;
-        $tamplet->font_color      = $request->font_color;
-        $tamplet->lablebg         = $request->lable_bg;
-        $tamplet->font_size       = $request->font_size;
-        $tamplet->lable           = $request->label_new;
-        $tamplet->font_type       = $request->font_type;
-        $tamplet->language        = $request->language;
-        $tamplet->event_date      = $request->event_date;
-        $tamplet->free_paid       = $request->free_paid ? 1 : 0;
-        $tamplet->type            = 1;// if you use type, set default or dynamic
-        $imagePaths               = [];
+
+        $maskPath = null;
+        if ($request->has('has_mask') && $request->hasFile('mask')) {
+            $mask     = $request->file('mask');
+            $maskName = time() . '_' . $mask->getClientOriginalName();
+            $maskPath = $mask->storeAs('uploads/tamplet/masks', $maskName, 'public');
+        }
+
         if ($request->hasFile('image')) {
-            foreach ($request->file('image') as $img) {
-                $imgName      = time() . '_' . $img->getClientOriginalName();
-                $stored       = $img->storeAs('uploads/tamplet/images', $imgName, 'public');
-                $imagePaths[] = $stored;
+            foreach ($request->file('image') as $index => $img) {
+                $tamplet                  = new Tamplet();
+                $tamplet->sub_category_id = $request->sub_category_id;
+                $tamplet->font_color      = $request->font_color;
+                $tamplet->lablebg         = $request->lable_bg;
+                $tamplet->font_size       = $request->font_size;
+                $tamplet->lable           = $request->label_new;
+                $tamplet->font_type       = $request->font_type;
+                $tamplet->language        = $request->language;
+                $tamplet->event_date      = $request->event_date;
+                $tamplet->free_paid       = $request->free_paid ? 1 : 0;
+                $tamplet->type            = 1;
+                $tamplet->planImgName     = $maskPath;
+                $imgName       = time() . '_' . $index . '_' . $img->getClientOriginalName();
+                $stored        = $img->storeAs('uploads/tamplet/images', $imgName, 'public');
+                $tamplet->path = $stored;
+                $tamplet->save();
             }
         }
-        $tamplet->path = json_encode($imagePaths);
-
-        if ($request->has('has_mask') && $request->hasFile('mask')) {
-            $mask                 = $request->file('mask');
-            $maskName             = time() . '_' . $mask->getClientOriginalName();
-            $maskPath             = $mask->storeAs('uploads/tamplet/masks', $maskName, 'public');
-            $tamplet->planImgName = $maskPath;
-        } else {
-            $tamplet->planImgName = null;
-        }
-        $tamplet->save();
         return redirect()->route('tamplet.index')->with('success', 'Tamplet created successfully.');
     }
 
@@ -163,16 +165,19 @@ class TampletController extends Controller
         $tamplet->free_paid       = $request->has('free_paid') ? 1 : 0;
         
         if ($request->hasFile('image')) {
-            $imagePaths = $tamplet->path ? json_decode($tamplet->path, true) : [];
-            foreach ($request->file('image') as $img) {
-                $imgName      = time() . '_' . $img->getClientOriginalName();
-                $stored       = $img->storeAs('uploads/tamplet/images', $imgName, 'public');
-                $imagePaths[] = $stored;
+            if ($tamplet->path) {
+                Storage::disk('public')->delete($tamplet->path);
             }
-            $tamplet->path = json_encode($imagePaths);
+            $img           = $request->file('image');
+            $imgName       = time() . '_' . $img->getClientOriginalName();
+            $stored        = $img->storeAs('uploads/tamplet/images', $imgName, 'public');
+            $tamplet->path = $stored;
         }
         
         if ($request->hasFile('mask')) {
+            if ($tamplet->planImgName) {
+                Storage::disk('public')->delete($tamplet->planImgName);
+            }
             $mask                 = $request->file('mask');
             $maskName             = time() . '_' . $mask->getClientOriginalName();
             $maskPath             = $mask->storeAs('uploads/tamplet/masks', $maskName, 'public');
@@ -189,12 +194,9 @@ class TampletController extends Controller
     {
         $tamplet = Tamplet::findOrFail($id);
 
-        // Delete video file
+        // Delete image file
         if ($tamplet->path) {
-            $images = json_decode($tamplet->path, true);
-            foreach ($images as $image) {
-                Storage::disk('public')->delete($image);
-            }
+            Storage::disk('public')->delete($tamplet->path);
         }
         // Delete planImgName file
         if ($tamplet->planImgName && Storage::disk('public')->exists($tamplet->planImgName)) {

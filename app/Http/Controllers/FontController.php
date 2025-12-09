@@ -38,9 +38,9 @@ class FontController extends Controller
                             </button>
                             ';
                     return $buttons;
-                })
-                ->rawColumns(['actions'])
-                ->make(true);
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
         }
         return view('fonts.index');
     }
@@ -52,11 +52,15 @@ class FontController extends Controller
 
     public function store(Request $request)
     {
-       
         // Validate inputs
         $validator = Validator::make($request->all(), [
             'font_name' => ['required', 'file'],
         ]);
+
+         if ($validator->fails()) {
+            $messages = $validator->getMessageBag();
+            return redirect()->back()->with('error', $messages->first());
+        }
         
         // Additional validation for font file extensions
         $file = $request->file('font_name');
@@ -79,13 +83,17 @@ class FontController extends Controller
 
         // Save to DB
         Font::create([
-            'font_name' => $originalName,   // save readable name
-            'file_path' => $storedPath,     // save actual storage path
+            'font_name' => $originalName,  
+            'file_path' => $storedPath,    
         ]);
 
         return redirect()->route('fonts.index')->with('success', 'Font uploaded successfully.');
     }
 
+    public function show(Font $font)
+    {
+        return redirect()->back();
+    }
 
     public function edit(Font $font)
     {
@@ -95,6 +103,15 @@ class FontController extends Controller
 
     public function update(Request $request, Font $font)
     {
+        // Validate inputs
+        $validator = Validator::make($request->all(), [
+            'font_name' => ['required', 'file'],
+        ]);
+
+         if ($validator->fails()) {
+            $messages = $validator->getMessageBag();
+            return redirect()->back()->with('error', $messages->first());
+        }
         // If new font file is uploaded
         if ($request->hasFile('font_name')) {
             $file = $request->file('font_name');

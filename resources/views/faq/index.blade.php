@@ -1,36 +1,24 @@
 @extends('layouts.main')
-@section('title', 'Sub Category')
+@section('title', 'FAQ')
 @section('content')
-
     <div class="page-header">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="card-title">Sub Category List</h4>
-            <div>
-                <a href="{{ route('subcategory.export') }}" class="btn btn-success me-2">
-                    <i class="fa fa-download me-2"></i>Export Excel
-                </a>
-                <a href="{{ route('sub-category.create') }}" class="btn btn-primary">
-                    <i class="fa fa-plus me-2"></i>Add
-                </a>
-            </div>
+            <h4 class="card-title">FAQ List</h4>
+            <a href="#" class="btn btn-primary" data-ajax-popup="true" data-size="md"
+                data-title="{{ __('Create FAQ') }}" data-url="{{ route('faqs.create') }}"
+                data-bs-toggle="tooltip" data-bs-original-title="{{ __('Create') }}"><i class="fa fa-plus me-2"></i>Add</a>
         </div>
     </div>
 
     <div class="card">
         <div class="card-body">
             <div class="table-container">
-                <table class="table" id="sub-category-table">
+                <table class="table" id="faqs-table">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Event date</th>
-                            <th>Category</th>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Noti Banner</th>
-                            <th>Quote</th>
-                            <th>Tag</th>
-                            <th>TagBG</th>
+                            <th>Question</th>
+                            <th>Answer</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -44,10 +32,10 @@
     <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $('#sub-category-table').DataTable({
+            $('#faqs-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('sub-category.index') }}',
+                ajax: '{{ route('faqs.index') }}',
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -55,46 +43,16 @@
                         searchable: false
                     },
                     {
-                        data: 'event_date',
-                        name: 'event_date'
+                        data: 'question',
+                        name: 'question'
                     },
                     {
-                        data: 'category',
-                        name: 'category'
-                    },
-                    {
-                        data: 'image',
-                        name: 'image',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'mtitle',
-                        name: 'mtitle'
-                    },
-                    {
-                        data: 'noti_banner',
-                        name: 'noti_banner',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'noti_quote',
-                        name: 'noti_quote'
-                    },
-                    {
-                        data: 'lable',
-                        name: 'lable'
-                    },
-                    {
-                        data: 'lablebg',
-                        name: 'lablebg'
+                        data: 'answer',
+                        name: 'answer'
                     },
                     {
                         data: 'status',
-                        name: 'status',
-                        orderable: false,
-                        searchable: false
+                        name: 'status'
                     },
                     {
                         data: 'actions',
@@ -104,7 +62,6 @@
                     },
                 ]
             });
-
             $(document).on('click', '.delete-btn', function(e) {
                 e.preventDefault();
                 const deleteUrl = $(this).attr('data-url');
@@ -145,7 +102,7 @@
             let id = $(this).data('id');
 
             $.ajax({
-                url: "{{ route('subcategory.updateStatus') }}",
+                url: "{{ route('faq.updateStatus') }}",
                 type: "POST",
                 data: {
                     id: id,

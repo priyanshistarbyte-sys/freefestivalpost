@@ -4,7 +4,7 @@
 
     <div class="page-header">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="card-title">All Users</h4>
+            <h4 class="card-title">Users List</h4>
             <a href="#" class="btn btn-primary" data-ajax-popup="true" data-size="lg"
                 data-title="{{ __('Create User') }}" data-url="{{ route('admin-user.create') }}" data-bs-toggle="tooltip"
                 data-bs-original-title="{{ __('Create') }}"><i class="fa fa-plus me-2"></i>Add</a>

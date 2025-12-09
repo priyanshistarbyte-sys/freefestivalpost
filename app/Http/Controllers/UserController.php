@@ -313,4 +313,36 @@ class UserController extends Controller
         $feedback->delete();
         return redirect()->route('feedback.list')->with('success', 'Feedback deleted successfully.');
     }
+
+
+    public function transactionList(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Transaction::from('transaction as t')
+                ->leftJoin('admin as a', 'a.id', '=', 't.user_id')
+                ->select('t.*', 'a.business_name', 'a.mobile')
+                ->orderByRaw('t.id DESC')
+                ->get();
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->editColumn('created_at', function ($transaction) {
+                    return $transaction->created_at ? with(new \Carbon\Carbon($transaction->created_at))->format('d-m-Y h:m') : '';
+                })
+                ->addColumn('actions', function ($transaction) {
+                    $buttons  = '';
+                    $deleteUrl = route('transaction.delete', $transaction->id);
+                    $buttons .= '
+                            <button type="button" class="btn btn-sm delete-btn"
+                                data-url="' . $deleteUrl . '"
+                                title="Delete">
+                                <i class="fa fa-trash me-2"></i>
+                            </button>
+                            ';
+                    return $buttons;
+                })
+                ->rawColumns(['created_at', 'actions'])
+                ->make(true);
+        }
+        return view('users.transactionlist');
+    }
 }

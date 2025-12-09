@@ -5,7 +5,9 @@ use App\Http\Controllers\AppSliderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ComplainController;
 use App\Http\Controllers\CustomframeController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FontController;
 use App\Http\Controllers\FrameController;
 use App\Http\Controllers\HomeCategoryController;
@@ -19,6 +21,7 @@ use App\Http\Controllers\SubscriptionPlanController;
 use App\Http\Controllers\TampletController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideogifController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -50,6 +53,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // users
     Route::resource('user', UserController::class);
     Route::post('/user/status/update', [UserController::class, 'updateStatus'])->name('admin.updateStatus');
+
+    // users transactions 
+    Route::get('/users-transactions', [UserController::class, 'transactionList'])->name('users.transactions.list');
    
     // change-password
     Route::get('/user/{id}/change-password', [UserController::class, 'changePassword'])->name('user.changePassword');
@@ -113,7 +119,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('app-slider',AppSliderController::class);
     Route::post('/app-slider/status/update', [AppSliderController::class, 'updateStatus'])->name('app-slider.updateStatus');
 
+    // faqs
+    Route::resource('faqs',FaqController::class);
+    Route::post('/faq/status/update', [FaqController::class, 'updateStatus'])->name('faq.updateStatus');
+    
+    // complain 
+    Route::get('/complain', [ComplainController::class, 'index'])->name('complain.list');
+    Route::get('/complain/reply/{id}', [ComplainController::class, 'reply'])->name('compain.reply');
+    Route::post('/complain/reply/{id}', [ComplainController::class, 'replyStore'])->name('compain.reply.store');
 
+    // payment
+    Route::get('/payment-failed', [PaymentController::class, 'failedList'])->name('payment.failed');
 });
 
 Route::middleware('auth')->group(function () {
