@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ApplicationAddController;
 use App\Http\Controllers\AppSliderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -130,6 +131,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // payment
     Route::get('/payment-failed', [PaymentController::class, 'failedList'])->name('payment.failed');
+
+    // application
+    Route::resource('application',ApplicationAddController::class);
 });
 
 Route::middleware('auth')->group(function () {

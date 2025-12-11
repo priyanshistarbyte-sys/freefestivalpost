@@ -1,11 +1,11 @@
 @extends('layouts.main')
 
-@section('page-title', 'Create Sub Category')
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <a href="{{ route('sub-category.index') }}" class="btn btn-secondary btn-sm float-end">Back to List</a>
+        <div class="card-header d-flex justify-content-between align-items-center">
+             <h4 class="card-title mb-0">Sub Category Page</h4>
+            <a href="{{ route('sub-category.index') }}" class="btn btn-secondary btn-sm">Back to List</a>
         </div>
         <div class="card-body">
             @if ($errors->any())

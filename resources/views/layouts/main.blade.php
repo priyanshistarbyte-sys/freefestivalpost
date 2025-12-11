@@ -105,6 +105,17 @@
                         <li class="{{ request()->routeIs('photo.index') ? 'active' : '' }}"><a href="{{ route('photo.index') }}"><span>Photos</span></a></li>
                     </ul>
                 </li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle">
+                        <i class="fa fa-mobile"></i> <span>Application</span>
+                        <i class="fa fa-angle-right arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="{{ request()->routeIs('photo-status.*') ? 'active' : '' }}"><a href="{{ route('photo-status.index') }}"><span>Photo Status</span></a></li>
+                        <li class="{{ request()->routeIs('application.*') ? 'active' : '' }}"><a href="{{ route('application.index') }}"><span>Application</span></a></li>
+                    </ul>
+                </li>
+                
                 <li class="{{ request()->routeIs('plan.*') ? 'active' : '' }}">
                     <a href="{{ route('plan.index') }}">
                         <i class="fa fa-paw"></i><span>Subscription Plan</span>
