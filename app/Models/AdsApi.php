@@ -18,10 +18,10 @@ class AdsApi extends Model
         'updated_at',
     ];
         
-
-
-    public function adsApi()
+    public function ads_app()
     {
-        return $this->hasMany(AdsApi::class, 'app_id', 'id');
+        return $this->belongsTo(ApplicationAdd::class, 'app_id', 'id');
     }
+
+   
 }

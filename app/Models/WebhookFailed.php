@@ -9,19 +9,18 @@ class WebhookFailed extends Model
     protected $table = 'webhook_failed';
 
     protected $fillable = [
-        'web_fail_id',
-        'w_date',
-        'w_event',
+        'date',
+        'event',
         'transaction_id',
-        'w_amount',
-        'w_email',
-        'w_mobile',
+        'amount',
+        'email',
+        'mobile',
         'created_at',
         'updated_at'
     ];
 
     protected $casts = [
-        'w_date' => 'date',
+        'date' => 'datetime',
     ];
 
     

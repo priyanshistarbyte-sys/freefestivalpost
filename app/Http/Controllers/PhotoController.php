@@ -24,7 +24,7 @@ class PhotoController extends Controller
                 ->addColumn('photo', function ($photo) {
                     $imagePath = $photo->photo
                         ? asset('storage/' . ltrim($photo->photo, '/'))
-                        :  asset('assets/images/defaultApp.png');
+                        :  asset('assets/images/default.jpg');
                     return '
                     <a class="image-popup-no-margins" href="' . $imagePath . '">
 						<img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">

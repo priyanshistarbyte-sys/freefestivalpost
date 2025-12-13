@@ -47,7 +47,7 @@ class SubCategoryController extends Controller
                     if ($subCategory->noti_banner) {
                         $bannerPath = $subCategory->noti_banner
                             ? asset('storage/' . ltrim($subCategory->noti_banner, '/'))
-                            : asset('assets/images/defaultApp.png');
+                            : asset('assets/images/default.jpg');
                         return '<img src="' . $bannerPath . '" alt="Icon" class="dataTable-app-img rounded" width="40" height="40">';
                     }
                 })

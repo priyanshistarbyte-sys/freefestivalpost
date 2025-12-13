@@ -52,9 +52,11 @@
                     <div class="col-md-6 mb-3">
                          <label for="image" class="form-label">Images</label>
                          <input type="file" class="form-control" id="image" name="image">
-                         @if($appSlider->image)
-                            <small class="text-muted">Current: {{ basename($appSlider->image) }}</small>
-                         @endif
+                         <div class="mt-2">
+                            <img src="{{ $appSlider->image ? asset('storage/' . $appSlider->image) : asset('assets/images/default.jpg') }}" 
+                                    alt="Current Image" 
+                                    style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;">
+                        </div>
                     </div>
                     <div class="col-md-6 mb-3">
                           <label class="form-label" for="status">Status</label></br>

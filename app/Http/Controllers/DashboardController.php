@@ -24,4 +24,22 @@ class DashboardController extends Controller
        
         return view('admin.dashboard');
     }
+
+    public function settings()
+    {
+        $settings = DB::table('setting')->pluck('value', 'option_name')->toArray();
+
+        return view('admin.settings', compact('settings'));
+    }
+
+
+    public function updateSettings(Request $request)
+    {
+        $data = $request->all();
+        unset($data['_token']);
+        foreach ($data as $key => $value) {
+            DB::table('setting')->where('option_name', $key)->update(['value' => $value]);
+        }
+        return redirect()->back()->with('success', 'Settings updated successfully.');
+    }
 }

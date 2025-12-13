@@ -63,7 +63,7 @@ class VideogifController extends Controller
                 ->addColumn('thumb', function ($Videogif) {
                     $imagePath = $Videogif->thumb
                         ? asset('storage/' . ltrim($Videogif->thumb, '/'))
-                        : asset('assets/images/defaultApp.png');
+                        : asset('assets/images/default.jpg');
                     return '<img src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">';
                 })
                 ->editColumn('created_at', function ($user) {

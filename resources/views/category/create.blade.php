@@ -1,6 +1,6 @@
 <form action="{{  route('category.store') }}" enctype="multipart/form-data" method="POST">
     @csrf
-     <div class="modal-body">
+    <div class="modal-body">
         <div class="row">
             <div class="mb-3">
                 <div class="form-group">

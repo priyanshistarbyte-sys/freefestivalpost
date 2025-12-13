@@ -42,7 +42,7 @@
 }
 
 .custom-switch input:checked + .switch-slider {
-    background-color: #28a745;
+    background-color: #2c3e50;
 }
 
 .custom-switch input:checked + .switch-slider:before {
@@ -50,7 +50,7 @@
 }
 
 .custom-switch input:focus + .switch-slider {
-    box-shadow: 0 0 4px rgba(40, 167, 69, 0.5);
+    box-shadow: 0 0 4px rgba(44, 62, 80, 0.5);
 }
 
 /* Override any conflicting styles */
@@ -64,7 +64,7 @@
 }
 
 .custom-switch input:checked + .switch-slider {
-    background-color: #28a745 !important;
+    background-color: #2c3e50 !important;
 }
 
 .custom-switch .switch-slider:before,

@@ -33,7 +33,7 @@ class TampletController extends Controller
                 ->addColumn('image', function ($tamplet) {
                     $imagePath = $tamplet->path
                         ? asset('storage/' . ltrim($tamplet->path, '/'))
-                        : asset('assets/images/defaultApp.png');
+                        : asset('assets/images/default.jpg');
                     return '
                     <a class="image-popup-no-margins" href="' . $imagePath . '">
 						<img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="30" height="20">
@@ -46,7 +46,7 @@ class TampletController extends Controller
                     }else{
                         $imagePath = $tamplet->planImgName
                             ? asset('storage/' . ltrim($tamplet->planImgName, '/'))
-                            : asset('assets/images/defaultApp.png');
+                            : asset('assets/images/default.jpg');
                         return '<img src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">';
                     }
                 })
@@ -102,10 +102,14 @@ class TampletController extends Controller
         }
 
         $maskPath = null;
+        // if ($request->has('has_mask') && $request->hasFile('mask')) {
+        //     $mask     = $request->file('mask');
+        //     $maskName = time() . '_' . $mask->getClientOriginalName();
+        //     $maskPath = $mask->storeAs('uploads/tamplet/masks', $maskName, 'public');
+        // }
+
         if ($request->has('has_mask') && $request->hasFile('mask')) {
-            $mask     = $request->file('mask');
-            $maskName = time() . '_' . $mask->getClientOriginalName();
-            $maskPath = $mask->storeAs('uploads/tamplet/masks', $maskName, 'public');
+            $maskPath = $request->file('mask')->store('uploads/tamplet/masks', 'public');
         }
 
         if ($request->hasFile('image')) {

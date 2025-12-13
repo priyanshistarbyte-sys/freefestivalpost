@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('webhook_failed')) {
-            Schema::create('webhook_failed', function (Blueprint $table) {
+        if (!Schema::hasTable('setting')) {
+            Schema::create('setting', function (Blueprint $table) {
                 $table->id();
-                $table->date('date');
-                $table->string('event');
-                $table->string('transaction_id');
-                $table->float('amount',12,2)->default(0.0);
-                $table->string('email');
-                $table->string('mobile');
+                $table->string('option_name');
+                $table->text('value');
                 $table->timestamps();
             });
         }
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('webhook_failed');
+        Schema::dropIfExists('setting');
     }
 };

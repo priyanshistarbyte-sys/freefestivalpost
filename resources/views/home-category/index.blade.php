@@ -110,7 +110,7 @@
             }
         });
     });
-        $(document).on('change', '.home-status-toggle', function () {
+    $(document).on('change', '.home-status-toggle', function () {
         let is_show_on_home = $(this).is(':checked') ? 1 : 0;
         let id = $(this).data('id');
 

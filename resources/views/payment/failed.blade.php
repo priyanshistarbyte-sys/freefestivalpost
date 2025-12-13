@@ -72,12 +72,12 @@
                     }
                 },
                 columns: [
-                    { data: 'web_fail_id', name: 'web_fail_id', orderable: false, searchable: false },
-                    { data: 'w_date', name: 'w_date' },
-                    { data: 'w_mobile', name: 'w_mobile'},
+                    { data: 'id', name: 'id', orderable: false, searchable: false },
+                    { data: 'date', name: 'date' },
+                    { data: 'mobile', name: 'mobile'},
                     { data: 'transaction_id', name: 'transaction_id' },
-                    { data: 'w_amount', name: 'w_amount' },
-                    { data: 'w_email', name: 'w_email' },
+                    { data: 'amount', name: 'amount' },
+                    { data: 'email', name: 'email' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'updated_at', name: 'updated_at' },
                 ]

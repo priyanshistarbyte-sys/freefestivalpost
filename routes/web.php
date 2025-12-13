@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicationAddController;
+use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\AppSliderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -134,6 +135,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // application
     Route::resource('application',ApplicationAddController::class);
+
+    // advertisement
+    Route::resource('advertisement',AdvertisementController::class);
+
+    // settings
+    Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
+    Route::post('/settings/update', [DashboardController::class, 'updateSettings'])->name('settings.update');
+
+   
 });
 
 Route::middleware('auth')->group(function () {
