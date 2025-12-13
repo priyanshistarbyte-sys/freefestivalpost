@@ -18,7 +18,7 @@ return new class extends Migration
                 $table->string('business_name')->nullable();
                 $table->text('photo')->nullable();
                 $table->string('mobile',14)->unique();
-                $table->string('email')->unique();
+                $table->string('email')->unique()->nullable();
                 $table->string('password');
                 $table->string('b_email',50)->nullable();
                 $table->string('b_mobile2',12)->nullable();
