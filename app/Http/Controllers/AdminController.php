@@ -21,7 +21,7 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Admin::where('role', '!=', '3')->orderBy('id', 'desc');
+            $query = Admin::where('role', '!=', 'User')->orderBy('id', 'desc');
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->editColumn('created_at', function ($user) {
@@ -105,9 +105,10 @@ class AdminController extends Controller
         $admin->password = Hash::make($request->password);
         $admin->note = $request->note ?? '';
         $admin->status = $request->status ?? '';
+        $admin->role = $request->role;
         $admin->save();
 
-        // Assign Role directly 
+        // Assign Role through Spatie Permission
         $admin->assignRole($request->role);
 
         return redirect()->route('admin-user.index')->with('success', 'Admin user created successfully.');
@@ -129,9 +130,10 @@ class AdminController extends Controller
      */
     public function edit(string $id)
     {
-        $roles = Role::pluck('name', 'name')->all();
         $admin = Admin::findOrFail($id);
-        return view('admin-user.edit', compact('roles', 'admin'));
+        $roles = Role::pluck('name', 'name')->all();
+        $userRole = $admin->getRoleNames()->toArray();
+        return view('admin-user.edit', compact('roles', 'admin','userRole'));
     }
 
     /**
@@ -145,7 +147,7 @@ class AdminController extends Controller
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'email', 'max:255', Rule::unique('admin')->ignore($admin->id)],
             'mobile'   => ['required', 'string', 'max:15', Rule::unique('admin')->ignore($admin->id)],
-            'password' => ['required', 'string', 'min:8'],
+            // 'password' => ['required', 'string', 'min:8'],
             'role'     => ['required', 'exists:roles,name'],
 
         ]);
@@ -159,6 +161,7 @@ class AdminController extends Controller
         $admin->mobile = $request->mobile;
         $admin->note = $request->note ?? '';
         $admin->status = $request->status ?? 0;
+        $admin->role = $request->role;
 
         if (!empty($request->password)) {
             $admin->password = Hash::make($request->password);
@@ -166,7 +169,7 @@ class AdminController extends Controller
 
         $admin->save();
 
-        // Remove old roles & assign new role
+        // Remove old roles & assign new role through Spatie Permission
         $admin->syncRoles([$request->role]);
 
         return redirect()->route('admin-user.index')->with('success', 'Admin updated successfully.');

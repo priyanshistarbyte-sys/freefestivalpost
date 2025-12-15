@@ -37,12 +37,37 @@
 @endsection
 @push('scripts')
     <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.print.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#admin-user-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('admin-user.index') }}',
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        title: 'Admin_User',
+                        className: 'btn btn-success btn-sm',
+                        exportOptions: {
+                            columns: [0,1,2,3,4,5,6,7,8,9]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        title: 'Admin_User',
+                        className: 'btn btn-info btn-sm',
+                        exportOptions: {
+                            columns: [0,1,2,3,4,5,6,7,8,9]
+                        }
+                    }
+                ],
                 columns: [
                     {
                         data: 'DT_RowIndex',
@@ -95,6 +120,30 @@
                         searchable: false
                     },
                 ]
+            });
+        });
+        $(document).on('change', '.status-toggle', function() {
+            let status = $(this).is(':checked') ? 1 : 0;
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: "{{ route('admin.updateStatus') }}",
+                type: "POST",
+                data: {
+                    id: id,
+                    status: status,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success('Status updated successfully');
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function() {
+                    toastr.error('Something went wrong!');
+                }
             });
         });
     </script>

@@ -35,6 +35,10 @@
 @endsection
 @push('scripts')
     <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.print.min.js') }}"></script>
       <script>
         function previewVideo(input) {
             const file = input.files[0];
@@ -54,6 +58,27 @@
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('videogif.index') }}',
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        title: 'Videogif',
+                        className: 'btn btn-success btn-sm',
+                        exportOptions: {
+                            columns: [0,1,2,3,6,7,8]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        title: 'Customframe',
+                        className: 'btn btn-info btn-sm',
+                        exportOptions: {
+                            columns: [0,1,2,3,6,7,8]
+                        }
+                    }
+                ],
                 columns: [
                     {
                         data: 'id',

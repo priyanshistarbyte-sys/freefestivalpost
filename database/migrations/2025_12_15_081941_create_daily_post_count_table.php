@@ -11,18 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-         if (!Schema::hasTable('notification')) {
-            Schema::create('notification', function (Blueprint $table) {
+        if (!Schema::hasTable('daily_post_count')) {
+            Schema::create('daily_post_count', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('user_id');
                 $table->foreign('user_id')->references('id')->on('admin')->onDelete('cascade');
-                $table->string('oprating_system');
-                $table->integer('app_version');
-                $table->text('token');
-                $table->text('device_id');
+                $table->integer('tamp_count');
                 $table->timestamps();
             });
-         }
+        }
     }
 
     /**
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notification');
+        Schema::dropIfExists('daily_post_count');
     }
 };

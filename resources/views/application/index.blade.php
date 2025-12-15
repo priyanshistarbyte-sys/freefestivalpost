@@ -32,12 +32,37 @@
 @endsection
 @push('scripts')
     <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.print.min.js') }}"></script>
      <script>
         $(document).ready(function() {
             $('#application-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('application.index') }}',
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        title: 'Application',
+                        className: 'btn btn-success btn-sm',
+                        exportOptions: {
+                            columns: [0,1,2,3,4,5]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        title: 'Application',
+                        className: 'btn btn-info btn-sm',
+                        exportOptions: {
+                            columns: [0,1,2,3,4,5]
+                        }
+                    }
+                ],
                 columns: [
                     {
                         data: 'DT_RowIndex',

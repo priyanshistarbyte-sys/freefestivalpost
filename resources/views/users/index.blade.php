@@ -7,53 +7,67 @@
             <a href="{{ route('user.create') }}" class="btn btn-primary"><i class="fa fa-plus me-2"></i>Add</a>
         </div>
     </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <form id="payment_filter" class="w-100">
+                    <div class="row mb-3 align-items-end">
+                        <div class="col-md-3">
+                            <label for="version" class="form-label">Version Code</label>
+                            <input type="text" name="version" id="version" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="type" class="form-label">User Type</label>
+                            <select id="type" class="form-select">
+                                <option value="">--- Select ---</option>
+                                <option value="1">New User</option>
+                                <option value="2">Total Package Paid User</option>
+                                <option value="6">Total Package Expired User</option>
+                                <option value="3">Trial Plan Active User</option>
+                                <option value="5">Trial Plan Expired User</option>
+                                <option value="4">Without Logo</option>
+                                <option value="8">Total Free User</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="start_date" class="form-label">Start Date</label>
+                            <input type="date" name="start_date" id="start_date" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="end_date" class="form-label">End Date</label>
+                            <input type="date" name="end_date" id="end_date" class="form-control">
+                        </div>
+                    </div>
+                    <!-- Buttons column -->
+                    <div class="d-flex justify-content-end gap-1">
+                        <button type="button" id="filter-btn" class="btn btn-primary">
+                            <i class="ti ti-search"></i> Filter
+                        </button>
+                        <button type="button" id="reset-btn" class="btn btn-danger">
+                            <i class="ti ti-trash-off"></i> Reset
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <div class="card">
         <div class="card-body">
-            <div class="row mb-4">
-                <div class="col-md-3">
-                    <label>Version Code</label>
-                    <input type="text" id="filter_version" class="form-control" placeholder="Enter Version Code">
-                </div>
-
-                <div class="col-md-3">
-                    <label>Select Plan</label>
-                    <select id="filter_plan" class="form-select">
-                        <option value="">All</option>
-                        <option value="free">Free</option>
-                        <option value="trial">Trial</option>
-                        <option value="premium">Premium</option>
-                    </select>
-                </div>
-
-                <div class="col-md-3">
-                    <label>Start Date</label>
-                    <input type="date" id="filter_start" class="form-control">
-                </div>
-
-                <div class="col-md-3">
-                    <label>End Date</label>
-                    <input type="date" id="filter_end" class="form-control">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-12 text-end">
-                    <button type="button" id="search-btn" class="btn btn-primary me-2">Filter</button>
-                    <button type="button" id="reset-btn" class="btn btn-danger">Reset</button>
-                </div>
-            </div>
-            <hr class="mb-5">
             <div class="table-container">
                 <table class="table" id="users-table">
                     <thead>
                         <tr>
                             <th>Id</th>
+                            <th>Post</th>
                             <th>Reg. Date</th>
-                            {{-- <th>App Version</th> --}}
+                            <th>App Version</th>
                             <th>Logo</th>
                             <th>Business Name</th>
                             <th>Mobile</th>
+                            <th>ispaid</th>
                             <th>Status</th>
+                            <th>Expiry</th>
                             <th>OTP</th>
                             <th>Actions</th>
                         </tr>
@@ -65,19 +79,70 @@
 @endsection
 @push('scripts')
     <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.print.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             var table = $('#users-table').DataTable({
+              
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('user.index') }}',
+                ajax: {
+                    ajax: '{{ route('user.index') }}',
+                    data: function (d) {
+                        d.version    = $('#version')..val();
+                        d.start_date = $('#start_date').val();
+                        d.end_date = $('#end_date').val();
+                        d.type = $('#type').val();
+                    }
+                },
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        title: 'Users',
+                        className: 'btn btn-success btn-sm',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 9, 10]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        title: 'Users',
+                        className: 'btn btn-info btn-sm',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 9, 10]
+                        },
+                        customize: function(win) {
+                            $(win.document.body).find('table').addClass('compact');
+                            $(win.document.body).find('img').css({
+                                'max-width': '30px',
+                                'height': 'auto',
+                                'display': 'block',
+                                'margin': '0 auto'
+                            });
+                            $(win.document.body).css('font-size', '10pt');
+                        }
+                    }
+                ],
                 columns: [{
                         data: 'id',
                         name: 'id'
                     },
                     {
+                        data: 'post',
+                        name: 'post'
+                    },
+                    {
                         data: 'created_at',
                         name: 'created_at'
+                    },
+                    {
+                        data: 'app_version',
+                        name: 'app_version'
                     },
                     {
                         data: 'photo',
@@ -92,8 +157,16 @@
                         name: 'mobile'
                     },
                     {
+                        data: 'ispaid',
+                        name: 'ispaid'
+                    },
+                    {
                         data: 'status',
                         name: 'status'
+                    },
+                    {
+                        data: 'expdate',
+                        name: 'expdate'
                     },
                     {
                         data: 'otp',
@@ -106,6 +179,7 @@
                         searchable: false
                     }
                 ]
+
             });
 
             $(document).on('click', '.delete-btn', function(e) {

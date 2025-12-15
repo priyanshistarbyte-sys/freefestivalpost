@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -20,17 +21,33 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // $query = Admin::from('admin as a')
-            // ->leftJoin('notification as n', 'a.id', '=', 'n.user_id')
-            // ->where('a.role', '>', 0)
-            // ->select('a.*', 'n.app_version')
-            // ->groupBy('a.id')
-            // ->get();
-            $query = Admin::where('role', 3)->get();
+
+            $query = Admin::from('admin as a')
+                ->leftJoin('notification as n', 'a.id', '=', 'n.user_id')
+                ->where('a.role', 'User')
+                ->select('a.*', 'n.app_version');
+            
+            if ($request->filled('start_date')) {
+                $query->whereDate('created_at', '>=', $request->start_date);
+            }
+            
+            if ($request->filled('end_date')) {
+                $query->whereDate('created_at', '<=', $request->end_date);
+            }
+            
+            if ($request->filled('type')) {
+                $query->where('status', $request->status);
+            }
+
             return DataTables::of($query)
                 ->addIndexColumn()
+                ->addColumn('post', function ($user) {
+                    return $user->countUserPostTotal($user->id);
+                })
                 ->editColumn('created_at', function ($user) {
-                    return $user->created_at ? with(new \Carbon\Carbon($user->created_at))->format('d-m-Y h:m') : '';
+                    return $user->created_at
+                        ? \Carbon\Carbon::parse($user->created_at)->format('d-m-Y h:i A')
+                        : '';
                 })
                 ->addColumn('photo', function ($user) {
                     $imagePath = $user->photo ? asset('storage/' . ltrim($user->photo, '/')) : null;
@@ -41,57 +58,68 @@ class UserController extends Controller
                             </a>
                             ';
                     } else {
-                        return '<img src="' . asset('assets/images/default.jpg') . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">';
+                        return 'No Logo';
                     }
                 })
+
+               ->editColumn('mobile', function ($user) {
+                    return '<a target="_blank" style="text-decoration: underline; color: #0088cc"
+                                href="https://web.whatsapp.com/send?phone=91' . $user->mobile . '">
+                                ' . $user->mobile . '
+                            </a>';
+                })
+                ->editColumn('ispaid', function ($user) {
+                    $ispaidTitle = $this->userPaidStatus($user->ispaid, $user->planStatus);
+
+                    if ($user->ispaid == 0) {
+                        return '<i class="fa fa-times-circle iconfsize icolred"
+                                    data-toggle="tooltip" title="' . $ispaidTitle . '"></i>
+                                <span class="ms-1">' . $ispaidTitle . '</span>';
+                    }
+                    return '<i class="fa fa-check-circle iconfsize icolgreen"
+                                data-toggle="tooltip" title="' . $ispaidTitle . '"></i>
+                            <span class="ms-1">' . $ispaidTitle . '</span>';
+                })
+
                 ->addColumn('status', function ($user) {
                     $checked = $user->status == 1 ? 'checked' : '';
                     return '
                         <label class="custom-switch">
-                            <input type="checkbox" class="status-toggle" data-id="' . $user->id . '" ' . $checked . '>
+                            <input type="checkbox" class="status-toggle"
+                                data-id="' . $user->id . '" ' . $checked . '>
                             <span class="switch-slider"></span>
                         </label>';
                 })
-                ->addColumn('actions', function ($user) {
-                    $buttons = '';
-                    $changepassword = route('user.changePassword', $user->id);
-                    $buttons .= '
-                            <a href="#" class="btn btn-sm" 
-                            data-ajax-popup="true" data-size="md"
-                            data-title="Change Password" data-url="' . $changepassword . '"
-                            data-bs-toggle="tooltip" data-bs-original-title="Edit">
-                                <i class="fa fa-key me-2"></i>
-                            </a>
-                            ';
-                    $customeUrl = route('user.customframe', $user->id);
-                    $buttons .= '
-                             <a href="' . $customeUrl . '" class="btn btn-sm">
-                                <i class="fa fa-eye me-2"></i> 
-                             </a>
-                            ';
-                    $editUrl = route('user.edit', $user->id);
-                    $buttons .= '
-                             <a href="' . $editUrl . '" class="btn btn-sm">
-                                <i class="fa fa-edit me-2"></i> 
-                             </a>
-                            ';
-                    $deleteUrl = route('user.destroy', $user->id);
-                    $buttons .= '
-                            <button type="button" class="btn btn-sm delete-btn"
-                                data-url="' . $deleteUrl . '"
-                                title="Delete">
-                                <i class="fa fa-trash me-2"></i>
-                            </button>
-                            ';
-
-                    return $buttons;
+                ->editColumn('expdate', function ($user) {
+                    return $user->expdate
+                        ? \Carbon\Carbon::parse($user->expdate)->format('d/m/Y')
+                        : '';
                 })
-                ->rawColumns(['created_at', 'photo', 'status', 'actions'])
+
+                ->addColumn('actions', function ($user) {
+                    return '
+                        <a href="' . route('user.changePassword', $user->id) . '" class="btn btn-sm">
+                            <i class="fa fa-key me-2"></i>
+                        </a>
+                        <a href="' . route('user.customframe', $user->id) . '" class="btn btn-sm">
+                            <i class="fa fa-eye me-2"></i>
+                        </a>
+                        <a href="' . route('user.edit', $user->id) . '" class="btn btn-sm">
+                            <i class="fa fa-edit me-2"></i>
+                        </a>
+                        <button class="btn btn-sm delete-btn"
+                            data-url="' . route('user.destroy', $user->id) . '">
+                            <i class="fa fa-trash me-2"></i>
+                        </button>
+                    ';
+                })
+
+                ->rawColumns(['post','created_at','photo','mobile','ispaid','status','expdate','actions'])
                 ->make(true);
         }
+
         return view('users.index');
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -318,31 +346,61 @@ class UserController extends Controller
     public function transactionList(Request $request)
     {
         if ($request->ajax()) {
-            $query = Transaction::from('transaction as t')
-                ->leftJoin('admin as a', 'a.id', '=', 't.user_id')
-                ->select('t.*', 'a.business_name', 'a.mobile')
-                ->orderByRaw('t.id DESC')
-                ->get();
+
+            $query = DB::table('payments as p')
+                ->leftJoin('admin as a', 'p.user_id', '=', 'a.id')
+                ->leftJoin('subscription_plans as s', 'p.packageid', '=', 's.id')
+                ->select(
+                    'p.id',
+                    'p.user_id',
+                    'p.date',
+                    'p.amount',
+                    'p.transactionid',
+                    'p.status as payment_status',
+                    'p.created_at',
+                    'a.business_name',
+                    'a.mobile',
+                    'a.ispaid',
+                    's.plan_name'
+                );
+              
+
             return DataTables::of($query)
-                ->addIndexColumn()
-                ->editColumn('created_at', function ($transaction) {
-                    return $transaction->created_at ? with(new \Carbon\Carbon($transaction->created_at))->format('d-m-Y h:m') : '';
+                ->editColumn('date', function ($row) {
+                    return $row->date
+                        ? \Carbon\Carbon::parse($row->date)->format('d-m-Y')
+                        : '-';
                 })
-                ->addColumn('actions', function ($transaction) {
-                    $buttons  = '';
-                    $deleteUrl = route('transaction.delete', $transaction->id);
-                    $buttons .= '
-                            <button type="button" class="btn btn-sm delete-btn"
-                                data-url="' . $deleteUrl . '"
-                                title="Delete">
-                                <i class="fa fa-trash me-2"></i>
-                            </button>
-                            ';
-                    return $buttons;
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at
+                        ? \Carbon\Carbon::parse($row->created_at)->format('d-m-Y h:i A')
+                        : '-';
                 })
-                ->rawColumns(['created_at', 'actions'])
+                ->editColumn('payment_status', function ($row) {
+                    return ucfirst($row->payment_status);
+                })
+
+                ->editColumn('ispaid', function ($row) {
+                    return ($row->ispaid == 0)  ? 'Free' : 'Paid';
+                })
+                ->rawColumns(['date','created_at','payment_status','ispaid'])
                 ->make(true);
         }
         return view('users.transactionlist');
+    }
+
+    private function userPaidStatus($ispaid, $planStatus)
+    {
+        if ($ispaid == 1 && $planStatus == 2) {
+            return 'Paid';
+        } elseif ($ispaid == 1 && $planStatus == 1) {
+            return 'Trial Active';
+        } elseif ($ispaid == 0 && $planStatus == 1) {
+            return 'Trial Expired';
+        } elseif ($ispaid == 0 && $planStatus == 2) {
+            return 'Paid Expired';
+        } else {
+            return 'Free';
+        }
     }
 }

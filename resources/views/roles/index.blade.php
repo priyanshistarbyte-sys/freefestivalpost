@@ -29,12 +29,37 @@
 
 @push('scripts')
 <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.print.min.js') }}"></script>
 <script>
         $(document).ready(function() {
             $('#role-permission-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('roles.index') }}',
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        title: 'Role',
+                        className: 'btn btn-success btn-sm',
+                        exportOptions: {
+                            columns: [0,1]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        title: 'Customframe',
+                        className: 'btn btn-info btn-sm',
+                        exportOptions: {
+                            columns: [0,1]
+                        }
+                    }
+                ],
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'name', name: 'name'},

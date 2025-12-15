@@ -10,19 +10,17 @@
         <div class="card-body">
             <div class="row">
                 <form id="complain_filter">
-                    <div class="row mb-4">
-                        <div class="col-md-2">
-                        
-                        </div>
-                        <div class="col-md-3">
+                    <div class="row mb-3">
+                       
+                        <div class="col-md-4">
                             <label for="start_date" class="form-label">Start Date</label>
                             <input type="date" name="start_date" id="start_date" class="form-control">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label for="end_date" class="form-label">End Date</label>
                             <input type="date" name="end_date" id="end_date" class="form-control">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label>Select Status</label>
                             <select class="form-select" name="status" id="status">
                                 <option value="">Select Status</option>
@@ -32,14 +30,15 @@
                                 <option value="3">Solved</option>
                             </select>
                         </div>
-                        <div class="col-md-1" style=" padding: 20px;">
-                            <button type="button" id="filter-btn" class="btn  btn-primary">
-                                <i class="ti ti-search"></i> Filter
-                            </button>
-                            <button type="button" id="reset-btn" class="btn  btn-danger">
-                                <i class="ti ti-trash-off"></i> Reset
-                            </button>
-                        </div>
+                     
+                    </div>
+                    <div class="d-flex justify-content-end gap-1">
+                        <button type="button" id="filter-btn" class="btn btn-primary">
+                            <i class="ti ti-search"></i> Filter
+                        </button>
+                        <button type="button" id="reset-btn" class="btn btn-danger">
+                            <i class="ti ti-trash-off"></i> Reset
+                        </button>
                     </div>
                 </form>
             </div>
@@ -69,7 +68,11 @@
     </div>
 @endsection
 @push('scripts')
-    <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+      <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.print.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             var table = $('#complain-table').DataTable({
@@ -83,6 +86,27 @@
                         d.status = $('#status').val();
                     }
                 },
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        title: 'Complain',
+                        className: 'btn btn-success btn-sm',
+                        exportOptions: {
+                            columns: [0,1,2,3,4,5,6]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        title: 'Complain',
+                        className: 'btn btn-info btn-sm',
+                        exportOptions: {
+                            columns: [0,1,2,3,4,5,6]
+                        }
+                    }
+                ],
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'business_name', name: 'business_name' },

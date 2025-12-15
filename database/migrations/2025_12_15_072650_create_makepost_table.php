@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('makepost')) {
+         if (!Schema::hasTable('makepost')) {
             Schema::create('makepost', function (Blueprint $table) {
                 $table->id();
-                $table->unsignedBigInteger('user_id');
-                $table->foreign('user_id')->references('id')->on('admin')->onDelete('cascade');
-                $table->unsignedBigInteger('tamp_id');
-                $table->foreign('tamp_id')->references('id')->on('tamplet')->onDelete('cascade');
-                $table->text('post');
-                $table->timestamps();
+                $table->integer('user_id');
+                $table->integer('tamp_id');
+                $table->text('post')->nullable();
+                $table->date('created_at')->nullable();
+                $table->dateTime('updated_at')->nullable();
+
             });
         }
     }

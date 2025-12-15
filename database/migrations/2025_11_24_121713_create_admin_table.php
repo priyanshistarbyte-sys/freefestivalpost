@@ -18,7 +18,7 @@ return new class extends Migration
                 $table->string('business_name')->nullable();
                 $table->text('photo')->nullable();
                 $table->string('mobile',14)->unique();
-                $table->string('email')->unique()->nullable();
+                $table->string('email')->nullable();
                 $table->string('password');
                 $table->string('b_email',50)->nullable();
                 $table->string('b_mobile2',12)->nullable();
@@ -27,7 +27,7 @@ return new class extends Migration
                 $table->date('expdate')->nullable();
                 $table->integer('planStatus')->nullable();
                 $table->integer('gender')->nullable();
-                $table->integer('role')->default(1);
+                $table->string('role')->default('User');
                 $table->text('address')->nullable();
                 $table->integer('status')->nullable();
                 $table->text('note')->nullable();

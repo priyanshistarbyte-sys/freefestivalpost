@@ -13,7 +13,7 @@
     <div class="card">
         <div class="card-body">
             <div class="table-container">
-                <table class="table" id="photo-status-table">
+                <table class="table" id="photo-table">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -30,6 +30,10 @@
 @endsection
 @push('scripts')
     <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/buttons.print.min.js') }}"></script>
     <script>
         function previewImage(input, previewId) {
             const preview = document.getElementById(previewId);
@@ -53,10 +57,31 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#photo-status-table').DataTable({
+            $('#photo-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('photo.index') }}',
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        title: 'Photo',
+                        className: 'btn btn-success btn-sm',
+                        exportOptions: {
+                            columns: [0,1,2,3]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        title: 'Customframe',
+                        className: 'btn btn-info btn-sm',
+                        exportOptions: {
+                            columns: [0,1,2,3]
+                        }
+                    }
+                ],
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',

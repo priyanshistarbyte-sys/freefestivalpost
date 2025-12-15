@@ -14,7 +14,7 @@ class Admin extends Authenticatable
 
      protected $table = 'admin';
 
-     protected $guard_name = 'web';
+     protected $guard_name = 'admin';
 
      protected $fillable = [
         'name',
@@ -58,5 +58,12 @@ class Admin extends Authenticatable
         return [
             'password' => 'hashed',
         ];
+    }
+
+    public function countUserPostTotal($user_id)
+    {
+        return \DB::table('daily_post_count')
+            ->where('user_id', $user_id)
+            ->value('tamp_count') ?? 0;
     }
 }

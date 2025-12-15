@@ -38,10 +38,9 @@
                 <label class="form-label">Role</label>
                 <select name="role" class="form-control" required>
                     @foreach ($roles as $value => $label)
-                        <option value="{{ $value }}"
-                            {{ $admin->getRoleNames()->first() == $value ? 'selected' : '' }}>
-                            {{ $label }}
-                        </option>
+                            <option value="{{ $value }}" {{ in_array($value, $userRole) ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
                     @endforeach
                 </select>
             </div>
