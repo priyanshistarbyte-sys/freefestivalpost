@@ -663,7 +663,7 @@
                 buttons: [{
                         extend: 'excelHtml5',
                         text: 'Excel',
-                        title: 'Home-Category',
+                        title: 'Today-Festival-Post',
                         className: 'btn btn-success btn-sm',
                         exportOptions: {
                             columns: [0, 1, 2, 3]
@@ -672,7 +672,7 @@
                     {
                         extend: 'print',
                         text: 'Print',
-                        title: 'Customframe',
+                        title: 'Today-Festival-Post',
                         className: 'btn btn-info btn-sm',
                         exportOptions: {
                             columns: [0, 1, 2, 3]
@@ -716,7 +716,7 @@
                 buttons: [{
                         extend: 'excelHtml5',
                         text: 'Excel',
-                        title: 'Home-Category',
+                        title: 'Upcoming-Festival-Post',
                         className: 'btn btn-success btn-sm',
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4]
@@ -725,7 +725,7 @@
                     {
                         extend: 'print',
                         text: 'Print',
-                        title: 'Customframe',
+                        title: 'Upcoming-Festival-Post',
                         className: 'btn btn-info btn-sm',
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4]
@@ -826,7 +826,7 @@
                 buttons: [{
                         extend: 'excelHtml5',
                         text: 'Excel',
-                        title: 'Home-Category',
+                        title: 'Category-Template-Count',
                         className: 'btn btn-success btn-sm',
                         exportOptions: {
                             columns: [0, 1, 2, 3]
@@ -835,7 +835,7 @@
                     {
                         extend: 'print',
                         text: 'Print',
-                        title: 'Customframe',
+                        title: 'Category-Template-Count',
                         className: 'btn btn-info btn-sm',
                         exportOptions: {
                             columns: [0, 1, 2, 3]
@@ -885,7 +885,7 @@
                     {
                         extend: 'print',
                         text: 'Print',
-                        title: 'Customframe',
+                        title: 'Category-Photo',
                         className: 'btn btn-info btn-sm',
                         exportOptions: {
                             columns: [0, 1, 2]

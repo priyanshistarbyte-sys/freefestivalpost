@@ -186,14 +186,23 @@
                         @endcan
                     </ul>
                 </li>
-                <li class="dropdown">
+                <li class="dropdown {{ request()->routeIs('payment.*') ? 'active' : '' }}">
                     <a href="javascript:void(0)" class="dropdown-toggle">
                         <i class="fa fa-user-circle"></i> <span>Payment</span>
                         <i class="fa fa-angle-right arrow"></i>
                     </a>
                     <ul class="submenu">
-                        <li class="{{ request()->routeIs('payment-failed.*') ? 'active' : '' }}"><a href="{{ route('payment.failed') }}"><span>Payment Failed</span></a></li>
-                        <li class="#"><a href="#"><span>Trial Subscription</span></a></li>
+                        <li class="{{ request()->routeIs('payment.failed') ? 'active' : '' }}">
+                            <a href="{{ route('payment.failed') }}">
+                                <span>Payment Failed</span>
+                            </a>
+                        </li>
+
+                        <li class="{{ request()->routeIs('payment.paid-subscription') ? 'active' : '' }}">
+                            <a href="{{ route('payment.paid-subscription') }}">
+                                <span>Paid Subscription</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="{{ request()->routeIs('complain.*') ? 'active' : '' }}">

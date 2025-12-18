@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\HomeCategory;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -243,15 +244,21 @@ class SubCategoryController extends Controller
     public function destroy($id)
     {
         $subCategory = SubCategory::findOrFail($id);
-        // Delete image
-        if ($subCategory->image && Storage::disk('public')->exists($subCategory->image)) {
-            Storage::disk('public')->delete($subCategory->image);
+        $home_category = HomeCategory::where('sub_category_id', $subCategory->id)->count();
+        if ($home_category == 0) {
+               // Delete image
+                if ($subCategory->image && Storage::disk('public')->exists($subCategory->image)) {
+                    Storage::disk('public')->delete($subCategory->image);
+                }
+                if ($subCategory->noti_banner && Storage::disk('public')->exists($subCategory->noti_banner)) {
+                    Storage::disk('public')->delete($subCategory->noti_banner);
+                }
+                $subCategory->delete();
+                return redirect()->route('sub-category.index')->with('success', 'Sub Category deleted successfully.');
+        } 
+        else {
+            return redirect()->back()->with('error', 'This Sub Category is used in one or more Home Category.');
         }
-        if ($subCategory->noti_banner && Storage::disk('public')->exists($subCategory->noti_banner)) {
-            Storage::disk('public')->delete($subCategory->noti_banner);
-        }
-        $subCategory->delete();
-        return redirect()->route('sub-category.index')->with('success', 'Sub Category deleted successfully.');
     }
 
     public function getSubcategories($cid)

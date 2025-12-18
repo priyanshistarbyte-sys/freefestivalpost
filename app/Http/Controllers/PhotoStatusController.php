@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Photo;
 use App\Models\PhotoStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -51,6 +52,14 @@ class PhotoStatusController extends Controller
                             data-bs-toggle="tooltip" data-bs-original-title="Edit">
                                 <i class="fa fa-edit me-2"></i>
                             </a>
+                            ';
+                    $deleteUrl = route('photo-status.destroy', $photoStatus->id);
+                    $buttons .= '
+                            <button type="button" class="btn btn-sm delete-btn"
+                                data-url="' . $deleteUrl . '"
+                                title="Delete">
+                                <i class="fa fa-trash me-2"></i>
+                            </button>
                             ';
                     return $buttons;
                 })
@@ -148,11 +157,16 @@ class PhotoStatusController extends Controller
     public function destroy($id)
     {
         $photoStatus = PhotoStatus::findOrFail($id);
-        // Delete image
-        if ($photoStatus->image && Storage::disk('public')->exists($photoStatus->image)) {
-            Storage::disk('public')->delete($photoStatus->image);
-        }
-        $photoStatus->delete();
-        return redirect()->route('photo-status.index')->with('success', 'Photo Status deleted successfully.');
+        $photo = Photo::where('photo_status_id', $photoStatus->id)->count();
+            if ($photo == 0) {
+                // Delete image
+                if ($photoStatus->image && Storage::disk('public')->exists($photoStatus->image)) {
+                    Storage::disk('public')->delete($photoStatus->image);
+                }
+                $photoStatus->delete();
+                return redirect()->route('photo-status.index')->with('success', 'Photo Status deleted successfully.');
+            } else {
+                return redirect()->back()->with('error', 'This Photo Status is used in one or more Photo.');
+            }
     }
 }

@@ -145,6 +145,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // payment
     Route::get('/payment-failed', [PaymentController::class, 'failedList'])->name('payment.failed');
+    Route::get('/paid-subscription', [PaymentController::class, 'paidsubscriptionList'])->name('payment.paid-subscription');
+    Route::get('/paid/other-number-payment', [PaymentController::class, 'Othernumberpayment'])->name('payment.othernumberpayment');
+    Route::delete('/other-number-payment/{id}', [PaymentController::class, 'deleteOthernumberpayment'])->name('payment.othernumberpayment.destroy');
+    Route::get('/payment-active', [PaymentController::class, 'paymentActive'])->name('payment.active');
+    Route::get('/payment-deactive', [PaymentController::class, 'paymentDeactive'])->name('payment.deactive');
+    Route::post('/payment/get-user-data', [PaymentController::class, 'getUserData'])->name('payment.getUserData');
+    
 
     // application
     Route::resource('application',ApplicationAddController::class);

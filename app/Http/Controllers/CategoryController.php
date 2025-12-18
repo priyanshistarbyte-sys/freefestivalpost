@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -145,11 +146,16 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
-        // Delete image
-        if ($category->icon && Storage::disk('public')->exists($category->icon)) {
-            Storage::disk('public')->delete($category->icon);
+        $sub_category = SubCategory::where('category_id', $category->id)->count();
+            if ($sub_category == 0) {
+                // Delete image
+                if ($category->icon && Storage::disk('public')->exists($category->icon)) {
+                    Storage::disk('public')->delete($category->icon);
+                }
+                $category->delete();
+                return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
+            } else {
+                return redirect()->back()->with('error', 'This Category is used in one or more Sub Category.');
         }
-        $category->delete();
-        return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
     }
 }

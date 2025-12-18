@@ -3,7 +3,7 @@
 @section('content')
     <div class="page-header">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="card-title">Payments List</h4>
+            <h4 class="card-title">Payments Failed List</h4>
         </div>
     </div>
     <div class="card">
@@ -57,7 +57,7 @@
     </div>
 @endsection
 @push('scripts')
-      <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('assets/js/jszip.min.js') }}"></script>
     <script src="{{ asset('assets/js/buttons.html5.min.js') }}"></script>
