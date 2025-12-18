@@ -61,28 +61,30 @@
         $('#category-table').DataTable({
             processing: true,
             serverSide: true,
+            pageLength: 100,
             ajax: '{{ route('category.index') }}',
-             dom: 'Bfrtip',
-                buttons: [
-                    {
-                        extend: 'excelHtml5',
-                        text: 'Excel',
-                        title: 'Category',
-                        className: 'btn btn-success btn-sm',
-                        exportOptions: {
-                            columns: [0,2]
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        text: 'Print',
-                        title: 'Category',
-                        className: 'btn btn-info btn-sm',
-                        exportOptions: {
-                            columns: [0,2]
-                        }
+            dom: '<"d-flex justify-content-between align-items-center"<"d-flex align-items-center gap-2"Bl><f>>rtip',
+            lengthMenu: [[10, 25, 50, 100, 500, 1000], [10, 25, 50, 100, 500, 1000]],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Excel',
+                    title: 'Category',
+                    className: 'btn btn-success btn-sm',
+                    exportOptions: {
+                        columns: [0,2]
                     }
-                ],
+                },
+                {
+                    extend: 'print',
+                    text: 'Print',
+                    title: 'Category',
+                    className: 'btn btn-info btn-sm',
+                    exportOptions: {
+                        columns: [0,2]
+                    }
+                }
+            ],
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                 { data: 'icon', name: 'icon', orderable: false, searchable: false },

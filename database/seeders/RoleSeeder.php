@@ -11,10 +11,11 @@ class RoleSeeder extends Seeder
     {
         $admin     = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'admin']);
         $sub_admin = Role::firstOrCreate(['name' => 'Sub Admin', 'guard_name' => 'admin']);
-        // $user      = Role::firstOrCreate(['name' => 'User']);
+        
 
 
         $admin->syncPermissions([
+            'dashboard-manage',
             'role-manage',
             'role-create',
             'role-edit',
@@ -27,13 +28,24 @@ class RoleSeeder extends Seeder
             'user-create',
             'user-edit',
             'user-delete',
+            'user-transaction',
+            'frame-manage',
+            'sub-frame-manage',
+            'setting-manage',
+            'font-manage',
+            'send-notification-manage',
+            'slider-manage',
+            'faq-manage',
             'plan-manage',
             'plan-create',
             'plan-edit',
             'plan-delete',
+            'admin-user-manage',
         ]);
 
         $sub_admin->syncPermissions([
+           'dashboard-manage',
+           'sub-admin-dashboard-manage',
            'category-manage',
            'category-create',
            'category-edit',
@@ -42,6 +54,8 @@ class RoleSeeder extends Seeder
            'user-create',
            'user-edit',
            'user-delete',
+           'slider-manage',
+           'faq-manage',
         ]);
     }
 }

@@ -161,11 +161,11 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>New</th>
-                                <th>Active</th>
-                                <th>Impression</th>
-                                <th>Updated Date</th>
+                                <th width="25%">Date</th>
+                                <th width="25%">New</th>
+                                <th width="15%">Active</th>
+                                <th width="15%">Impression</th>
+                                <th width="10%">Updated Date</th>
                             </tr>
                         </thead>
 
@@ -173,7 +173,7 @@
                             @forelse($analytics as $analytic)
                                 <tr>
                                     <td>
-                                        {{ $analytic->c_date != '0000-00-00' ? date('d/m/Y', strtotime($analytic->c_date)) : '' }}
+                                        {{ $analytic->date != '0000-00-00' ? date('d/m/Y', strtotime($analytic->date)) : '' }}
                                     </td>
 
                                     <td>{{ $analytic->new ?? '-' }}</td>
@@ -207,10 +207,10 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>New</th>
-                                <th>Active</th>
-                                <th>Impression</th>
+                                <th width="25%">Date</th>
+                                <th width="25%">New</th>
+                                <th width="25%">Active</th>
+                                <th width="25%">Impression</th>
                             </tr>
                         </thead>
 
@@ -218,7 +218,7 @@
                             @forelse($liveanalytics as $liveanalytic)
                                 <tr>
                                     <td>
-                                        {{ $liveanalytic->d_date != '0000-00-00' ? date('d/m/Y', strtotime($liveanalytic->d_date)) : '' }}
+                                        {{ $liveanalytic->date != '0000-00-00' ? date('d/m/Y', strtotime($liveanalytic->date)) : '' }}
                                     </td>
                                     <td>{{ $liveanalytic->totalNew ?? '-' }}</td>
                                     <td>{{ $liveanalytic->totalActive ?? '-' }}</td>

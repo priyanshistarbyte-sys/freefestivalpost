@@ -1,24 +1,25 @@
 @extends('layouts.main')
-@section('title', 'Feedback')
+@section('title', 'User Post')
 @section('content')
-    <div class="page-header">
+   <div class="page-header">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="card-title">Feedback List</h4>
+            <h4 class="card-title">User Post List</h4>
         </div>
     </div>
-  <div class="card">
+    <div class="card">
         <div class="card-body">
             <div class="table-container">
-                <table class="table" id="feedback-table">
+                <table class="table" id="user-post-table">
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Business Name</th>
+                            <th>User</th>
                             <th>Mobile</th>
-                            <th>Subject</th>
-                            <th>Message</th>
-                            <th>Created At</th>
-                            <th>Actions</th>
+                            <th>Tamp ID</th>
+                            <th>Post</th>
+                            <th>Created</th>
+                            <th>Updated</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                 </table>
@@ -33,22 +34,22 @@
     <script src="{{ asset('assets/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('assets/js/buttons.print.min.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            $('#feedback-table').DataTable({
+         $(document).ready(function() {
+            $('#user-post-table').DataTable({
                 processing: true,
                 serverSide: true,
                 pageLength: 100,
-                ajax: '{{ route('feedback.list') }}',
+                ajax: '{{ route('post.list') }}',
                 dom: '<"d-flex justify-content-between align-items-center"<"d-flex align-items-center gap-2"Bl><f>>rtip',
                 lengthMenu: [[10, 25, 50, 100, 500, 1000], [10, 25, 50, 100, 500, 1000]],
                 buttons: [
                     {
                         extend: 'excelHtml5',
                         text: 'Excel',
-                        title: 'Feedback',
+                        title: 'Sub-Frame',
                         className: 'btn btn-success btn-sm',
                         exportOptions: {
-                            columns: [0,1,2,3,4,5]
+                            columns: [0,1,2,3]
                         }
                     },
                     {
@@ -57,48 +58,54 @@
                         title: 'Customframe',
                         className: 'btn btn-info btn-sm',
                         exportOptions: {
-                            columns: [0,1,2,3,4,5]
+                            columns: [0,1,2,3]
                         }
                     }
                 ],
-                columns: [{
+                columns: [
+                    {
                         data: 'id',
-                        name: 'id'
+                        name: 'id',
                     },
                     {
-                        data: 'business_name',
-                        name: 'business_name'
+                        data: 'name',
+                        name: 'name'
                     },
                     {
                         data: 'mobile',
                         name: 'mobile'
                     },
                     {
-                        data: 'subject',
-                        name: 'subject'
+                        data: 'tamplate',
+                        name: 'tamplate'
                     },
                     {
-                        data: 'message',
-                        name: 'message'
+                        data: 'post',
+                        name: 'post',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'created_at',
                         name: 'created_at'
                     },
-                    
+                    {
+                        data: 'updated_at',
+                        name: 'updated_at'
+                    },
                     {
                         data: 'actions',
                         name: 'actions',
                         orderable: false,
                         searchable: false
-                    }
+                    },
                 ]
             });
-
-            $(document).on('click', '.delete-btn', function(e) {
+         });
+         $(document).on('click', '.delete-btn', function(e) {
                 e.preventDefault();
                 const deleteUrl = $(this).attr('data-url');
-                
+
                 Swal.fire({
                     title: 'Are you sure?',
                     text: 'You want to delete this record?',
@@ -128,7 +135,6 @@
                         form.submit();
                     }
                 });
-            });
         });
     </script>
 @endpush

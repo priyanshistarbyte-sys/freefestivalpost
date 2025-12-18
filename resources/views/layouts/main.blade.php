@@ -13,6 +13,9 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
+    
+    <!-- Bootstrap Override CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-override.css') }}">
 
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
@@ -73,7 +76,7 @@
                     </ul>
                 </li>
                 
-                <li class="dropdown">
+                {{-- <li class="dropdown">
                     <a href="javascript:void(0)" class="dropdown-toggle">
                         <i class="fa fa-users"></i> <span>Users</span>
                         <i class="fa fa-angle-right arrow"></i>
@@ -81,8 +84,31 @@
                     <ul class="submenu">
                         <li class="{{ request()->routeIs('user.*') ? 'active' : '' }}"><a href="{{ route('user.index') }}"><span>Users List</span></a></li>
                         <li class="{{ request()->routeIs('users-transactions.*') ? 'active' : '' }}"><a href="{{ route('users.transactions.list') }}"><span>User Transaction</span></a></li>     
-                        <li class="#"><a href="#"><span>User Post</span></a></li>
+                        <li class="{{ request()->routeIs('post.list') ? 'active' : '' }}"><a href="{{ route('post.list') }}"><span>User Post</span></a></li> 
                         <li class="{{ request()->routeIs('feedback.*') ? 'active' : '' }}"><a href="{{ route('feedback.list') }}"><span>User Feedback</span></a></li>
+                    </ul>
+                </li> --}}
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle">
+                        <i class="fa fa-users"></i> <span>Users</span>
+                        <i class="fa fa-angle-right arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="{{ request()->routeIs('user.*') ? 'active' : '' }}">
+                            <a href="{{ route('user.index') }}"><span>Users List</span></a>
+                        </li>
+                        @can('user-transaction')
+                            <li class="{{ request()->routeIs('users.transactions.*') ? 'active' : '' }}">
+                                <a href="{{ route('users.transactions.list') }}"><span>User Transaction</span></a>
+                            </li>     
+                        @endcan
+                        <li class="{{ request()->routeIs('post.list') ? 'active' : '' }}">
+                            <a href="{{ route('post.list') }}"><span>User Post</span></a>
+                        </li> 
+
+                        <li class="{{ request()->routeIs('feedback.*') ? 'active' : '' }}">
+                            <a href="{{ route('feedback.list') }}"><span>User Feedback</span></a>
+                        </li>
                     </ul>
                 </li>
                 <li class="{{ request()->routeIs('tamplet.*') ? 'active' : '' }}">
@@ -115,34 +141,49 @@
                         <li class="{{ request()->routeIs('application.*') ? 'active' : '' }}"><a href="{{ route('application.index') }}"><span>Application</span></a></li>
                     </ul>
                 </li>
-                
+                @can('plan-manage')
                 <li class="{{ request()->routeIs('plan.*') ? 'active' : '' }}">
                     <a href="{{ route('plan.index') }}">
                         <i class="fa fa-paw"></i><span>Subscription Plan</span>
                     </a>
                 </li>
+                @endcan
+                @can('admin-user-manage')
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropdown-toggle">
                         <i class="fa fa-user-circle"></i> <span>Admin</span>
                         <i class="fa fa-angle-right arrow"></i>
                     </a>
                     <ul class="submenu">
-                        <li class="{{ request()->routeIs('admin-user.*') ? 'active' : '' }}"><a href="{{ route('admin-user.index') }}"><span>Users</span></a></li>
-                        <li class="{{ request()->routeIs('roles.index') ? 'active' : '' }}"><a href="{{ route('roles.index') }}"><span>Roles</span></a></li>
+                        @can('admin-user-manage')<li class="{{ request()->routeIs('admin-user.*') ? 'active' : '' }}"><a href="{{ route('admin-user.index') }}"><span>Users</span></a></li>@endcan
+                        @can('role-manage')<li class="{{ request()->routeIs('roles.index') ? 'active' : '' }}"><a href="{{ route('roles.index') }}"><span>Roles</span></a></li>@endcan
                     </ul>
                 </li>
+                @endcan
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropdown-toggle">
                         <i class="fa fa-cog"></i> <span>Site Settings</span>
                         <i class="fa fa-angle-right arrow"></i>
                     </a>
                     <ul class="submenu">
+                        @can('frame-manage')
                         <li class="{{ request()->routeIs('frame.*') ? 'active' : '' }}"><a href="{{ route('frame.index') }}"><span>Frames</span></a></li>
+                        @endcan
+                        @can('sub-frame-manage')
                         <li class="{{ request()->routeIs('sub-frame.*') ? 'active' : '' }}"><a href="{{ route('sub-frame.index') }}"><span>Sub Frames</span></a></li>
+                        @endcan
+                        @can('setting-manage')
                         <li class="{{ request()->routeIs('settings.*') ? 'active' : '' }}"><a href="{{ route('settings') }}"><span>Settings</span></a></li>
+                        @endcan
+                        @can('font-manage')
                         <li class="{{ request()->routeIs('fonts.*') ? 'active' : '' }}"><a href="{{ route('fonts.index') }}"><span>Fonts</span></a></li>
+                        @endcan
+                        @can('slider-manage')
                         <li class="{{ request()->routeIs('app-slider.*') ? 'active' : '' }}"><a href="{{ route('app-slider.index') }}"><span>Slider</span></a></li>
+                        @endcan
+                        @can('faq-manage')
                         <li class="{{ request()->routeIs('faqs.*') ? 'active' : '' }}"><a href="{{ route('faqs.index') }}"><span>FAQ</span></a></li>
+                        @endcan
                     </ul>
                 </li>
                 <li class="dropdown">

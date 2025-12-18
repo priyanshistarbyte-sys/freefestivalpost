@@ -35,6 +35,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::get('/dashboard/today-festival-posts', [DashboardController::class, 'todayFestivalPosts'])->name('dashboard.today-festival-posts');
+    Route::get('/dashboard/upcoming-festival-posts', [DashboardController::class, 'upcomingFestivalPosts'])->name('dashboard.upcoming-festival-posts');
+    Route::get('/dashboard/upcoming-festivals', [DashboardController::class, 'upcomingFestivals'])->name('dashboard.upcoming-festivals');
+    Route::get('/dashboard/category-template-count', [DashboardController::class, 'categoryWiseTemplateCount'])->name('dashboard.category-template-count');
+    Route::get('/dashboard/category-photo-count', [DashboardController::class, 'categoryWisePhotoCount'])->name('dashboard.category-photo-count');
+    Route::get('/dashboard/paid-user-count', [DashboardController::class, 'paidWiseUserCount'])->name('dashboard.paid-user-count');
+    Route::get('/dashboard/custom-report', [DashboardController::class, 'customReport'])->name('dashboard.custom-report');
+    Route::get('/dashboard/sms-log', [DashboardController::class, 'smsLog'])->name('dashboard.sms-log');
+
     // categories
     Route::resource('category', CategoryController::class);
 
@@ -58,6 +67,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // users transactions 
     Route::get('/users-transactions', [UserController::class, 'transactionList'])->name('users.transactions.list');
+
+    // user post list    
+    Route::get('/post-list', [UserController::class, 'postList'])->name('post.list');
+    Route::delete('/post/{id}', [UserController::class, 'deletePost'])->name('user.post.delete');
    
     // change-password
     Route::get('/user/{id}/change-password', [UserController::class, 'changePassword'])->name('user.changePassword');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Feedback;
+use App\Models\Makepost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,23 +23,101 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
 
-            $query = Admin::from('admin as a')
+            $type    = $request->input('type');
+            $version = $request->input('version');
+
+             $query = Admin::from('admin as a')
                 ->leftJoin('notification as n', 'a.id', '=', 'n.user_id')
+                ->leftJoin('daily_post_count as dp', 'a.id', '=', 'dp.user_id')
                 ->where('a.role', 'User')
-                ->select('a.*', 'n.app_version');
-            
-            if ($request->filled('start_date')) {
-                $query->whereDate('created_at', '>=', $request->start_date);
+                ->select(
+                    'a.*',
+                    'n.app_version',
+                    'dp.tamp_count'
+                );
+        
+            if ($version) {
+                if (in_array($type, [6, 7])) {
+                    $query->where('dp.tamp_count', '>=', $version);
+                } else {
+                    $query->where('n.app_version', $version);
+                }
             }
-            
-            if ($request->filled('end_date')) {
-                $query->whereDate('created_at', '<=', $request->end_date);
-            }
-            
-            if ($request->filled('type')) {
-                $query->where('status', $request->status);
+             /* User Type Filters */
+            switch ($type) {
+                // Free User
+                case 1:
+                    $query->where('a.ispaid', 0)
+                        ->whereNull('a.expdate')
+                        ->whereNull('a.planStatus');
+                    break;
+
+                // Plan Active (Paid)
+                case 2:
+                    $query->where('a.ispaid', 1)
+                        ->where('a.planStatus', 2);
+                    break;
+
+                // Plan Expired
+                case 3:
+                    $query->where('a.planStatus', 2);
+                    break;
+
+                // Trial Active
+                case 4:
+                    $query->where('a.ispaid', 1)
+                        ->where('a.planStatus', 1);
+                    break;
+
+                // Trial Expired
+                case 5:
+                    $query->where('a.ispaid', 0)
+                        ->where('a.planStatus', 1);
+                    break;
+
+                // Free User Wise Post Count
+                case 6:
+                    $query->where(function ($q) {
+                        $q->whereNull('a.planStatus')
+                        ->orWhere('a.planStatus', 1);
+                    });
+                    break;
+
+                // Paid User Wise Post Count
+                case 7:
+                    $query->where('a.ispaid', 1)
+                        ->where('a.planStatus', 2);
+                    break;
+
+                // Total Free User
+                case 8:
+                    $query->where('a.ispaid', 0)
+                        ->whereNull('a.planStatus');
+                    break;
             }
 
+             /* Date Filters */
+             if (in_array($type, [3, 5])) {
+                // Expiry date based
+                if ($request->filled('start_date')) {
+                    $query->whereDate('a.expdate', '>=', $request->start_date);
+                }
+                if ($request->filled('end_date')) {
+                    $query->whereDate('a.expdate', '<=', $request->end_date);
+                }
+            } else {
+                // Created date based
+                if ($request->filled('start_date')) {
+                    $query->whereDate('a.created_at', '>=', $request->start_date);
+                }
+                if ($request->filled('end_date')) {
+                    $query->whereDate(
+                        'a.created_at',
+                        '<=',
+                        \Carbon\Carbon::parse($request->end_date)->addDay()
+                    );
+                }
+            }
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('post', function ($user) {
@@ -97,9 +176,13 @@ class UserController extends Controller
                 })
 
                 ->addColumn('actions', function ($user) {
+                     $changepassword  = route('user.changePassword', $user->id);
                     return '
-                        <a href="' . route('user.changePassword', $user->id) . '" class="btn btn-sm">
-                            <i class="fa fa-key me-2"></i>
+                        <a href="#" class="btn btn-sm" 
+                            data-ajax-popup="true" data-size="md"
+                            data-title="Change Password" data-url="' . $changepassword . '"
+                            data-bs-toggle="tooltip" data-bs-original-title="Change Password">
+                                <i class="fa fa-key me-2"></i>
                         </a>
                         <a href="' . route('user.customframe', $user->id) . '" class="btn btn-sm">
                             <i class="fa fa-eye me-2"></i>
@@ -120,6 +203,8 @@ class UserController extends Controller
 
         return view('users.index');
     }
+   
+
     /**
      * Show the form for creating a new resource.
      */
@@ -345,48 +430,60 @@ class UserController extends Controller
 
     public function transactionList(Request $request)
     {
-        if ($request->ajax()) {
+        if (auth()->user()->can('user-transaction')) {
+            if ($request->ajax()) {
 
-            $query = DB::table('payments as p')
-                ->leftJoin('admin as a', 'p.user_id', '=', 'a.id')
-                ->leftJoin('subscription_plans as s', 'p.packageid', '=', 's.id')
-                ->select(
-                    'p.id',
-                    'p.user_id',
-                    'p.date',
-                    'p.amount',
-                    'p.transactionid',
-                    'p.status as payment_status',
-                    'p.created_at',
-                    'a.business_name',
-                    'a.mobile',
-                    'a.ispaid',
-                    's.plan_name'
-                );
-              
+                $query = DB::table('payments as p')
+                    ->leftJoin('admin as a', 'p.user_id', '=', 'a.id')
+                    ->leftJoin('subscription_plans as s', 'p.packageid', '=', 's.id')
+                    ->select(
+                        'p.id',
+                        'p.user_id',
+                        'p.date',
+                        'p.amount',
+                        'p.transactionid',
+                        'p.status as payment_status',
+                        'p.created_at',
+                        'a.business_name',
+                        'a.mobile',
+                        'a.ispaid',
+                        's.plan_name'
+                    );
+                
+                if ($request->filled('start_date')) {
+                    $query->whereDate('p.created_at', '>=', $request->start_date);
+                }
+                
+                if ($request->filled('end_date')) {
+                    $query->whereDate('p.created_at', '<=', $request->end_date);
+                }
+                
 
-            return DataTables::of($query)
-                ->editColumn('date', function ($row) {
-                    return $row->date
-                        ? \Carbon\Carbon::parse($row->date)->format('d-m-Y')
-                        : '-';
-                })
-                ->editColumn('created_at', function ($row) {
-                    return $row->created_at
-                        ? \Carbon\Carbon::parse($row->created_at)->format('d-m-Y h:i A')
-                        : '-';
-                })
-                ->editColumn('payment_status', function ($row) {
-                    return ucfirst($row->payment_status);
-                })
+                return DataTables::of($query)
+                    ->editColumn('date', function ($row) {
+                        return $row->date
+                            ? \Carbon\Carbon::parse($row->date)->format('d-m-Y')
+                            : '-';
+                    })
+                    ->editColumn('created_at', function ($row) {
+                        return $row->created_at
+                            ? \Carbon\Carbon::parse($row->created_at)->format('d-m-Y h:i A')
+                            : '-';
+                    })
+                    ->editColumn('payment_status', function ($row) {
+                        return ucfirst($row->payment_status);
+                    })
 
-                ->editColumn('ispaid', function ($row) {
-                    return ($row->ispaid == 0)  ? 'Free' : 'Paid';
-                })
-                ->rawColumns(['date','created_at','payment_status','ispaid'])
-                ->make(true);
+                    ->editColumn('ispaid', function ($row) {
+                        return ($row->ispaid == 0)  ? 'Free' : 'Paid';
+                    })
+                    ->rawColumns(['date','created_at','payment_status','ispaid'])
+                    ->make(true);
+            }
+            return view('users.transactionlist');
+        } else {
+            return redirect()->route('adx.index')->with('error', 'Permission Denied !');
         }
-        return view('users.transactionlist');
     }
 
     private function userPaidStatus($ispaid, $planStatus)
@@ -403,4 +500,62 @@ class UserController extends Controller
             return 'Free';
         }
     }
+
+
+    public function postList(Request $request)  
+    {
+        if ($request->ajax()) {
+             $query = DB::table('makepost as m')
+                ->leftJoin('admin as a', 'm.user_id', '=', 'a.id')
+                ->select('m.*', 'a.name','a.mobile')
+               ->get();
+              return DataTables::of($query)
+                ->addIndexColumn()
+                ->editColumn('tamplate', function ($row) {
+                     $editUrl = route('tamplet.edit', $row->tamp_id);
+                     return '<a class="image-popup-no-margins" target="_blank" href="' . $editUrl . '">'.$row->tamp_id.'</a>';
+                })
+                ->editColumn('post', function ($row) {
+                    $imagePath = $row->post ? asset('storage/' . ltrim($row->post, '/')) : null;
+                    if (!empty($row->post)) {
+                        return '
+                            <a class="image-popup-no-margins" href="' . $imagePath . '">
+                                <img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">
+                            </a>
+                            ';
+                    } else {
+                        return 'No Post';
+                    }
+                })
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at ? with(new \Carbon\Carbon($row->created_at))->format('d/m/Y') : '';
+                })
+                ->editColumn('updated_at', function ($row) {
+                    return $row->updated_at ? with(new \Carbon\Carbon($row->updated_at))->format('d/m/Y') : '';
+                })
+                ->addColumn('actions', function ($row) {
+                    $buttons  = '';
+                    $deleteUrl = route('user.post.delete', $row->id);
+                    $buttons .= '
+                            <button type="button" class="btn btn-sm delete-btn"
+                                data-url="' . $deleteUrl . '"
+                                title="Delete">
+                                <i class="fa fa-trash me-2"></i>
+                            </button>
+                            ';
+                    return $buttons;
+                })
+                ->rawColumns(['tamplate','post','created_at','updated_at','actions'])
+                ->make(true);
+        }
+        return view('users.postlist');
+    }
+
+    public function deletePost($id)
+    {
+        $post = Makepost::findOrFail($id);
+        $post->delete();
+        return redirect()->route('post.list')->with('success', 'Post deleted successfully.');
+    }
+
 }

@@ -14,6 +14,8 @@ class PermissionTableSeeder extends Seeder
      public function run(): void
     {
         $permissions = [
+            'dashboard-manage',
+            'sub-admin-dashboard-manage',
             'role-manage',
             'role-create',
             'role-edit',
@@ -26,10 +28,19 @@ class PermissionTableSeeder extends Seeder
             'user-create',
             'user-edit',
             'user-delete',
+            'user-transaction',
+            'frame-manage',
+            'sub-frame-manage',
+            'setting-manage',
+            'font-manage',
+            'send-notification-manage',
+            'slider-manage',
+            'faq-manage',
             'plan-manage',
             'plan-create',
             'plan-edit',
             'plan-delete',
+            'admin-user-manage',
         ];
 
         foreach ($permissions as $permission) {

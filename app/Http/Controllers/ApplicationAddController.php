@@ -235,19 +235,19 @@ class ApplicationAddController extends Controller
 
         $totaladvertisements = AdsApi::where('app_id', $appId)->count();
         $dailogs = Dailog::where('app_id', $appId)->first(); 
-        $analytics = DB::table('appcounter')->where('package_name', $applicationAdd->app_package_name)->orderBy('c_date', 'desc')->limit(7)->get();
+        $analytics = DB::table('appcounter')->where('package_name', $applicationAdd->app_package_name)->orderBy('date', 'desc')->limit(7)->get();
         $today = date('Y-m-d');
         $liveanalytics = DB::table('dailyappcounter')
             ->select(
-                'd_date',
-                'd_package_name',
+                'date',
+                'package_name',
                 DB::raw('SUM(impression) as totalImpression'),
-                DB::raw('SUM(d_new) as totalNew'),
-                DB::raw('COUNT(d_app_c_id) as totalActive')
+                DB::raw('SUM(new) as totalNew'),
+                DB::raw('COUNT(id) as totalActive')
             )
-            ->where('d_date', $today)
-            ->where('d_package_name', $applicationAdd->app_package_name)
-            ->groupBy('d_package_name', 'd_date')
+            ->where('date', $today)
+            ->where('package_name', $applicationAdd->app_package_name)
+            ->groupBy('package_name', 'date')
             ->get();
         return view('application.view', compact('applicationAdd','totaladvertisements','dailogs','analytics','liveanalytics'));
     }

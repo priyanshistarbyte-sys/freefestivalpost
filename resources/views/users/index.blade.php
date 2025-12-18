@@ -84,28 +84,30 @@
     <script src="{{ asset('assets/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('assets/js/buttons.print.min.js') }}"></script>
     <script>
-        $(document).ready(function() {
+         $(document).ready(function() {
             var table = $('#users-table').DataTable({
-              
                 processing: true,
                 serverSide: true,
+                pageLength: 100,
                 ajax: {
-                    ajax: '{{ route('user.index') }}',
+                    url: '{{ route("user.index") }}',
                     data: function (d) {
-                        d.version    = $('#version')..val();
+                        d.version    = $('#version').val();
                         d.start_date = $('#start_date').val();
-                        d.end_date = $('#end_date').val();
-                        d.type = $('#type').val();
+                        d.end_date   = $('#end_date').val();
+                        d.type       = $('#type').val();
                     }
                 },
-                dom: 'Bfrtip',
-                buttons: [{
+                dom: '<"d-flex justify-content-between align-items-center"<"d-flex align-items-center gap-2"Bl><f>>rtip',
+                lengthMenu: [[10, 25, 50, 100, 500, 1000], [10, 25, 50, 100, 500, 1000]],
+                buttons: [
+                    {
                         extend: 'excelHtml5',
                         text: 'Excel',
                         title: 'Users',
                         className: 'btn btn-success btn-sm',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 9, 10]
+                           columns: [0, 1, 2, 3, 4, 5, 6, 7, 9, 10]
                         }
                     },
                     {
@@ -114,21 +116,11 @@
                         title: 'Users',
                         className: 'btn btn-info btn-sm',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 9, 10]
-                        },
-                        customize: function(win) {
-                            $(win.document.body).find('table').addClass('compact');
-                            $(win.document.body).find('img').css({
-                                'max-width': '30px',
-                                'height': 'auto',
-                                'display': 'block',
-                                'margin': '0 auto'
-                            });
-                            $(win.document.body).css('font-size', '10pt');
+                           columns: [0, 1, 2, 3, 4, 5, 6, 7, 9, 10]
                         }
                     }
                 ],
-                columns: [{
+               columns: [{
                         data: 'id',
                         name: 'id'
                     },
@@ -179,10 +171,22 @@
                         searchable: false
                     }
                 ]
-
             });
 
-            $(document).on('click', '.delete-btn', function(e) {
+            $('#filter-btn').click(function() {
+                table.ajax.reload();
+            });
+
+            $('#reset-btn').click(function() {
+                $('#version').val('');
+                $('#type').val('');
+                $('#start_date').val('');
+                $('#end_date').val('');
+                table.ajax.reload();
+            });
+        });
+      
+        $(document).on('click', '.delete-btn', function(e) {
                 e.preventDefault();
                 const deleteUrl = $(this).attr('data-url');
 
@@ -216,7 +220,6 @@
                     }
                 });
             });
-        });
         $(document).on('change', '.status-toggle', function() {
             let status = $(this).is(':checked') ? 1 : 0;
             let id = $(this).data('id');
@@ -242,16 +245,6 @@
             });
         });
 
-        $('#reset-btn').click(function() {
-            $('#filter_version').val('');
-            $('#filter_plan').val('');
-            $('#filter_start').val('');
-            $('#filter_end').val('');
-            table.ajax.reload();
-        });
-
-        $('#search-btn').click(function() {
-            table.ajax.reload();
-        });
+      
     </script>
 @endpush

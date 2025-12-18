@@ -12,16 +12,16 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
-        <!-- Static CSS for XAMPP compatibility -->
+       
+        
+        <!-- Additional static assets -->
         <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/auth.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/tailwind-essential.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/compact-layout.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/spacing-override.css') }}">
         <script src="{{ asset('assets/js/jquery.min.js') }}" defer></script>
         <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}" defer></script>
-        <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
