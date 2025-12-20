@@ -184,6 +184,7 @@
                         @can('faq-manage')
                         <li class="{{ request()->routeIs('faqs.*') ? 'active' : '' }}"><a href="{{ route('faqs.index') }}"><span>FAQ</span></a></li>
                         @endcan
+                        <li class="{{ request()->routeIs('image-zip.download') ? 'active' : '' }}}"><a href="{{ route('image-zip.download') }}"><span>Images Copy With Zip Download</span></a></li>
                     </ul>
                 </li>
                 <li class="dropdown {{ request()->routeIs('payment.*') ? 'active' : '' }}">
@@ -197,10 +198,14 @@
                                 <span>Payment Failed</span>
                             </a>
                         </li>
-
                         <li class="{{ request()->routeIs('payment.paid-subscription') ? 'active' : '' }}">
                             <a href="{{ route('payment.paid-subscription') }}">
                                 <span>Paid Subscription</span>
+                            </a>
+                        </li>
+                        <li class="{{ request()->routeIs('payment.trial-subscription') ? 'active' : '' }}">
+                            <a href="{{ route('payment.trial-subscription') }}">
+                                <span>Trial Subscription</span>
                             </a>
                         </li>
                     </ul>
@@ -251,6 +256,15 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
+                        @can('setting-manage')
+                        <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog"></i>
+                                Setting</a></li>
+                        <li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        @endcan
+                      
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf

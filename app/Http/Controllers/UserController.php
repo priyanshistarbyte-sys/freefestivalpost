@@ -31,7 +31,16 @@ class UserController extends Controller
                 ->leftJoin('daily_post_count as dp', 'a.id', '=', 'dp.user_id')
                 ->where('a.role', 'User')
                 ->select(
-                    'a.*',
+                    'a.id',
+                    'a.business_name',
+                    'a.mobile',
+                    'a.ispaid',
+                    'a.planStatus',
+                    'a.expdate',
+                    'a.status',
+                    'a.otp',
+                    'a.created_at',
+                    'a.photo',
                     'n.app_version',
                     'dp.tamp_count'
                 );
@@ -123,6 +132,9 @@ class UserController extends Controller
                 ->addColumn('post', function ($user) {
                     return $user->countUserPostTotal($user->id);
                 })
+                ->filterColumn('post', function ($query, $keyword) {
+                        $query->where('dp.tamp_count', 'LIKE', "%{$keyword}%");
+                })
                 ->editColumn('created_at', function ($user) {
                     return $user->created_at
                         ? \Carbon\Carbon::parse($user->created_at)->format('d-m-Y h:i A')
@@ -159,6 +171,40 @@ class UserController extends Controller
                                 data-toggle="tooltip" title="' . $ispaidTitle . '"></i>
                             <span class="ms-1">' . $ispaidTitle . '</span>';
                 })
+                
+                ->filterColumn('ispaid', function ($query, $keyword) {
+                    $keyword = strtolower(trim($keyword));
+
+                    switch ($keyword) {
+                        case 'paid':
+                            $query->where('a.ispaid', 1)
+                                ->where('a.planStatus', 2);
+                            break;
+
+                        case 'trial active':
+                            $query->where('a.ispaid', 1)
+                                ->where('a.planStatus', 1);
+                            break;
+
+                        case 'trial expired':
+                            $query->where('a.ispaid', 0)
+                                ->where('a.planStatus', 1);
+                            break;
+
+                        case 'paid expired':
+                            $query->where('a.ispaid', 0)
+                                ->where('a.planStatus', 2);
+                            break;
+
+                        case 'free':
+                            $query->where(function ($q) {
+                                $q->whereNull('a.planStatus')
+                                ->orWhere('a.planStatus', 0);
+                            })->where('a.ispaid', 0);
+                            break;
+                    }
+                })
+
 
                 ->addColumn('status', function ($user) {
                     $checked = $user->status == 1 ? 'checked' : '';

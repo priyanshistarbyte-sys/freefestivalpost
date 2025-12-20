@@ -8,7 +8,7 @@
     </div>
     <div class="card">
         <div class="card-header">
-            <a href="{{ route('payment.paid-subscription') }}" class="btn btn-secondary btn-lg float-end ">Back to List</a>
+            {{-- <a href="{{ route('payment.paid-subscription') }}" class="btn btn-secondary btn-lg float-end ">Back to List</a> --}}
         </div>
         <div class="card-body">
             @if ($errors->any())
@@ -20,13 +20,13 @@
                     </ul>
                 </div>
             @endif
-            <form action="#" method="POST">
+            <form action="{{ route('payment.manually') }}" method="POST">
                 @csrf
                  <div class="row">
                     <div class="mb-3 col-md-3 form-group">
                         <label for="mobile" class="form-label">Fetch User</label>
-                        <input type="text" id="mobile" name="mobile" placeholder="Enter Mobile Number" class="form-control mobile">
-                        <input type="hidden" id="userid" name="userid" value="userid">
+                        <input type="text" id="mobile" name="mobile" placeholder="Enter Mobile Number" class="form-control mobile" required>
+                        <input type="hidden" id="userid" name="userid" value="">
                     </div>
                     <div class="mb-3 col-md-1 form-group" style="padding-top: 25px;">
                         <button type="button" class="getMobileData btn btn-primary fetch">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="mb-3 col-md-4 form-group">
                         <label for="mobile" class="form-label">Transaction ID</label>
-                        <input type="text" id="transationid" name="transationid" placeholder="Enter Transation ID" class="form-control">
+                        <input type="text" id="transationid" name="transationid" placeholder="Enter Transation ID" class="form-control" required>
                     </div>
                     <div class="mb-3 col-md-4 form-group">
                          <label for="mobile" class="form-label">Select Plan</label>
@@ -52,12 +52,11 @@
                     </div>
                     <div class="mb-3 col-md-4 form-group">
                         <label class="form-label">Select Date</label>
-                        <input type="date" class="form-control" id="buyDate" name="buyDate" value="{{ old('buyDate', date('Y-m-d')) }}"
-                            placeholder="Enter Date">
+                        <input type="date" class="form-control" id="buyDate" name="buyDate" value="{{ old('buyDate', date('Y-m-d')) }}" placeholder="Enter Date" required>
                     </div>
                     <div class="mb-3 col-md-4 form-group">
                         <label for="freeDays" class="form-label">Free Trial Days</label>
-                         <input type="text" id="freeDays" name="freeDays" placeholder="Enter Free Trial Days" class="form-control">
+                        <input type="text" id="freeDays" name="freeDays" placeholder="Enter Free Trial Days" class="form-control">
                     </div>
                     <div class="d-flex justify-content-end gap-2 mt-4">
                         <button type="submit" class="btn btn-primary" disabled="disabled">Send</button>
@@ -301,52 +300,19 @@
                         }
                     }
                 ],
-                columns: [{
-                        data: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'mobile',
-                        name: 'mobile'
-                    },
-                    {
-                        data: 'business_name',
-                        name: 'business_name'
-                    },
-                    {
-                        data: 'transactionid',
-                        name: 'transactionid'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status',
-                    },
-                    {
-                        data: 'packageid',
-                        name: 'packageid',
-                    },
-                    {
-                        data: 'price',
-                        name: 'price',
-                    },
-                    {
-                        data: 'month',
-                        name: 'month',
-                    },
-                    {
-                        data: 'ispaid',
-                        name: 'ispaid',
-                    },
-                    {
-                        data: 'expdate',
-                        name: 'expdate',
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at',
-                    },
-                ]
+             columns: [
+                { data: 'DT_RowIndex', orderable: false, searchable: false },
+                { data: 'mobile',        name: 'u.mobile' },
+                { data: 'business_name', name: 'u.business_name' },
+                { data: 'transactionid', name: 'p.transactionid' },
+                { data: 'status',        name: 'p.status' },
+                { data: 'packageid',     name: 'p.packageid' },
+                { data: 'price',         name: 'p.price' },
+                { data: 'month',         name: 'p.month' },
+                { data: 'ispaid',        name: 'u.ispaid' },
+                { data: 'expdate',       name: 'u.expdate' },
+                { data: 'created_at',    name: 'p.created_at' },
+            ]
             });
             $('#paymentexpireTable').DataTable({
                 processing: true,
@@ -377,51 +343,18 @@
                         }
                     }
                 ],
-                columns: [{
-                        data: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'mobile',
-                        name: 'mobile'
-                    },
-                    {
-                        data: 'business_name',
-                        name: 'business_name'
-                    },
-                    {
-                        data: 'transactionid',
-                        name: 'transactionid'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status',
-                    },
-                    {
-                        data: 'packageid',
-                        name: 'packageid',
-                    },
-                    {
-                        data: 'price',
-                        name: 'price',
-                    },
-                    {
-                        data: 'month',
-                        name: 'month',
-                    },
-                    {
-                        data: 'ispaid',
-                        name: 'ispaid',
-                    },
-                    {
-                        data: 'expdate',
-                        name: 'expdate',
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at',
-                    },
+                columns: [
+                    { data: 'DT_RowIndex', orderable: false, searchable: false },
+                    { data: 'mobile',        name: 'u.mobile' },
+                    { data: 'business_name', name: 'u.business_name' },
+                    { data: 'transactionid', name: 'p.transactionid' },
+                    { data: 'status',        name: 'p.status' },
+                    { data: 'packageid',     name: 'p.packageid' },
+                    { data: 'price',         name: 'p.price' },
+                    { data: 'month',         name: 'p.month' },
+                    { data: 'ispaid',        name: 'u.ispaid' },
+                    { data: 'expdate',       name: 'u.expdate' },
+                    { data: 'created_at',    name: 'p.created_at' },
                 ]
             });
 
@@ -476,37 +409,31 @@
                 },
                 success: function (response) {
 
-                    if (response.status === 'success') {
+                  if (response.status === 'success') {
 
-                        $(':submit').prop('disabled', false);
-                        
+                    $(':submit').prop('disabled', false);
+                    $('#userid').val(response.data.id);
 
-                        $('#userid').val(response.data.id);
+                    let rowData = `
+                        <td>${response.data.id}</td>
+                        <td>${response.data.mobile}</td>
+                        <td>${response.data.business_name ?? ''}</td>
+                        <td>${response.data.b_email ?? ''}</td>
+                        <td>${response.data.payment_status}</td>
+                        <td>${response.data.expdate ?? ''}</td>
+                        <td>${response.data.admin_status}</td>
+                        <td>${response.data.last_login ?? ''}</td>
+                    `;
 
-                        let isPaidBadge = response.data.pstatus
-                            ? response.data.pstatus
-                            : '<span class="badge bg-danger">Free</span>';
+                    $('.insertRow').html(rowData);
+                    toastr.success(response.message);
 
-                        let rowData = `
-                            <td>${response.data.id}</td>
-                            <td>${response.data.mobile}</td>
-                            <td>${response.data.business_name ?? ''}</td>
-                            <td>${response.data.b_email ?? ''}</td>
-                            <td>${isPaidBadge}</td>
-                            <td>${response.data.expdate ?? ''}</td>
-                            <td>${response.data.status ?? ''}</td>
-                            <td>${response.data.last_login ?? ''}</td>
-                        `;
-
-                        $('.insertRow').html(rowData);
-                        toastr.success(response.message);
-
-                    } else {
-                        $(':submit').prop('disabled', true);
-                        $('#userid').val('');
-                        $('.insertRow').html('');
-                        toastr.error(response.message);
-                    }
+                } else {
+                    $(':submit').prop('disabled', true);
+                    $('#userid').val('');
+                    $('.insertRow').html('');
+                    toastr.error(response.message);
+                }
                 },
                 error: function(xhr, status, error) {
                     toastr.error('Failed to fetch user data. Please try again.');

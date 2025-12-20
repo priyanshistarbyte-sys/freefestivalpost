@@ -151,6 +151,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/payment-active', [PaymentController::class, 'paymentActive'])->name('payment.active');
     Route::get('/payment-deactive', [PaymentController::class, 'paymentDeactive'])->name('payment.deactive');
     Route::post('/payment/get-user-data', [PaymentController::class, 'getUserData'])->name('payment.getUserData');
+    Route::post('/payment/manually', [PaymentController::class, 'paymentManually'])->name('payment.manually');
+    Route::get('/trial-subscription', [PaymentController::class, 'trialsubscriptionList'])->name('payment.trial-subscription');
+
+
+    
+
+    
     
 
     // application
@@ -163,7 +170,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
     Route::post('/settings/update', [DashboardController::class, 'updateSettings'])->name('settings.update');
 
-   
+    // image zip
+    Route::get('/image-zip-download', [DashboardController::class, 'imagezipDownload'])->name('image-zip.download');
+    
 });
 
 Route::middleware('auth')->group(function () {

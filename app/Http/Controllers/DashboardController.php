@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -363,5 +364,11 @@ class DashboardController extends Controller
             DB::table('setting')->where('option_name', $key)->update(['value' => $value]);
         }
         return redirect()->back()->with('success', 'Settings updated successfully.');
+    }
+
+    public function imagezipDownload(Request $request)
+    {
+        $categories = SubCategory::get();
+        return view('admin.imagezipDownload',compact('categories'));
     }
 }

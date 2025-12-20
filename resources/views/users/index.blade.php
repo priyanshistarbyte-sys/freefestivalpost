@@ -88,7 +88,6 @@
             var table = $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
-                pageLength: 100,
                 ajax: {
                     url: '{{ route("user.index") }}',
                     data: function (d) {
@@ -120,55 +119,23 @@
                         }
                     }
                 ],
-               columns: [{
-                        data: 'id',
-                        name: 'id'
-                    },
-                    {
-                        data: 'post',
-                        name: 'post'
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at'
-                    },
-                    {
-                        data: 'app_version',
-                        name: 'app_version'
-                    },
-                    {
-                        data: 'photo',
-                        name: 'photo'
-                    },
-                    {
-                        data: 'business_name',
-                        name: 'business_name'
-                    },
-                    {
-                        data: 'mobile',
-                        name: 'mobile'
-                    },
-                    {
-                        data: 'ispaid',
-                        name: 'ispaid'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status'
-                    },
-                    {
-                        data: 'expdate',
-                        name: 'expdate'
-                    },
-                    {
-                        data: 'otp',
-                        name: 'otp'
-                    },
+                columns: [
+                    { data: 'id', name: 'a.id' },
+                    { data: 'post', name: 'post', searchable: false }, // computed
+                    { data: 'created_at', name: 'a.created_at' },
+                    { data: 'app_version', name: 'n.app_version' },
+                    { data: 'photo', name: 'photo', searchable: false, orderable: false },
+                    { data: 'business_name', name: 'a.business_name' },
+                    { data: 'mobile', name: 'a.mobile' },
+                    { data: 'ispaid', name: 'a.ispaid' },
+                    { data: 'status', name: 'status', searchable: false, orderable: false },
+                    { data: 'expdate', name: 'a.expdate' },
+                    { data: 'otp', name: 'a.otp' },
                     {
                         data: 'actions',
                         name: 'actions',
-                        orderable: false,
-                        searchable: false
+                        searchable: false,
+                        orderable: false
                     }
                 ]
             });
