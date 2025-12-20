@@ -7,7 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Tamplet;
 use Carbon\Carbon;
+use ZipArchive;
+use Illuminate\Support\Facades\File;
 
 class DashboardController extends Controller
 {
@@ -370,5 +375,39 @@ class DashboardController extends Controller
     {
         $categories = SubCategory::get();
         return view('admin.imagezipDownload',compact('categories'));
+    }
+
+    public function imagezipDownloadStore(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'sub_category_id'  =>  ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            $messages = $validator->getMessageBag();
+            return redirect()->back()->with('error', $messages->first());
+        }
+
+        $cat_id = $request->sub_category_id;
+        $tamplet = $this->getTampList($cat_id);
+        $zip = new ZipArchive();
+        $zipFileName = 'images.zip';
+        $zip->open($zipFileName, ZipArchive::CREATE);
+        foreach ($tamplet as $tamp) {
+            $imagePath = storage_path('app/public/' . $tamp->path);
+            if (File::exists($imagePath)) {
+                $zip->addFile($imagePath, basename($imagePath));
+            }
+        }
+        $zip->close();
+        return response()->download($zipFileName)->deleteFileAfterSend(true);
+    }
+    
+    private function getTampList($cat_id)
+    {
+        if($cat_id!="all" && $cat_id!=""){
+           $tamplet = Tamplet::where('sub_category_id', $cat_id)->get();
+        }
+        return $tamplet;
     }
 }

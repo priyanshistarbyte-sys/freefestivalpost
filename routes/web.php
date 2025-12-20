@@ -154,12 +154,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/payment/manually', [PaymentController::class, 'paymentManually'])->name('payment.manually');
     Route::get('/trial-subscription', [PaymentController::class, 'trialsubscriptionList'])->name('payment.trial-subscription');
 
-
-    
-
-    
-    
-
     // application
     Route::resource('application',ApplicationAddController::class);
 
@@ -172,6 +166,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // image zip
     Route::get('/image-zip-download', [DashboardController::class, 'imagezipDownload'])->name('image-zip.download');
+    Route::post('/image-zip-download/store', [DashboardController::class, 'imagezipDownloadStore'])->name('image-zip.download.store');
+
     
 });
 
