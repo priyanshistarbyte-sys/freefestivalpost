@@ -75,19 +75,6 @@
                         <li class="{{ request()->routeIs('home-category.*') ? 'active' : '' }}"><a href="{{ route('home-category.index') }}"><span>Home Category</span></a></li>
                     </ul>
                 </li>
-                
-                {{-- <li class="dropdown">
-                    <a href="javascript:void(0)" class="dropdown-toggle">
-                        <i class="fa fa-users"></i> <span>Users</span>
-                        <i class="fa fa-angle-right arrow"></i>
-                    </a>
-                    <ul class="submenu">
-                        <li class="{{ request()->routeIs('user.*') ? 'active' : '' }}"><a href="{{ route('user.index') }}"><span>Users List</span></a></li>
-                        <li class="{{ request()->routeIs('users-transactions.*') ? 'active' : '' }}"><a href="{{ route('users.transactions.list') }}"><span>User Transaction</span></a></li>     
-                        <li class="{{ request()->routeIs('post.list') ? 'active' : '' }}"><a href="{{ route('post.list') }}"><span>User Post</span></a></li> 
-                        <li class="{{ request()->routeIs('feedback.*') ? 'active' : '' }}"><a href="{{ route('feedback.list') }}"><span>User Feedback</span></a></li>
-                    </ul>
-                </li> --}}
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropdown-toggle">
                         <i class="fa fa-users"></i> <span>Users</span>
@@ -148,6 +135,20 @@
                     </a>
                 </li>
                 @endcan
+                @can('report-manage')
+                 <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle">
+                        <i class="fa fa-mobile"></i> <span>Reports</span>
+                        <i class="fa fa-angle-right arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="{{ request()->routeIs('report.dayWiseSubscription') ? 'active' : '' }}"><a href="{{ route('report.dayWiseSubscription') }}"><span>Day Wise Subscription</span></a></li>
+                        <li class="{{ request()->routeIs('report.monthlySubscription') ? 'active' : '' }}"><a href="{{ route('report.monthlySubscription') }}"><span>Monthly Subscription</span></a></li>
+                        <li class="{{ request()->routeIs('report.repeatSubscription') ? 'active' : '' }}"><a href="{{ route('report.repeatSubscription') }}"><span>Repeat Subscription</span></a></li>
+                        <li class="{{ request()->routeIs('report.daywiseRegister') ? 'active' : '' }}"><a href="{{ route('report.daywiseRegister') }}"><span>Day Wise User Register</span></a></li>
+                    </ul>
+                </li>
+                @endcan
                 @can('admin-user-manage')
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropdown-toggle">
@@ -173,10 +174,13 @@
                         <li class="{{ request()->routeIs('sub-frame.*') ? 'active' : '' }}"><a href="{{ route('sub-frame.index') }}"><span>Sub Frames</span></a></li>
                         @endcan
                         @can('setting-manage')
-                        <li class="{{ request()->routeIs('settings.*') ? 'active' : '' }}"><a href="{{ route('settings') }}"><span>Settings</span></a></li>
+                        <li class="{{ request()->routeIs('settings') ? 'active' : '' }}"><a href="{{ route('settings') }}"><span>Settings</span></a></li>
                         @endcan
                         @can('font-manage')
                         <li class="{{ request()->routeIs('fonts.*') ? 'active' : '' }}"><a href="{{ route('fonts.index') }}"><span>Fonts</span></a></li>
+                        @endcan
+                        @can('coupon-manage')
+                        <li class="{{ request()->routeIs('coupon-code.*') ? 'active' : '' }}"><a href="{{ route('coupon-code.index') }}"><span>Coupon Code</span></a></li>
                         @endcan
                         @can('slider-manage')
                         <li class="{{ request()->routeIs('app-slider.*') ? 'active' : '' }}"><a href="{{ route('app-slider.index') }}"><span>Slider</span></a></li>
@@ -184,10 +188,11 @@
                         @can('faq-manage')
                         <li class="{{ request()->routeIs('faqs.*') ? 'active' : '' }}"><a href="{{ route('faqs.index') }}"><span>FAQ</span></a></li>
                         @endcan
-                        <li class="{{ request()->routeIs('image-zip.download') ? 'active' : '' }}}"><a href="{{ route('image-zip.download') }}"><span>Images Copy With Zip Download</span></a></li>
+                        <li class="{{ request()->routeIs('image-zip.download') ? 'active' : '' }}}"><a href="{{ route('image-zip.download') }}"><span>Images Copy</span></a></li>
+                        
                     </ul>
                 </li>
-                <li class="dropdown {{ request()->routeIs('payment.*') ? 'active' : '' }}">
+                <li class="dropdown">
                     <a href="javascript:void(0)" class="dropdown-toggle">
                         <i class="fa fa-user-circle"></i> <span>Payment</span>
                         <i class="fa fa-angle-right arrow"></i>

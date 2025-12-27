@@ -41,6 +41,11 @@ class RoleSeeder extends Seeder
             'plan-edit',
             'plan-delete',
             'admin-user-manage',
+            'report-manage',
+            'coupon-manage',
+            'coupon-create',
+            'coupon-edit',
+            'coupon-delete',
         ]);
 
         $sub_admin->syncPermissions([

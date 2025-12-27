@@ -11,8 +11,8 @@ class Tamplet extends Model
     protected $fillable = [
         'sub_category_id',
         'free_paid',
-        'type',
         'event_date',
+        'event',
         'path',
         'font_type',
         'font_size',

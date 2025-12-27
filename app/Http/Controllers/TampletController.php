@@ -92,6 +92,7 @@ class TampletController extends Controller
 
     public function store(Request $request)
     {
+      
         $validator = Validator::make($request->all(), [
             'sub_category_id' => ['required'],
             'image.*'         => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp'],
@@ -123,6 +124,7 @@ class TampletController extends Controller
                 $tamplet->font_type       = $request->font_type;
                 $tamplet->language        = $request->language;
                 $tamplet->event_date      = $request->event_date;
+                $tamplet->event           = $request->event ? 1 : 0;
                 $tamplet->free_paid       = $request->free_paid ? 1 : 0;
                 $tamplet->type            = 1;
                 $tamplet->planImgName     = $maskPath;
@@ -149,6 +151,7 @@ class TampletController extends Controller
 
     public function update(Request $request, Tamplet $tamplet)
     {
+       
         $validator = Validator::make($request->all(), [
             'type'            => ['required'],
             'image.*'         => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp'],
@@ -166,6 +169,7 @@ class TampletController extends Controller
         $tamplet->font_type       = $request->font_type;
         $tamplet->language        = $request->ln_post;
         $tamplet->event_date      = $request->event_date;
+        $tamplet->event           = $request->has('event') ? 1 : 0; 
         $tamplet->free_paid       = $request->has('free_paid') ? 1 : 0;
         
         if ($request->hasFile('image')) {

@@ -15,7 +15,6 @@
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Type</th>
                             <th>Date</th>
                             <th>Image</th>
                             <th>Mask</th>
@@ -42,7 +41,8 @@
             processing: true,
             serverSide: true,
             ajax: '{{ route('tamplet.index') }}',
-              dom: 'Bfrtip',
+            dom: '<"d-flex justify-content-between align-items-center"<"d-flex align-items-center gap-2"Bl><f>>rtip',
+            lengthMenu: [[10, 25, 50, 100, 500, 1000], [10, 25, 50, 100, 500, 1000]],
                 buttons: [
                     {
                         extend: 'excelHtml5',
@@ -50,7 +50,7 @@
                         title: 'Tamplet',
                         className: 'btn btn-success btn-sm',
                         exportOptions: {
-                            columns: [0,1,2,4,5,6,7]
+                            columns: [0,1,4,5,6]
                         }
                     },
                     {
@@ -59,13 +59,12 @@
                         title: 'Customframe',
                         className: 'btn btn-info btn-sm',
                         exportOptions: {
-                            columns: [0,1,2,4,5,6,7]
+                            columns: [0,1,4,5,6]
                         }
                     }
                 ],
             columns: [
                 { data: 'id', name: 'id'},
-                { data: 'type', name: 'type'},
                 { data: 'event_date', name: 'event_date'},
                 { data: 'image', name: 'image'},
                 { data: 'mask', name: 'mask'},

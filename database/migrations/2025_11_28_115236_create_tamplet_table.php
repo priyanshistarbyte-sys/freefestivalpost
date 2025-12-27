@@ -15,8 +15,8 @@ return new class extends Migration
             Schema::create('tamplet', function (Blueprint $table) {
                 $table->id();
                 $table->integer('free_paid')->default(0); // 1 for paid, 0 for free
-                $table->integer('type'); // 1 for video, 2 for gif
                 $table->date('event_date')->nullable();
+                $table->integer('event')->default(0); // 1 for event, 0 for event
                 $table->unsignedBigInteger('sub_category_id');
                 $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('cascade');
                 $table->text('path')->nullable(); 

@@ -26,7 +26,7 @@ class UserController extends Controller
             $type    = $request->input('type');
             $version = $request->input('version');
 
-             $query = Admin::from('admin as a')
+            $query = Admin::from('admin as a')
                 ->leftJoin('notification as n', 'a.id', '=', 'n.user_id')
                 ->leftJoin('daily_post_count as dp', 'a.id', '=', 'dp.user_id')
                 ->where('a.role', 'User')
@@ -222,25 +222,42 @@ class UserController extends Controller
                 })
 
                 ->addColumn('actions', function ($user) {
-                     $changepassword  = route('user.changePassword', $user->id);
-                    return '
-                        <a href="#" class="btn btn-sm" 
+
+                    $buttons = '';
+
+                    $changepassword = route('user.changePassword', $user->id);
+
+                    // Change password
+                    $buttons .= '
+                        <a href="#" class="btn btn-sm"
                             data-ajax-popup="true" data-size="md"
                             data-title="Change Password" data-url="' . $changepassword . '"
                             data-bs-toggle="tooltip" data-bs-original-title="Change Password">
-                                <i class="fa fa-key me-2"></i>
-                        </a>
+                            <i class="fa fa-key me-2"></i>
+                        </a>';
+
+                    // View
+                    $buttons .= '
                         <a href="' . route('user.customframe', $user->id) . '" class="btn btn-sm">
                             <i class="fa fa-eye me-2"></i>
-                        </a>
-                        <a href="' . route('user.edit', $user->id) . '" class="btn btn-sm">
-                            <i class="fa fa-edit me-2"></i>
-                        </a>
-                        <button class="btn btn-sm delete-btn"
-                            data-url="' . route('user.destroy', $user->id) . '">
-                            <i class="fa fa-trash me-2"></i>
-                        </button>
-                    ';
+                        </a>';
+
+                    // Edit
+                    if (auth()->user()->can('user-edit')) {
+                        $buttons .= '
+                            <a href="' . route('user.edit', $user->id) . '" class="btn btn-sm">
+                                <i class="fa fa-edit me-2"></i>
+                            </a>';
+                    }
+
+                    if (auth()->user()->can('user-delete')) {
+                        $buttons .= '
+                            <button class="btn btn-sm delete-btn"
+                                data-url="' . route('user.destroy', $user->id) . '">
+                                <i class="fa fa-trash me-2"></i>
+                            </button>';
+                    }
+                    return $buttons;
                 })
 
                 ->rawColumns(['post','created_at','photo','mobile','ispaid','status','expdate','actions'])
@@ -264,53 +281,56 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        if (auth()->user()->can('user-edit')) {
+            $validator = Validator::make($request->all(), [
+                'business_name' => ['nullable', 'string', 'max:255'],
+                'email'         => ['nullable', 'string', 'email', 'max:255', 'unique:admin'],
+                'password'      => ['required', 'min:6', 'confirmed'],
+                'business_logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+                'note'          => ['nullable', 'string', 'max:255'],
+                'mobile'        => ['required', 'string', 'max:15', 'unique:admin'],
+                'b_mobile2'     => ['nullable', 'string', 'max:15'],
+                'b_email'       => ['nullable', 'email'],
+                'b_website'     => ['nullable', 'string', 'max:255'],
+                'address'       => ['nullable', 'string', 'max:500'],
+                'gender'        => ['nullable', 'int', 'max:255', 'in:0,1'],
+            ]);
 
-        $validator = Validator::make($request->all(), [
-            'business_name' => ['nullable', 'string', 'max:255'],
-            'email'         => ['nullable', 'string', 'email', 'max:255', 'unique:admin'],
-            'password'      => ['required', 'min:6', 'confirmed'],
-            'business_logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'note'          => ['nullable', 'string', 'max:255'],
-            'mobile'        => ['required', 'string', 'max:15', 'unique:admin'],
-            'b_mobile2'     => ['nullable', 'string', 'max:15'],
-            'b_email'       => ['nullable', 'email'],
-            'b_website'     => ['nullable', 'string', 'max:255'],
-            'address'       => ['nullable', 'string', 'max:500'],
-            'gender'        => ['nullable', 'int', 'max:255', 'in:0,1'],
-        ]);
 
+            if ($validator->fails()) {
+                $messages = $validator->getMessageBag();
+                return redirect()->back()->with('error', $messages->first());
+            }
+            // Store User
+            $user                = new Admin();
+            $user->business_name = $request->business_name  ?? '';
+            $user->email         = $request->email ?: null;
+            $user->password      = bcrypt($request->password);
+            $user->note          = $request->note ?? '';
+            $user->mobile        = $request->mobile;
+            $user->b_mobile2     = $request->b_mobile2  ?? '';
+            $user->b_email       = $request->b_email  ?? '';
+            $user->b_website     = $request->b_website  ?? '';
+            $user->address       = $request->address ?? '';
+            $user->gender        = $request->gender;
+            $user->role          = 3; // User Role
 
-        if ($validator->fails()) {
-            $messages = $validator->getMessageBag();
-            return redirect()->back()->with('error', $messages->first());
+            // Checkbox Values
+            $user->status = $request->has('status') ? 1 : 0;
+            $user->ispaid = $request->has('ispaid') ? 1 : 0;
+
+            // Upload Business Logo
+            if ($request->hasFile('business_logo')) {
+                $path                = $request->file('business_logo')->store('uploads/images/business_logo', 'public');
+                $user->photo = $path;
+            }
+
+            $user->save();
+
+            return redirect()->route('user.index')->with('success', 'User created successfully!');
+        } else {
+            return redirect()->route('user.index')->with('error', 'Permission Denied !');
         }
-        // Store User
-        $user                = new Admin();
-        $user->business_name = $request->business_name  ?? '';
-        $user->email         = $request->email ?: null;
-        $user->password      = bcrypt($request->password);
-        $user->note          = $request->note ?? '';
-        $user->mobile        = $request->mobile;
-        $user->b_mobile2     = $request->b_mobile2  ?? '';
-        $user->b_email       = $request->b_email  ?? '';
-        $user->b_website     = $request->b_website  ?? '';
-        $user->address       = $request->address ?? '';
-        $user->gender        = $request->gender;
-        $user->role          = 3; // User Role
-
-        // Checkbox Values
-        $user->status = $request->has('status') ? 1 : 0;
-        $user->ispaid = $request->has('ispaid') ? 1 : 0;
-
-        // Upload Business Logo
-        if ($request->hasFile('business_logo')) {
-            $path                = $request->file('business_logo')->store('uploads/images/business_logo', 'public');
-            $user->photo = $path;
-        }
-
-        $user->save();
-
-        return redirect()->route('user.index')->with('success', 'User created successfully!');
     }
 
     /**
@@ -335,54 +355,58 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = Admin::findOrFail($id);
+        if (auth()->user()->can('user-edit')) {
+            $user = Admin::findOrFail($id);
 
-        // Validation
-        $validator = Validator::make($request->all(), [
-            'business_name' => ['nullable', 'string', 'max:255'],
-            'email'         => ['nullable', 'string', 'email', 'max:255', Rule::unique('admin')->ignore($user->id)],
-            'business_logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'note'          => ['nullable', 'string', 'max:255'],
-            'mobile'        => ['required', 'string', 'max:15', Rule::unique('admin')->ignore($user->id)],
-            'b_mobile2'     => ['nullable', 'string', 'max:15'],
-            'b_email'       => ['nullable', 'email'],
-            'b_website'     => ['nullable', 'string', 'max:255'],
-            'address'       => ['nullable', 'string', 'max:500'],
-            'gender'        => ['nullable', 'int', 'in:0,1'],
-        ]);
+            // Validation
+            $validator = Validator::make($request->all(), [
+                'business_name' => ['nullable', 'string', 'max:255'],
+                'email'         => ['nullable', 'string', 'email', 'max:255', Rule::unique('admin')->ignore($user->id)],
+                'business_logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+                'note'          => ['nullable', 'string', 'max:255'],
+                'mobile'        => ['required', 'string', 'max:15', Rule::unique('admin')->ignore($user->id)],
+                'b_mobile2'     => ['nullable', 'string', 'max:15'],
+                'b_email'       => ['nullable', 'email'],
+                'b_website'     => ['nullable', 'string', 'max:255'],
+                'address'       => ['nullable', 'string', 'max:500'],
+                'gender'        => ['nullable', 'int', 'in:0,1'],
+            ]);
 
-        if ($validator->fails()) {
-            $messages = $validator->getMessageBag();
-            return redirect()->back()->with('error', $messages->first());
-        }
-
-        // Update User Fields
-        $user->business_name = $request->business_name ?? '';
-        $user->email         = $request->email ?: null;
-        $user->note          = $request->note ?? '';
-        $user->mobile        = $request->mobile;
-        $user->b_mobile2     = $request->b_mobile2 ?? '';
-        $user->b_email       = $request->b_email ?? '';
-        $user->b_website     = $request->b_website ?? '';
-        $user->address       = $request->address ?? '';
-        $user->gender        = $request->gender;
-        // Checkbox Values
-        $user->status = $request->has('status') ? 1 : 0;
-        $user->ispaid = $request->has('ispaid') ? 1 : 0;
-
-        // Upload Business Logo
-        if ($request->hasFile('business_logo')) {
-
-            // Delete old logo if exists
-            if ($user->photo && Storage::disk('public')->exists($user->photo)) {
-                Storage::disk('public')->delete($user->photo);
+            if ($validator->fails()) {
+                $messages = $validator->getMessageBag();
+                return redirect()->back()->with('error', $messages->first());
             }
-            // Upload new logo
-            $path = $request->file('business_logo')->store('uploads/images/business_logo', 'public');
-            $user->photo = $path;
+
+            // Update User Fields
+            $user->business_name = $request->business_name ?? '';
+            $user->email         = $request->email ?: null;
+            $user->note          = $request->note ?? '';
+            $user->mobile        = $request->mobile;
+            $user->b_mobile2     = $request->b_mobile2 ?? '';
+            $user->b_email       = $request->b_email ?? '';
+            $user->b_website     = $request->b_website ?? '';
+            $user->address       = $request->address ?? '';
+            $user->gender        = $request->gender;
+            // Checkbox Values
+            $user->status = $request->has('status') ? 1 : 0;
+            $user->ispaid = $request->has('ispaid') ? 1 : 0;
+
+            // Upload Business Logo
+            if ($request->hasFile('business_logo')) {
+
+                // Delete old logo if exists
+                if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                    Storage::disk('public')->delete($user->photo);
+                }
+                // Upload new logo
+                $path = $request->file('business_logo')->store('uploads/images/business_logo', 'public');
+                $user->photo = $path;
+            }
+            $user->save();
+            return redirect()->route('user.index')->with('success', 'User updated successfully!');
+        } else {
+            return redirect()->route('user.index')->with('error', 'Permission Denied !');
         }
-        $user->save();
-        return redirect()->route('user.index')->with('success', 'User updated successfully!');
     }
 
     /**
@@ -392,13 +416,17 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        $user = Admin::findOrFail($id);
-        // Delete image
-        if ($user->business_logo && Storage::disk('public')->exists($user->business_logo)) {
-            Storage::disk('public')->delete($user->business_logo);
+        if (auth()->user()->can('user-delete')) {
+            $user = Admin::findOrFail($id);
+            // Delete image
+            if ($user->business_logo && Storage::disk('public')->exists($user->business_logo)) {
+                Storage::disk('public')->delete($user->business_logo);
+            }
+            $user->delete();
+            return redirect()->route('user.index')->with('success', 'User deleted successfully.');
+        } else {
+            return redirect()->route('adx.index')->with('error', 'Permission Denied !');
         }
-        $user->delete();
-        return redirect()->route('user.index')->with('success', 'User deleted successfully.');
     }
 
 

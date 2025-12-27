@@ -24,6 +24,7 @@ use App\Http\Controllers\TampletController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideogifController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\CouponCodeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -163,12 +164,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // settings
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
     Route::post('/settings/update', [DashboardController::class, 'updateSettings'])->name('settings.update');
+    Route::post('/settings/create-next-year-templates', [DashboardController::class, 'createNextYearTemplates'])->name('settings.createNextYearTemplates');
 
     // image zip
     Route::get('/image-zip-download', [DashboardController::class, 'imagezipDownload'])->name('image-zip.download');
     Route::post('/image-zip-download/store', [DashboardController::class, 'imagezipDownloadStore'])->name('image-zip.download.store');
 
+    // reports
+    Route::get('/report/subscription/daywise', [DashboardController::class, 'dayWiseSubscription'])->name('report.dayWiseSubscription');
+    Route::get('/report/subscription/monthly', [DashboardController::class, 'monthlySubscription'])->name('report.monthlySubscription');
+    Route::get('/report/subscription/repeat', [DashboardController::class,  'repeatSubscription'])->name('report.repeatSubscription');
+    Route::get('/report/subscription/daywise/register', [DashboardController::class, 'daywiseRegister'])->name('report.daywiseRegister');
     
+    // coupon
+    Route::resource('coupon-code',CouponCodeController::class);
+
 });
 
 Route::middleware('auth')->group(function () {

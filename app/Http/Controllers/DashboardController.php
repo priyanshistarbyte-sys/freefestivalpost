@@ -371,6 +371,57 @@ class DashboardController extends Controller
         return redirect()->back()->with('success', 'Settings updated successfully.');
     }
 
+    public function createNextYearTemplates()
+    {
+        $currentYear = date('Y');
+        $nextYear = $currentYear + 1;
+        
+        $created = 0;
+        Tamplet::select(['sub_category_id', 'font_color', 'lablebg', 'font_size', 'lable', 'font_type', 'language', 'event_date', 'event', 'free_paid', 'type', 'planImgName', 'path'])
+            ->where('event', 1)
+            ->whereYear('event_date', $currentYear)
+            ->whereNotExists(function ($query) use ($nextYear) {
+                $query->select(DB::raw(1))
+                      ->from('tamplet as t2')
+                      ->whereRaw('t2.sub_category_id = tamplet.sub_category_id')
+                      ->whereRaw('t2.path = tamplet.path')
+                      ->whereYear('t2.event_date', $nextYear);
+            })
+            ->chunk(1000, function ($templates) use (&$created) {
+                $insertData = [];
+                
+                foreach ($templates as $template) {
+                    $nextYearDate = date('Y-m-d', strtotime($template->event_date . ' +1 year'));
+                    
+                    $insertData[] = [
+                        'sub_category_id' => $template->sub_category_id,
+                        'font_color' => $template->font_color,
+                        'lablebg' => $template->lablebg,
+                        'font_size' => $template->font_size,
+                        'lable' => $template->lable,
+                        'font_type' => $template->font_type,
+                        'language' => $template->language,
+                        'event_date' => $nextYearDate,
+                        'event' => $template->event,
+                        'free_paid' => $template->free_paid,
+                        'type' => $template->type,
+                        'planImgName' => $template->planImgName,
+                        'path' => $template->path,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+                
+                Tamplet::insert($insertData);
+                $created += count($insertData);
+            });
+        
+        return response()->json([
+            'success' => true,
+            'message' => "Successfully created {$created} templates for next year."
+        ]);
+    }
+
     public function imagezipDownload(Request $request)
     {
         $categories = SubCategory::get();
@@ -389,12 +440,12 @@ class DashboardController extends Controller
         }
 
         $cat_id = $request->sub_category_id;
-        $tamplet = $this->getTampList($cat_id);
+        $tamplets = $this->getTampList($cat_id);
         $zip = new ZipArchive();
         $zipFileName = 'images.zip';
         $zip->open($zipFileName, ZipArchive::CREATE);
-        foreach ($tamplet as $tamp) {
-            $imagePath = storage_path('app/public/' . $tamp->path);
+        foreach ($tamplets as $tamplet) {
+            $imagePath = storage_path('app/public/' . $tamplet->path);
             if (File::exists($imagePath)) {
                 $zip->addFile($imagePath, basename($imagePath));
             }
@@ -406,8 +457,157 @@ class DashboardController extends Controller
     private function getTampList($cat_id)
     {
         if($cat_id!="all" && $cat_id!=""){
-           $tamplet = Tamplet::where('sub_category_id', $cat_id)->get();
+           $tamplets = Tamplet::where('sub_category_id', $cat_id)->get();
+        } else {
+           $tamplets = Tamplet::all();
         }
-        return $tamplet;
+        return $tamplets;
+    }
+
+    
+    public function dayWiseSubscription(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $query = DB::table('payments')
+                ->select(
+                    'date',
+                    DB::raw('COUNT(id) as total_paid'),
+                    DB::raw('SUM(price) as total_amount'),
+                    // PLAN WISE COUNTS (change IDs as per your plans)
+                    DB::raw('SUM(CASE WHEN packageid = 1 THEN 1 ELSE 0 END) as business_1_year'),
+                    DB::raw('SUM(CASE WHEN packageid = 2 THEN 1 ELSE 0 END) as one_month'),
+                    DB::raw('SUM(CASE WHEN packageid = 3 THEN 1 ELSE 0 END) as business_6_month'),
+                    DB::raw('SUM(CASE WHEN packageid = 4 THEN 1 ELSE 0 END) as twelve_month'),
+                    DB::raw('SUM(CASE WHEN packageid = 5 THEN 1 ELSE 0 END) as advance_6_month'),
+                    DB::raw('SUM(CASE WHEN packageid = 6 THEN 1 ELSE 0 END) as exclusive_plan'),
+                    DB::raw('SUM(CASE WHEN packageid = 7 THEN 1 ELSE 0 END) as navratri_plan'),
+                    DB::raw('SUM(CASE WHEN packageid = 8 THEN 1 ELSE 0 END) as premium_plan'),
+                    // TRIAL
+                    DB::raw('SUM(CASE WHEN month = 0 THEN 1 ELSE 0 END) as trial_total'),
+                    // REFUND
+                    DB::raw('SUM(CASE WHEN ref_status = 1 THEN 1 ELSE 0 END) as refund_count'),
+                    DB::raw('SUM(CASE WHEN ref_status = 1 THEN price ELSE 0 END) as refund_amount')
+                )
+                ->groupBy('date')
+                ->orderBy('date', 'DESC');
+                if ($request->filled('start_date')) {
+                    $query->whereDate('date', '>=', $request->start_date);
+                }
+
+                if ($request->filled('end_date')) {
+                    $query->whereDate('date', '<=', $request->end_date);
+                }
+
+                return datatables()->of($query)->addIndexColumn()->editColumn('date', fn ($row) => Carbon::parse($row->date)->format('d-m-Y'))->make(true);
+                
+        }
+
+        return view('admin.day-wise-report');
+    }
+
+    public function monthlySubscription(Request $request)
+    {
+        $rows = DB::table('payments')
+            ->select(
+                DB::raw("DATE_FORMAT(date, '%b %Y') as month"),
+
+                // PLAN COUNTS
+                DB::raw("SUM(CASE WHEN packageid = 2 THEN 1 ELSE 0 END) as monthly_total"),
+                DB::raw("SUM(CASE WHEN packageid = 3 THEN 1 ELSE 0 END) as monthly_3_total"),
+                DB::raw("SUM(CASE WHEN packageid = 5 THEN 1 ELSE 0 END) as monthly_6_total"),
+                DB::raw("SUM(CASE WHEN packageid = 4 THEN 1 ELSE 0 END) as yearly_total"),
+                DB::raw("SUM(CASE WHEN packageid = 6 THEN 1 ELSE 0 END) as total_exclusive"),
+
+                // TRIAL (month = 0)
+                DB::raw("SUM(CASE WHEN month = 0 THEN 1 ELSE 0 END) as trail_total"),
+
+                // REFUND
+                DB::raw("SUM(CASE WHEN status = 'Refund' THEN 1 ELSE 0 END) as total_refund"),
+                DB::raw("SUM(CASE WHEN status = 'Refund' THEN price ELSE 0 END) as total_refund_amount"),
+
+                // TOTAL PAID
+                DB::raw("SUM(CASE WHEN status != 'Refund' THEN 1 ELSE 0 END) as total_paid"),
+                DB::raw("SUM(CASE WHEN status != 'Refund' THEN price ELSE 0 END) as total_amount")
+            )
+            ->groupBy(DB::raw("DATE_FORMAT(date, '%Y-%m')"))
+            ->orderBy(DB::raw("MIN(date)"), 'DESC')
+            ->get();
+
+        return view('admin.month-subscription-report', compact('rows'));
+    }
+
+    public function repeatSubscription(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $query = DB::table('payments as p')
+                ->join('admin as a', 'p.user_id', '=', 'a.id')
+                ->select(
+                    'a.name',
+                    'a.mobile',
+                    'p.status as pstatus',
+                    DB::raw('COUNT(p.id) as total'),
+                    DB::raw('MIN(p.date) as firstDate'),
+                    DB::raw('MAX(p.date) as lastDate')
+                )
+                ->groupBy('p.user_id', 'p.status', 'a.name', 'a.mobile')
+                ->havingRaw('COUNT(p.id) > 1')
+                ->orderByDesc('total');
+
+            // Filter by plan/status (Day / Month / Year)
+            if ($request->filled('status')) {
+                $query->where('p.status', $request->status);
+            }
+
+            return datatables()->of($query)
+                ->addIndexColumn()
+
+                ->editColumn('firstDate', function ($row) {
+                    return Carbon::parse($row->firstDate)->format('d-m-Y');
+                })
+
+                ->editColumn('lastDate', function ($row) {
+                    return Carbon::parse($row->lastDate)->format('d-m-Y');
+                })
+
+                ->make(true);
+        }
+
+        return view('admin.repeat-subscription-report');
+    }
+
+   
+    public function daywiseRegister(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $query = DB::table('admin')
+                ->select(
+                    DB::raw("DATE(created_at) as date"),
+                    DB::raw("COUNT(id) as total_user")
+                )
+                ->where('role','User')
+                ->groupBy(DB::raw("DATE(created_at)"))
+                ->orderBy(DB::raw("DATE(created_at)"), 'DESC');
+
+            // Date filters
+            if ($request->filled('start_date')) {
+                $query->whereDate('created_at', '>=', $request->start_date);
+            }
+
+            if ($request->filled('end_date')) {
+                $query->whereDate('created_at', '<=', $request->end_date);
+            }
+
+            return datatables()->of($query)
+                ->addIndexColumn()
+                ->editColumn('date', function ($row) {
+                    return Carbon::parse($row->date)->format('d-m-Y');
+                })
+                ->make(true);
+        }
+
+        return view('admin.day-wise-register-report');
     }
 }

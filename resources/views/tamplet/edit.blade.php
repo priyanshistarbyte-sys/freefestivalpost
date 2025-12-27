@@ -20,9 +20,16 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="type" class="form-label">Event Date:</label>
+                    <div class="col-md-4 mb-3">
+                        <label for="event_date" class="form-label">Event Date:</label>
                         <input type="date" name="event_date" class="form-control" value="{{ $tamplet->event_date }}">
+                    </div>
+                    <div class="col-md-2 mb-3" style="display:none;">
+                        <label for="event" class="form-label">Event</label></br>
+                        <label class="custom-switch">
+                            <input type="checkbox" name="event" id="event" value="1" {{ $tamplet->event ? 'checked' : '' }}>
+                            <span class="switch-slider"></span>
+                        </label>
                     </div>
                     <div class="col-md-6 mb-3 form-group">
                         <label for="font_type" class="form-label">Font</label>
@@ -111,6 +118,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const hasMaskCheckbox = document.getElementById('has_mask');
     const maskInput = document.getElementById('mask');
+    const eventDateInput = document.querySelector('input[name="event_date"]');
+    const eventDiv = document.querySelector('.col-md-2.mb-3[style="display:none;"]');
 
     hasMaskCheckbox.addEventListener('change', function() {
         if (this.checked) {
@@ -119,6 +128,19 @@ document.addEventListener('DOMContentLoaded', function() {
             maskInput.setAttribute('disabled', 'disabled');
         }
     });
+
+    eventDateInput.addEventListener('change', function() {
+        if (this.value) {
+            eventDiv.style.display = 'block';
+        } else {
+            eventDiv.style.display = 'none';
+        }
+    });
+
+    // Show event div on page load if event_date has value
+    if (eventDateInput.value) {
+        eventDiv.style.display = 'block';
+    }
 });
 </script>
 @endpush

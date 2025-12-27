@@ -4,6 +4,9 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="card-title mb-0">Site Setting</h4>
+              <button type="button" class="btn btn-warning" id="createNextYearTemplates">
+                            Create Templates for Next Year
+                        </button>
         </div>
         <div class="card-body">
             @if ($errors->any())
@@ -17,6 +20,7 @@
             @endif
             <form action="{{ route('settings.update') }}" enctype="multipart/form-data" method="POST">
                 @csrf
+               
                 <div class="row">
                     <div class="mb-3 col-md-6 form-group">
                         <label for="sitename" class="form-label">Site Name<span class="text-danger">*</span></label>
@@ -182,6 +186,7 @@
                                 </label>
                             </div>
                         </div>
+                        
                         <div class="mb-3 col-md-3 form-group">
                             <label for="sms_gateway_type" class="form-label">SMS Gateway</label>
                             <select name="sms_gateway_type" id="sms_gateway_type" class="form-select">
@@ -202,3 +207,38 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+document.getElementById('createNextYearTemplates').addEventListener('click', function() {
+    Swal.fire({
+        title: 'Create Next Year Templates?',
+        text: 'This will create templates for next year. Continue?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, create them!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('{{ route("settings.createNextYearTemplates") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    Swal.fire('Success!', data.message, 'success');
+                } else {
+                    Swal.fire('Error!', 'Something went wrong', 'error');
+                }
+            })
+            .catch(error => Swal.fire('Error!', 'Something went wrong', 'error'));
+        }
+    });
+});
+</script>
+@endpush
