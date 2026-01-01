@@ -9,7 +9,7 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <h4 class="mb-2">{{ $totalUser }}</h4>
-                                <p class="mb-2">Total Users</p>
+                                <a href="{{ route('user.index') }}" class="mb-2 d-block text-white text-decoration-none">Total Users</a>
                                 <div class="small">
                                     <span class="me-3">{{ $totalDeactiveUser }} Inactive</span>
                                     <span>{{ $totalTodayNewUser }} Today</span>
@@ -29,7 +29,7 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <h4 class="mb-2">{{ $totalUserPost }}</h4>
-                                <p class="mb-2">Total User Post</p>
+                                <a href="{{ route('post.list') }}" class="mb-2 d-block text-white text-decoration-none">Total User Post</a>
                                 <div class="small">
                                     <span class="me-3">{{ $totalUserPostToday }} Today Total Post</span>
                                 </div>
@@ -48,7 +48,7 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <h4 class="mb-2">{{ $videoanalytics }}</h4>
-                                <p class="mb-2">Total User Videos</p>
+                                <a href="{{ route('videogif.index') }}" class="mb-2 d-block text-white text-decoration-none">Total User Videos</a>
                                 <div class="small">
                                     <span class="me-3">{{ $videoanalyticsToday }} Today Total Videos</span>
                                 </div>
@@ -68,13 +68,13 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <h4 class="mb-2">{{ $totalTamplate }}</h4>
-                                <p class="mb-2">Total Tamplate</p>
+                                <a href="{{ route('tamplet.index') }}" class="mb-2 d-block text-white text-decoration-none">Total Tamplate</a>
                             </div>
                             <div class="align-self-center">
                                 <i class="fas fa-images fa-2x"></i>
                             </div>
                         </div>
-                    </div>
+                    </div> 
                 </div>
             </div>
             <div class="col-md-4 mb-3">
@@ -83,7 +83,7 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <h4 class="mb-2">{{ $totalCategory }}</h4>
-                                <p class="mb-2">Total Category</p>
+                                <a href="{{ route('category.index') }}" class="mb-2 d-block text-white text-decoration-none">Total Category</a>
                             </div>
                             <div class="align-self-center">
                                 <i class="fas fa-images fa-2x"></i>
@@ -98,7 +98,7 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <h4 class="mb-2">{{ $totalSubCategory }}</h4>
-                                <p class="mb-2">Total Sub Category</p>
+                                <a href="{{ route('sub-category.index') }}" class="mb-2 d-block text-white text-decoration-none">Total Sub Category</a>
                             </div>
                             <div class="align-self-center">
                                 <i class="fas fa-tags fa-2x"></i>
