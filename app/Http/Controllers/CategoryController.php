@@ -155,7 +155,7 @@ class CategoryController extends Controller
                 $category->delete();
                 return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
             } else {
-                return redirect()->back()->with('error', 'This Category is used in one or more Sub Category.');
+                return redirect()->back()->with('error', 'This Category is used in one or more Account');
         }
     }
 }

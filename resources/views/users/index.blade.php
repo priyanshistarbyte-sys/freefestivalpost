@@ -186,7 +186,7 @@
                         form.submit();
                     }
                 });
-            });
+        });
         $(document).on('change', '.status-toggle', function() {
             let status = $(this).is(':checked') ? 1 : 0;
             let id = $(this).data('id');

@@ -98,16 +98,18 @@ class AdminController extends Controller
             $messages = $validator->getMessageBag();
             return redirect()->back()->with('error', $messages->first());
         }
+      
         $admin = new Admin();
         $admin->name = $request->name;
         $admin->email = $request->email ?: null;
         $admin->mobile = $request->mobile;
-        $admin->password = Hash::make($request->password);
+        $admin->password = md5($request->password);
         $admin->note = $request->note ?? '';
         $admin->status = $request->status ?? '';
         $admin->role = $request->role;
         $admin->save();
 
+  
         // Assign Role through Spatie Permission
         $admin->assignRole($request->role);
 
@@ -164,7 +166,7 @@ class AdminController extends Controller
         $admin->role = $request->role;
 
         if (!empty($request->password)) {
-            $admin->password = Hash::make($request->password);
+            $admin->password = md5($request->password);
         }
 
         $admin->save();
@@ -178,8 +180,9 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Admin $admin)
+    public function destroy($id)
     {
+        $admin = Admin::findOrFail($id);
         $admin->delete();
         return redirect()->route('admin-user.index')->with('success', 'Admin deleted successfully.');
     }

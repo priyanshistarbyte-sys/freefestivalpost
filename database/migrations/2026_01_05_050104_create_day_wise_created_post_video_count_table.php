@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('faq')) {
-            Schema::create('faq', function (Blueprint $table) {
+        if (!Schema::hasTable('day_wise_created_post_video_count')) {
+            Schema::create('day_wise_created_post_video_count', function (Blueprint $table) {
                 $table->id();
-                $table->text('question');
-                $table->text('answer');
-                $table->integer('status')->default(1);
-                $table->text('img')->nullable();
-                $table->text('link')->nullable();
+                $table->date('daily_date')->nullable();
+                $table->integer('post_count')->nullable();
                 $table->timestamps();
             });
         }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('faq');
+        Schema::dropIfExists('day_wise_created_post_video_count');
     }
 };

@@ -12,6 +12,8 @@ class Faq extends Model
         'question',
         'answer',
         'status',
+        'img',
+        'link',
         'created_at',
         'updated_at'
     ];

@@ -11,9 +11,13 @@ class PasswordUpdateTest extends TestCase
 {
     use RefreshDatabase;
 
+    
+
     public function test_password_can_be_updated(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'password' => md5('password'), // IMPORTANT: factory must use md5
+        ]);
 
         $response = $this
             ->actingAs($user)
@@ -28,7 +32,10 @@ class PasswordUpdateTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertRedirect('/profile');
 
-        $this->assertTrue(Hash::check('new-password', $user->refresh()->password));
+        $this->assertEquals(
+            md5('new-password'),
+            $user->refresh()->password
+        );
     }
 
     public function test_correct_password_must_be_provided_to_update_password(): void

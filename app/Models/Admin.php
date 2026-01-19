@@ -53,12 +53,7 @@ class Admin extends Authenticatable
         'lang',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-        ];
-    }
+   
 
     public function countUserPostTotal($user_id)
     {

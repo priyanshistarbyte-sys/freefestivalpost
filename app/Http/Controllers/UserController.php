@@ -457,7 +457,7 @@ class UserController extends Controller
 
         $user = Admin::findOrFail($id);
         // Update new password
-        $user->password = Hash::make($request->new_password);
+        $user->password = md5($request->new_password);
         $user->save();
 
         return redirect()->back()->with('success', 'Password updated successfully!');
