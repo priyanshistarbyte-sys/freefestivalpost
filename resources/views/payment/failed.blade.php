@@ -36,6 +36,14 @@
     </div>
 
     <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Payments Failed List</h5>
+            <div class="card-tools">
+                <button class="btn btn-sm btn-outline-secondary" onclick="toggleCard(this)">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
         <div class="card-body">
             <div class="table-container">
                 <table class="table" id="payment-failed-table">
@@ -55,6 +63,65 @@
             </div>
         </div>
     </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Order Create List</h5>
+            <div class="card-tools">
+                <button class="btn btn-sm btn-outline-secondary" onclick="toggleCard(this)">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-container">
+                <table class="table" id="order-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>ID</th>
+                            <th>Entity</th>
+                            <th>Amount</th>
+                            <th>Receipt</th>
+                            <th>Status</th>
+                            <th>Attempts</th>
+                            <th>Created At</th>
+                        </tr>
+                        <tbody>
+                            @forelse($ordersList as $key => $item)
+                                @php
+                                    $mobile = getUserMobileNumber($item->user_id ?? null);
+                                @endphp
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $item->id }}</td>
+                                <td>{{ $item->entity }}</td>
+                                <td>{{ $item->amount / 100 }}</td>
+                                <td>
+                                    @if($mobile)
+                                        <a target="_blank"
+                                        href="https://wa.me/91{{ $mobile }}">
+                                            {{ $mobile }}
+                                        </a>
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
+                                </td>
+                                <td>{{ $item->status }}</td>
+                                <td>{{ $item->attempts }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y h:i:s') }}</td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="8" class="text-center">No data found</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('scripts')
     <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
@@ -63,11 +130,19 @@
     <script src="{{ asset('assets/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('assets/js/buttons.print.min.js') }}"></script>
     <script>
+         // Toggle card collapse function
+        function toggleCard(button) {
+            const card = $(button).closest('.card');
+            const cardBody = card.find('.card-body');
+            const icon = $(button).find('i');
+
+            cardBody.slideToggle();
+            icon.toggleClass('fa-minus fa-plus');
+        }
         $(document).ready(function() {
-            var table = $('#payment-failed-table').DataTable({
+            var payment_table = $('#payment-failed-table').DataTable({
                 processing: true,
                 serverSide: true,
-                pageLength: 100,
                 ajax: {
                     url: '{{ route("payment.failed") }}',
                     data: function (d) {
@@ -110,14 +185,16 @@
             });
 
             $('#filter-btn').click(function() {
-                table.ajax.reload();
+                payment_table.ajax.reload();
             });
 
             $('#reset-btn').click(function() {
                 $('#start_date').val('');
                 $('#end_date').val('');
-                table.ajax.reload();
+                payment_table.ajax.reload();
             });
+
+          
         });
     </script>
 @endpush

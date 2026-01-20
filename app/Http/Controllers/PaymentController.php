@@ -46,7 +46,10 @@ class PaymentController extends Controller
                 ->rawColumns(['date','created_at','updated_at'])
                 ->make(true);
         }
-        return view('payment.failed');
+        $razorPayOrderList = getOrderByRazorPayAllList();
+        return view('payment.failed', [
+            'ordersList' => $razorPayOrderList
+        ]);
     }
 
      public function  paidsubscriptionList(Request $request)

@@ -25,6 +25,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideogifController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\CouponCodeController;
+use App\Http\Controllers\RazorpayPaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -179,6 +180,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // coupon
     Route::resource('coupon-code',CouponCodeController::class);
+
+    // razorpay payment
+    Route::get('/razorpay/failed', [RazorpayPaymentController::class, 'failed'])->name('razorpay.failed');
+    Route::get('/razorpay/success', [RazorpayPaymentController::class, 'success'])->name('razorpay.success');
+    Route::post('/razorpay/failed-list', [RazorpayPaymentController::class, 'getFailedList'])->name('razorpay.failed.list');
+    Route::post('/razorpay/success-list', [RazorpayPaymentController::class, 'getSuccessList'])->name('razorpay.success.list');
 
 });
 

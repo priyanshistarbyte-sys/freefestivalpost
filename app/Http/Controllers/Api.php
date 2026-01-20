@@ -629,7 +629,7 @@ class Api extends REST_Controller
 	public function failedRepaymentRemove($mobile)
 	{
 		if($mobile!=""){
-			$this->db->where('w_mobile', $mobile);
+			$this->db->where('mobile', $mobile);
             $this->db->delete('webhook_failed');
 		}
 		return true;
@@ -868,12 +868,12 @@ class Api extends REST_Controller
 					}else{
 						/* do insert */
 						$webhook_authorized_insert = array(
-							'w_date' => ONLY_DATE,
+							'date' => ONLY_DATE,
 							'w_event' => $event,
 							'transaction_id' => $payment_id,
-							'w_amount' => $amount,
-							'w_email' => $email,
-							'w_mobile' => $mobile,
+							'amount' => $amount,
+							'email' => $email,
+							'mobile' => $mobile,
 							'w_status' => 0,
 							'created_at' => CURRENT_DATE,
 						);
@@ -1124,15 +1124,15 @@ class Api extends REST_Controller
 				}
 
 				/* subscribe vala user delete kre */
-				$this->db->where("w_mobile",$mobileRS)->delete('webhook_failed');
+				$this->db->where("mobile",$mobileRS)->delete('webhook_failed');
 				
 				$insertData = array(
-					'w_date' => ONLY_DATE,
+					'date' => ONLY_DATE,
 					'w_event' => $event,
 					'transaction_id' => $payment_id,
-					'w_amount' => $amountRS,
-					'w_email' => $email,
-					'w_mobile' => $mobileRS,
+					'amount' => $amountRS,
+					'email' => $email,
+					'mobile' => $mobileRS,
 					'created_at' => CURRENT_DATE,
 					'updated_at' => CURRENT_DATE,
 				);

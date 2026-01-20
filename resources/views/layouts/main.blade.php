@@ -203,6 +203,12 @@
                                 <span>Payment Failed</span>
                             </a>
                         </li>
+                        {{-- <li class="{{ request()->routeIs('order.list') ? 'active' : '' }}">
+                            <a href="{{ route('order.list') }}">
+                                <span>Order Create List</span>
+                            </a>
+                        </li> --}}
+                        
                         <li class="{{ request()->routeIs('payment.paid-subscription') ? 'active' : '' }}">
                             <a href="{{ route('payment.paid-subscription') }}">
                                 <span>Paid Subscription</span>

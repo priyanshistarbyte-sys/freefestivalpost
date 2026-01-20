@@ -63,12 +63,12 @@ class WebhookController extends Controller
                         $this->userSubPaymentHistory($user_id, $payment_id, $plan);
                     } else {
                         DB::table('webhook_authorized')->insert([
-                            'w_date' => now()->format('Y-m-d'),
+                            'date' => now()->format('Y-m-d'),
                             'w_event' => $event,
                             'transaction_id' => $payment_id,
-                            'w_amount' => $amount,
-                            'w_email' => $email,
-                            'w_mobile' => $mobile,
+                            'amount' => $amount,
+                            'email' => $email,
+                            'mobile' => $mobile,
                             'w_status' => 0,
                             'created_at' => now(),
                         ]);
@@ -120,15 +120,15 @@ class WebhookController extends Controller
             }
 
             if ($event == "payment.failed" && $status == "failed") {
-                WebhookFailed::where('w_mobile', $mobileRS)->delete();
+                WebhookFailed::where('mobile', $mobileRS)->delete();
 
                 WebhookFailed::create([
-                    'w_date' => now()->format('Y-m-d'),
+                    'date' => now()->format('Y-m-d'),
                     'w_event' => $event,
                     'transaction_id' => $payment_id,
-                    'w_amount' => $amountRS,
-                    'w_email' => $email,
-                    'w_mobile' => $mobileRS,
+                    'amount' => $amountRS,
+                    'email' => $email,
+                    'mobile' => $mobileRS,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
@@ -223,7 +223,7 @@ class WebhookController extends Controller
     private function failedRepaymentRemove($mobile)
     {
         if ($mobile) {
-            WebhookFailed::where('w_mobile', $mobile)->delete();
+            WebhookFailed::where('mobile', $mobile)->delete();
         }
         return true;
     }

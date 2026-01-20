@@ -11,7 +11,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Load helper files
+        $this->loadHelpers();
     }
 
     /**
@@ -20,5 +21,21 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+    }
+
+    /**
+     * Load helper files.
+     */
+    private function loadHelpers()
+    {
+        $helpers = [
+            app_path('Helpers/RazorpayHelper.php'),
+        ];
+
+        foreach ($helpers as $helper) {
+            if (file_exists($helper)) {
+                require_once $helper;
+            }
+        }
     }
 }
