@@ -212,7 +212,7 @@
         </div>
 
         <!-- UpComing Festival List -->
-        {{-- <div class="card">
+        <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0">UpComing Festival List</h5>
                 <div class="card-tools">
@@ -228,8 +228,8 @@
                             <tr>
                                 <th width="5%">No</th>
                                 <th width="10%">Date</th>
-                                <th width="5%">Cat ID</th>
-                                <th width="40%">Title</th>
+                                <th width="15%">Cat ID</th>
+                                <th width="20%">Title</th>
                                 <th width="5%">Plan/Auto</th>
                                 <th width="20%">Image</th>
                                 <th width="5%">Template</th>
@@ -238,13 +238,13 @@
                                 <th width="3%">Videos</th>
                                 <th width="3%">Paid</th>
                                 <th width="3%">Banner</th>
-                                <th width="3%">Quote</th>
+                                <th width="13%">Quote</th>
                             </tr>
                         </thead>
                     </table>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
         <div class="row">
             <!-- App Version Count -->
@@ -756,63 +756,51 @@
                     },
                 ]
             });
-            // $('#upcomingFestivalsTable').DataTable({
-            //     processing: true,
-            //     serverSide: true,
-            //     pageLength: 10,
-            //     ajax: '{{ route('dashboard.upcoming-festivals') }}',
-            //     dom: '<"d-flex justify-content-between align-items-center"<"d-flex align-items-center gap-2"Bl><f>>rtip',
-            //     lengthMenu: [
-            //         [10, 25, 50, 100, 500, 1000],
-            //         [10, 25, 50, 100, 500, 1000]
-            //     ],
-            //     buttons: [{
-            //             extend: 'excelHtml5',
-            //             text: 'Excel',
-            //             title: 'Home-Category',
-            //             className: 'btn btn-success btn-sm',
-            //             exportOptions: {
-            //                 columns: [0, 1, 2, 3, 4]
-            //             }
-            //         },
-            //         {
-            //             extend: 'print',
-            //             text: 'Print',
-            //             title: 'Customframe',
-            //             className: 'btn btn-info btn-sm',
-            //             exportOptions: {
-            //                 columns: [0, 1, 2, 3, 4]
-            //             }
-            //         }
-            //     ],
-            //     columns: [{
-            //             data: 'DT_RowIndex',
-            //             orderable: false,
-            //             searchable: false
-            //         },
-            //         {
-            //             data: 'event_date',
-            //             name: 'event_date'
-            //         },
-            //         {
-            //             data: 'category_id',
-            //             name: 'category_id'
-            //         },
-            //         {
-            //             data: 'mtitle',
-            //             name: 'mtitle'
-            //         },
-            //         {
-            //             data: 'plan_auto',
-            //             name: 'plan_auto'
-            //         },
-            //         {
-            //             data: 'image',
-            //             orderable: false,
-            //             searchable: false
-            //         },
-            //     ]
-            // });
+            $('#upcomingFestivalsTable').DataTable({
+                 processing: true,
+                 serverSide: true,
+                 pageLength: 10,
+                 ajax: '{{ route('dashboard.upcoming-festivals') }}',
+                 dom: '<"d-flex justify-content-between align-items-center"<"d-flex align-items-center gap-2"Bl><f>>rtip',
+                 lengthMenu: [
+                     [10, 25, 50, 100, 500, 1000],
+                     [10, 25, 50, 100, 500, 1000]
+                 ],
+                 buttons: [{
+                         extend: 'excelHtml5',
+                         text: 'Excel',
+                         title: 'Upcoming-Festivals',
+                         className: 'btn btn-success btn-sm',
+                         exportOptions: {
+                             columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                         }
+                     },
+                     {
+                         extend: 'print',
+                         text: 'Print',
+                         title: 'Upcoming-Festivals',
+                         className: 'btn btn-info btn-sm',
+                         exportOptions: {
+                             columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                         }
+                     }
+                 ],
+                 columns: [
+                     { data: 'DT_RowIndex', orderable: false, searchable: false },
+                     { data: 'event_date', name: 'event_date' },
+                     { data: 'id', name: 'id' },
+                     { data: 'mtitle', name: 'mtitle' },
+                     { data: 'plan_auto', name: 'plan_auto' },
+                     { data: 'image', orderable: false, searchable: false },
+                     { data: 'total_auto_tamp', name: 'total_auto_tamp' },
+                     { data: 'totalPlanPost', name: 'totalPlanPost' },
+                     { data: 'totalPaidTamp', name: 'totalPaidTamp' },
+                     { data: 'total_video_tamp', name: 'total_video_tamp' },
+                     { data: 'totalPaidvVideo', name: 'totalPaidvVideo' },
+                     { data: 'banner', orderable: false, searchable: false },
+                     { data: 'mtitle', name: 'mtitle' }
+                 ]
+             });
             $('#categoryTemplateTable').DataTable({
                 processing: true,
                 serverSide: true,

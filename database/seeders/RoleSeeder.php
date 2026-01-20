@@ -11,6 +11,7 @@ class RoleSeeder extends Seeder
     {
         $admin     = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'admin']);
         $sub_admin = Role::firstOrCreate(['name' => 'Sub Admin', 'guard_name' => 'admin']);
+        $user      = Role::firstOrCreate(['name' => 'User', 'guard_name' => 'admin']);
         
 
 
@@ -61,6 +62,41 @@ class RoleSeeder extends Seeder
            'user-delete',
            'slider-manage',
            'faq-manage',
+        ]);
+
+        // Assign all Admin permissions to User role as well
+        $user->syncPermissions([
+            'dashboard-manage',
+            'role-manage',
+            'role-create',
+            'role-edit',
+            'role-delete',
+            'category-manage',
+            'category-create',
+            'category-edit',
+            'category-delete',
+            'user-manage',
+            'user-create',
+            'user-edit',
+            'user-delete',
+            'user-transaction',
+            'frame-manage',
+            'sub-frame-manage',
+            'setting-manage',
+            'font-manage',
+            'send-notification-manage',
+            'slider-manage',
+            'faq-manage',
+            'plan-manage',
+            'plan-create',
+            'plan-edit',
+            'plan-delete',
+            'admin-user-manage',
+            'report-manage',
+            'coupon-manage',
+            'coupon-create',
+            'coupon-edit',
+            'coupon-delete',
         ]);
     }
 }

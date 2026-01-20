@@ -39,6 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/today-festival-posts', [DashboardController::class, 'todayFestivalPosts'])->name('dashboard.today-festival-posts');
     Route::get('/dashboard/upcoming-festival-posts', [DashboardController::class, 'upcomingFestivalPosts'])->name('dashboard.upcoming-festival-posts');
     Route::get('/dashboard/upcoming-festivals', [DashboardController::class, 'upcomingFestivals'])->name('dashboard.upcoming-festivals');
+    
     Route::get('/dashboard/category-template-count', [DashboardController::class, 'categoryWiseTemplateCount'])->name('dashboard.category-template-count');
     Route::get('/dashboard/category-photo-count', [DashboardController::class, 'categoryWisePhotoCount'])->name('dashboard.category-photo-count');
     Route::get('/dashboard/paid-user-count', [DashboardController::class, 'paidWiseUserCount'])->name('dashboard.paid-user-count');

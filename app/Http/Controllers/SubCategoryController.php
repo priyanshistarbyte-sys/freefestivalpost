@@ -117,7 +117,7 @@ class SubCategoryController extends Controller
         $subCategory->image = $path_image ?? '';
         $subCategory->category_id = $request->category_id;
         $subCategory->is_parent = $request->is_parent ?? 0;
-        $subCategory->parent_category = $request->is_parent == 1 ? $request->parent_category : null;
+        $subCategory->parent_category = $request->is_parent == 1 ? $request->parent_category : 0;
         $subCategory->mtitle = $request->mtitle;
         $subCategory->mslug = SubCategory::slug_string($request->mtitle);
         $subCategory->event_date = $request->event_date ?: null;
@@ -218,7 +218,7 @@ class SubCategoryController extends Controller
         $subCategory->category_id = $request->category_id;
         $subCategory->mtitle = $request->mtitle;
         $subCategory->is_parent = $request->parent_category ? 1 : 0;
-        $subCategory->parent_category = $request->parent_category ?: null;
+        $subCategory->parent_category = $request->parent_category ?: 0;
         $subCategory->event_date = $request->event_date ?: null;
         $subCategory->status = $request->status ?? 0;
         $subCategory->plan_auto = $request->plan_auto;
@@ -331,8 +331,8 @@ class SubCategoryController extends Controller
                 SubCategory::create([
                     'category_id' => $category->id,
                     'is_parent' => 0,
-                    'is_child' => null,
-                    'parent_category' => null,
+                    'is_child' => 0,
+                    'parent_category' => 0,
                     'image' => '',
                     'event_date' => !empty($row[2]) ? date('Y-m-d', strtotime($row[2])) : null,
                     'mtitle' => trim($row[1]),

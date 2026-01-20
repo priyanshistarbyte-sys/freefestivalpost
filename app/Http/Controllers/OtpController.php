@@ -92,6 +92,14 @@ class OtpController extends Controller
         // Mark OTP as verified
         $otp->update(['is_verified' => true]);
 
+        // Get user and assign role if not already assigned
+        $user = Admin::find($userId);
+        if ($user && !$user->hasAnyRole()) {
+            // Assign role based on user's role field or default to Admin
+            $roleName = $user->role === 'Sub Admin' ? 'Sub Admin' : 'Admin';
+            $user->assignRole($roleName);
+        }
+
         // Login user
         Auth::loginUsingId($userId);
         session()->forget('otp_user_id');

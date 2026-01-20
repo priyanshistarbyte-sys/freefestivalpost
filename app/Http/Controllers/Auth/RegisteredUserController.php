@@ -43,8 +43,11 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'mobile' => $request->mobile,
             'password' => md5($request->password),
-            'role' => 2,
+            'role' => 'Admin', // Changed from 'User' to 'Admin'
         ]);
+        
+        // Assign Admin role to new user
+        $user->assignRole('Admin');
         // event(new Registered($user));
 
         // Don't auto-login, redirect to login for OTP verification

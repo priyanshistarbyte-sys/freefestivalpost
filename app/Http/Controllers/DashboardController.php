@@ -13,12 +13,12 @@ use App\Models\Tamplet;
 use Carbon\Carbon;
 use ZipArchive;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-       
         if(\Auth::user()->role == 'Admin'){
             $totalUser              = DB::table('admin')->count();
             $totalDeactiveUser      = DB::table('admin')->where('status', 0)->count();
@@ -248,6 +248,93 @@ class DashboardController extends Controller
         return view('admin.dashboard');
     }
 
+    public function upcomingFestivals(Request $request)
+    {
+         if ($request->ajax()) {
+
+            $today = Carbon::today();
+            $toDate = Carbon::today()->addDays(100);
+
+            $query = DB::table('sub_categories as c')
+                ->whereBetween('c.event_date', [$today, $toDate])
+                ->where('c.status', 1)
+                ->orderBy('c.event_date')
+                ->limit(30);
+
+            return DataTables::of($query)
+                ->addIndexColumn()
+
+                ->editColumn('event_date', function ($row) {
+                    return $row->event_date
+                        ? Carbon::parse($row->event_date)->format('d, M Y')
+                        : '';
+                })
+
+                ->addColumn('image', function ($row) {
+                    $img = $row->image ? asset('storage/' . ltrim($row->image, '/')) : asset('assets/images/default.jpg');
+                    return '<a target="_blank" href="'.$img.'">
+                                <img src="'.$img.'" width="25%">
+                            </a>';
+                })
+
+                ->addColumn('total_auto_tamp', function ($row) {
+                    return DB::table('tamplet')
+                        ->where('sub_category_id', $row->id)
+                        ->count();
+                })
+
+                ->addColumn('totalPaidTamp', function ($row) {
+                    return DB::table('tamplet')
+                        ->where('sub_category_id', $row->id)
+                        ->where('free_paid', 1)
+                        ->count();
+                })
+
+                ->addColumn('total_video_tamp', function ($row) {
+                    return DB::table('videogif')
+                        ->where('sub_category_id', $row->id)
+                        ->count();
+                })
+
+                ->addColumn('totalPaidvVideo', function ($row) {
+                    return DB::table('videogif')
+                        ->where('sub_category_id', $row->id)
+                        ->where('free_paid', 1)
+                        ->count();
+                })
+
+                ->addColumn('totalPlanPost', function ($row) {
+                    $templates = DB::table('tamplet')
+                        ->where('sub_category_id', $row->id)
+                        ->pluck('path');
+
+                    $count = 0;
+                    foreach ($templates as $path) {
+                        if ($path && Storage::disk('public')->exists($path)) {
+                            $count++;
+                        }
+                    }
+                    return $count;
+                })
+
+                ->addColumn('plan_auto', fn ($row) =>
+                    $row->plan_auto == 1 ? 'Only Plan' : ''
+                )
+
+                ->addColumn('banner', function ($row) {
+                    if (!$row->noti_banner) return '';
+                    $url = $row->noti_banner ? asset('storage/' . ltrim($row->noti_banner, '/')) : asset('assets/images/default.jpg');
+                    return '<img src="'.$url.'" width="25%">';
+                })
+
+                ->rawColumns([
+                    'image',
+                    'banner'
+                ])
+                ->make(true);
+        }
+    }
+
     public function categoryWiseTemplateCount(Request $request)
     {
         if ($request->ajax()) {
@@ -363,12 +450,31 @@ class DashboardController extends Controller
 
     public function updateSettings(Request $request)
     {
-        $data = $request->all();
-        unset($data['_token']);
+        $data = $request->except('_token');
+
+        if ($request->hasFile('sharingBanner')) {
+
+            $path = $request
+                ->file('sharingBanner')
+                ->store('uploads/images/sharing_banner','public');
+
+            // store path in DB
+            DB::table('setting')
+                ->where('option_name', 'sharingBanner')
+                ->update(['value' => $path]);
+
+            // remove file from loop data
+            unset($data['sharingBanner']);
+        }
+
+        // ✅ Update remaining settings
         foreach ($data as $key => $value) {
             DB::table('setting')->where('option_name', $key)->update(['value' => $value]);
         }
+
         return redirect()->back()->with('success', 'Settings updated successfully.');
+            
+            
     }
 
     public function createNextYearTemplates()

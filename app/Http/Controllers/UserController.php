@@ -281,7 +281,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if (auth()->user()->can('user-edit')) {
+        if (auth()->user()->can('user-create')) {
             $validator = Validator::make($request->all(), [
                 'business_name' => ['nullable', 'string', 'max:255'],
                 'email'         => ['nullable', 'string', 'email', 'max:255', 'unique:admin'],
@@ -313,7 +313,7 @@ class UserController extends Controller
             $user->b_website     = $request->b_website  ?? '';
             $user->address       = $request->address ?? '';
             $user->gender        = $request->gender;
-            $user->role          = 3; // User Role
+            $user->role          = 'User'; // User Role
 
             // Checkbox Values
             $user->status = $request->has('status') ? 1 : 0;

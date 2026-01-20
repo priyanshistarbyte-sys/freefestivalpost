@@ -86,7 +86,7 @@
                             <div class="mt-2">
                                 <img src="{{ $settings['sharingBanner'] ? asset('storage/' . $settings['sharingBanner']) : asset('assets/images/default.jpg') }}"
                                     alt="Current Image"
-                                    style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;">
+                                    style="width: 300px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;">
                             </div>
                         </div>
                         <div class="row">

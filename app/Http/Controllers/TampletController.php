@@ -102,12 +102,10 @@ class TampletController extends Controller
             return redirect()->back()->with('error', $validator->errors()->first());
         }
 
+        $subCategory = SubCategory::find($request->sub_category_id);
+        $mslug = $subCategory ? $subCategory->mslug : 'default';
         $maskPath = null;
-        // if ($request->has('has_mask') && $request->hasFile('mask')) {
-        //     $mask     = $request->file('mask');
-        //     $maskName = time() . '_' . $mask->getClientOriginalName();
-        //     $maskPath = $mask->storeAs('uploads/tamplet/masks', $maskName, 'public');
-        // }
+       
 
         if ($request->has('has_mask') && $request->hasFile('mask')) {
             $maskPath = $request->file('mask')->store('uploads/tamplet/masks', 'public');
@@ -126,11 +124,10 @@ class TampletController extends Controller
                 $tamplet->event_date      = $request->event_date;
                 $tamplet->event           = $request->event ? 1 : 0;
                 $tamplet->free_paid       = $request->free_paid ? 1 : 0;
-                $tamplet->type            = 1;
                 $tamplet->planImgName     = $maskPath;
-                $imgName       = time() . '_' . $index . '_' . $img->getClientOriginalName();
-                $stored        = $img->storeAs('uploads/tamplet/images', $imgName, 'public');
-                $tamplet->path = $stored;
+                $imgName                  = $mslug . '_' . time() . '_' . $index . '_' . $img->getClientOriginalName();
+                $stored                   = $img->storeAs('uploads/tamplet/images', $imgName, 'public');
+                $tamplet->path            = $stored;
                 $tamplet->save();
             }
         }
@@ -176,8 +173,10 @@ class TampletController extends Controller
             if ($tamplet->path) {
                 Storage::disk('public')->delete($tamplet->path);
             }
+            $subCategory = SubCategory::find($request->type);
+            $mslug = $subCategory ? $subCategory->mslug : 'default';
             $img           = $request->file('image');
-            $imgName       = time() . '_' . $img->getClientOriginalName();
+            $imgName       = $mslug . '_' . time() . '_' . $img->getClientOriginalName();
             $stored        = $img->storeAs('uploads/tamplet/images', $imgName, 'public');
             $tamplet->path = $stored;
         }
