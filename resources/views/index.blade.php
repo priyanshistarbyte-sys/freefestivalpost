@@ -12,23 +12,23 @@
     <meta name="author" content="FREE FESTIVE POST">
 
     <!-- FAVICON -->
-    <link rel="icon" href="<?php echo base_url('assets/user/') ?>img/favicon.png">
+    <link rel="icon" href="{{ asset('assets/user/img/favicon.png') }}">
     <!-- TITLE -->
     <title>Free Festive Post - App Landing Page</title>
     <!-- bootstrap.min.css -->
-    <link href="<?php echo base_url('assets/user/') ?>css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/user/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- font-awesome.min.css -->
-    <link href="<?php echo base_url('assets/user/') ?>css/material-design-iconic-font.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/user/css/material-design-iconic-font.min.css') }}" rel="stylesheet">
     <!-- slicknav.min.css -->
-    <link href="<?php echo base_url('assets/user/') ?>css/slicknav.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/user/css/slicknav.min.css') }}" rel="stylesheet">
     <!-- magnific popup.css -->
-    <link href="<?php echo base_url('assets/user/') ?>css/magnific-popup.css" rel="stylesheet">
+    <link href="{{ asset('assets/user/css/magnific-popup.css') }}" rel="stylesheet">
     <!-- owl.css -->
-    <link href="<?php echo base_url('assets/user/') ?>css/owl.carousel.css" rel="stylesheet">
+    <link href="{{ asset('assets/user/css/owl.carousel.css') }}" rel="stylesheet">
     <!-- animate.min.css -->
-    <link href="<?php echo base_url('assets/user/') ?>css/animate.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/user/css/animate.min.css') }}" rel="stylesheet">
     <!-- style.css -->
-    <link href="<?php echo base_url('assets/user/') ?>style.css" rel="stylesheet">
+    <link href="{{ asset('assets/user/css/style.css') }}" rel="stylesheet">
 
 </head>
 
@@ -79,7 +79,7 @@
                         <h1>This is an App to increase <br> the growth of your business.</h1>
                         <p>This is one of the types of applications in which you can make your business festival post,
                             and you can reach outto the public by creating festive posts for your business.</p>
-                        <img src="<?php echo base_url('assets/user/') ?>img/logo.png" width="50%" />
+                        <img src="{{ asset('assets/user/img/logo.png') }}" width="50%" />
                         <a class="home2-download-btn2"
                             href="https://play.google.com/store/apps/details?id=com.freefestivalpost.freefestivalpost"
                             target="_blank"></a>
@@ -88,7 +88,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="home1-hero-mobile wow fadeInDown">
-                        <img src="<?php echo base_url('assets/user/') ?>img/home1-hero-mobile-img.png" alt="">
+                        <img src="{{ asset('assets/user/img/home1-hero-mobile-img.png') }}" alt="">
                     </div>
                 </div>
             </div>
@@ -118,7 +118,7 @@
                 <div class="col-md-4 text-center">
                     <div class="about-single-item">
                         <div class="about-single-icon cta">
-                            <span style="background: url(<?php echo base_url('assets/user/') ?>img/icon_code.png);"></span>
+                            <span style="background-image: url('{{ asset('assets/user/img/icon_code.png') }}');"></span>
                         </div>
                         <div class="about-single-content">
                             <h4>Friendly User Interface</h4>
@@ -131,7 +131,7 @@
                 <div class="col-md-4 text-center">
                     <div class="about-single-item">
                         <div class="about-single-icon">
-                            <span style="background: url(<?php echo base_url('assets/user/') ?>img/icon_privacy.png);"></span>
+                            <span style="background-image: url('{{ asset('assets/user/img/icon_privacy.png') }}');"></span>
                         </div>
                         <div class="about-single-content">
                             <h4>Data Privacy</h4>
@@ -143,7 +143,7 @@
                 <div class="col-md-4 text-center">
                     <div class="about-single-item">
                         <div class="about-single-icon">
-                            <span style="background: url(<?php echo base_url('assets/user/') ?>img/icon_support.png);"></span>
+                            <span style="background-image: url('{{ asset('assets/user/img/icon_support.png') }}');"></span>
                         </div>
                         <div class="about-single-content">
                             <h4>24/7 Support</h4>
@@ -162,7 +162,8 @@
             <div class="row">
                 <div class="col-lg-3 wow fadeInLeft">
                     <div class="featured-mobile">
-                        <img src="<?php echo base_url('assets/user/') ?>img/featured-mobile.png" alt="">
+                        <img src="{{ asset('assets/user/img/featured-mobile.png') }}" alt="">
+                        
                     </div>
                 </div>
                 <div class="col-lg-8 offset-lg-1 col-md-12 wow fadeInRight margin-left-30">
@@ -175,14 +176,14 @@
                             <div class="col-md-6">
                                 <div class="featured-single-items">
                                     <div class="featured-single">
-                                        <img src="<?php echo base_url('assets/user/') ?>img/featured-icon1.png" alt="">
+                                        <img src="{{ asset('assets/user/img/featured-icon1.png') }}" alt="">
                                         <div class="featured-single-text">
                                             <h4>User Friendly</h4>
                                             <p>100% easy to use and best smooth performance.</p>
                                         </div>
                                     </div>
                                     <div class="featured-single">
-                                        <img src="<?php echo base_url('assets/user/') ?>img/featured-icon4.png" alt="">
+                                        <img src="{{ asset('assets/user/img/featured-icon4.png') }}" alt="">
                                         <div class="featured-single-text">
                                             <h4>Creative Design</h4>
                                             <p>Unlimited creative and new design templates available for your business
@@ -190,14 +191,14 @@
                                         </div>
                                     </div>
                                     <div class="featured-single">
-                                        <img src="<?php echo base_url('assets/user/') ?>img/save-money.png" alt="">
+                                        <img src="{{ asset('assets/user/img/save-money.png') }}" alt="">
                                         <div class="featured-single-text">
                                             <h4>Save your Money</h4>
                                             <p>100% free this application for your business growth.</p>
                                         </div>
                                     </div>
                                     <div class="featured-single">
-                                        <img src="<?php echo base_url('assets/user/') ?>img/featured-icon3.png" alt="">
+                                        <img src="{{ asset('assets/user/img/featured-icon3.png') }}" alt="">
                                         <div class="featured-single-text">
                                             <h4>Super Fast</h4>
                                             <p>work performance is very fast and smooth.</p>
@@ -209,14 +210,14 @@
                             <div class="col-md-6">
                                 <div class="featured-single-items">
                                     <div class="featured-single">
-                                        <img src="<?php echo base_url('assets/user/') ?>img/featured-icon5.png" alt="">
+                                        <img src="{{ asset('assets/user/img/featured-icon5.png') }}" alt="">
                                         <div class="featured-single-text">
                                             <h4>Unlimited Design Tamplate</h4>
                                             <p>Unlimited design templates available for your business post.</p>
                                         </div>
                                     </div>
                                     <div class="featured-single">
-                                        <img src="<?php echo base_url('assets/user/') ?>img/featured-icon6.png" alt="">
+                                        <img src="{{ asset('assets/user/img/featured-icon6.png') }}" alt="">
                                         <div class="featured-single-text">
                                             <h4>Easy to Use</h4>
                                             <p>No more confusion, no more extra function, easily use and easily
@@ -224,14 +225,14 @@
                                         </div>
                                     </div>
                                     <div class="featured-single">
-                                        <img src="<?php echo base_url('assets/user/') ?>img/save-time.png" alt="">
+                                        <img src="{{ asset('assets/user/img/save-time.png') }}" alt="">
                                         <div class="featured-single-text">
                                             <h4>Save Time</h4>
                                             <p>No need to think about the best design</p>
                                         </div>
                                     </div>
                                     <div class="featured-single">
-                                        <img src="<?php echo base_url('assets/user/') ?>img/featured-icon8.png" alt="">
+                                        <img src="{{ asset('assets/user/img/featured-icon8.png') }}" alt="">
                                         <div class="featured-single-text">
                                             <h4>Make the design in a Second</h4>
                                             <p>Create a business post in the shortest time possible with one click.</p>
@@ -263,43 +264,43 @@
                 <div class="col-md-12">
                     <div class="screenshot-slide">
                         <div class="screenshot-single-slide">
-                            <img src="<?php echo base_url('assets/user/') ?>img/sc-1.jpg" alt="">
+                            <img src="{{ asset('assets/user/img/sc-1.jpg') }}" alt="">
                         </div>
                         <div class="screenshot-single-slide">
-                            <img src="<?php echo base_url('assets/user/') ?>img/sc-2.jpg" alt="">
+                            <img src="{{ asset('assets/user/img/sc-2.jpg') }}" alt="">
                         </div>
                         <div class="screenshot-single-slide">
-                            <img src="<?php echo base_url('assets/user/') ?>img/sc-3.jpg" alt="">
+                            <img src="{{ asset('assets/user/img/sc-3.jpg') }}" alt="">
                         </div>
                         <div class="screenshot-single-slide">
-                            <img src="<?php echo base_url('assets/user/') ?>img/sc-2.jpg" alt="">
+                            <img src="{{ asset('assets/user/img/sc-2.jpg') }}" alt="">
                         </div>
                         <div class="screenshot-single-slide">
-                            <img src="<?php echo base_url('assets/user/') ?>img/sc-4.jpg" alt="">
+                            <img src="{{ asset('assets/user/img/sc-4.jpg') }}" alt="">
                         </div>
                         <div class="screenshot-single-slide">
-                            <img src="<?php echo base_url('assets/user/') ?>img/sc-5.jpg" alt="">
+                            <img src="{{ asset('assets/user/img/sc-5.jpg') }}" alt="">
                         </div>
                         <div class="screenshot-single-slide">
-                            <img src="<?php echo base_url('assets/user/') ?>img/sc-6.jpg" alt="">
+                            <img src="{{ asset('assets/user/img/sc-6.jpg') }}" alt="">
                         </div>
                         <div class="screenshot-single-slide">
-                            <img src="<?php echo base_url('assets/user/') ?>img/sc-7.jpg" alt="">
+                            <img src="{{ asset('assets/user/img/sc-7.jpg') }}" alt="">
                         </div>
                         <div class="screenshot-single-slide">
-                            <img src="<?php echo base_url('assets/user/') ?>img/sc-8.jpg" alt="">
+                            <img src="{{ asset('assets/user/img/sc-8.jpg') }}" alt="">
                         </div>
                         <div class="screenshot-single-slide">
-                            <img src="<?php echo base_url('assets/user/') ?>img/sc-9.jpg" alt="">
+                            <img src="{{ asset('assets/user/img/sc-9.jpg') }}" alt="">
                         </div>
                         <div class="screenshot-single-slide">
-                            <img src="<?php echo base_url('assets/user/') ?>img/sc-10.jpg" alt="">
+                            <img src="{{ asset('assets/user/img/sc-10.jpg') }}" alt="">
                         </div>
                         <div class="screenshot-single-slide">
-                            <img src="<?php echo base_url('assets/user/') ?>img/sc-11.jpg" alt="">
+                            <img src="{{ asset('assets/user/img/sc-11.jpg') }}" alt="">
                         </div>
                         <div class="screenshot-single-slide">
-                            <img src="<?php echo base_url('assets/user/') ?>img/sc-12.jpg" alt="">
+                            <img src="{{ asset('assets/user/img/sc-12.jpg') }}" alt="">
                         </div>
                     </div>
                 </div>
@@ -328,7 +329,7 @@
                 </div>
                 <div class="col-lg-5 wow fadeInRight">
                     <div class="get-app-right">
-                        <img src="<?php echo base_url('assets/user/') ?>img/get-app-mobile.png" alt="">
+                        <img src="{{ asset('assets/user/img/get-app-mobile.png') }}" alt="">
                     </div>
                 </div>
             </div>
@@ -487,7 +488,7 @@
                     </div>
                     <div class="video-btn-section">
                         <a href="https://www.youtube.com/watch?v=MI7eBS0Nyks" class="video-btn mfp-iframe">
-                            <img src="<?php echo base_url('assets/user/') ?>img/video-icon.png" alt="">
+                            <img src="{{ asset('assets/user/img/video-icon.png') }}" alt="">
                         </a>
                     </div>
                 </div>
@@ -520,7 +521,7 @@
                                 </p>
                             </div>
                             <div class="testimonial-slide-meta">
-                                <img src="<?php echo base_url('assets/user/') ?>img/user-m.png" alt="">
+                                <img src="{{ asset('assets/user/img/user-m.png') }}" alt="">
                                 <span class="testimonial-meta">
                                     <span class="meta-title">Jayendrasinh Makwana</span>
                                     <br>
@@ -536,7 +537,7 @@
                                 </p>
                             </div>
                             <div class="testimonial-slide-meta">
-                                <img src="<?php echo base_url('assets/user/') ?>img/user-m.png" alt="">
+                                <img src="{{ asset('assets/user/img/user-m.png') }}" alt="">
                                 <span class="testimonial-meta">
                                     <span class="meta-title">Gajjar Heer</span>
                                     <br>
@@ -551,7 +552,7 @@
                                 </p>
                             </div>
                             <div class="testimonial-slide-meta">
-                                <img src="<?php echo base_url('assets/user/') ?>img/user-m.png" alt="">
+                                <img src="{{ asset('assets/user/img/user-m.png') }}" alt="">
                                 <span class="testimonial-meta">
                                     <span class="meta-title">Ankit Mangukiya</span>
                                     <br>
@@ -566,7 +567,7 @@
                                 </p>
                             </div>
                             <div class="testimonial-slide-meta">
-                                <img src="<?php echo base_url('assets/user/') ?>img/user-m.png" alt="">
+                                <img src="{{ asset('assets/user/img/user-m.png') }}" alt="">
                                 <span class="testimonial-meta">
                                     <span class="meta-title">Dr Anand Patel</span>
                                     <br>
@@ -581,7 +582,7 @@
                                 </p>
                             </div>
                             <div class="testimonial-slide-meta">
-                                <img src="<?php echo base_url('assets/user/') ?>img/user-f.png" alt="">
+                                <img src="{{ asset('assets/user/img/user-f.png') }}" alt="">
                                 <span class="testimonial-meta">
                                     <span class="meta-title">Komal Gaikwad</span>
                                     <br>
@@ -596,7 +597,7 @@
                                 </p>
                             </div>
                             <div class="testimonial-slide-meta">
-                                <img src="<?php echo base_url('assets/user/') ?>img/user-f.png" alt="">
+                                <img src="{{ asset('assets/user/img/user-f.png') }}" alt="">
                                 <span class="testimonial-meta">
                                     <span class="meta-title">Dr.Darshana Nariya</span>
                                     <br>
@@ -612,7 +613,7 @@
                                 </p>
                             </div>
                             <div class="testimonial-slide-meta">
-                                <img src="<?php echo base_url('assets/user/') ?>img/user-m.png" alt="">
+                                <img src="{{ asset('assets/user/img/user-m.png') }}" alt="">
                                 <span class="testimonial-meta">
                                     <span class="meta-title">Mitul Gabani</span>
                                     <br>
@@ -629,7 +630,7 @@
                                 </p>
                             </div>
                             <div class="testimonial-slide-meta">
-                                <img src="<?php echo base_url('assets/user/') ?>img/user-m.png" alt="">
+                                <img src="{{ asset('assets/user/img/user-m.png') }}" alt="">
                                 <span class="testimonial-meta">
                                     <span class="meta-title">Tejani Vishal</span>
                                     <br>
@@ -644,7 +645,7 @@
                                 </p>
                             </div>
                             <div class="testimonial-slide-meta">
-                                <img src="<?php echo base_url('assets/user/') ?>img/user-m.png" alt="">
+                                <img src="{{ asset('assets/user/img/user-m.png') }}" alt="">
                                 <span class="testimonial-meta">
                                     <span class="meta-title">Uday Ghori</span>
                                     <br>
@@ -667,28 +668,28 @@
             <div class="row">
                 <div class="col-md-3 text-center">
                     <a href="javascript:void(0);" class="single-counter">
-                        <img src="<?php echo base_url('assets/user/') ?>img/counter-icon1.png" alt="">
+                        <img src="{{ asset('assets/user/img/counter-icon1.png') }}" alt="">
                         <h1>10000+</h1>
                         <p>App Downloads</p>
                     </a>
                 </div>
                 <div class="col-md-3 text-center">
                     <a href="javascript:void(0);" class="single-counter">
-                        <img src="<?php echo base_url('assets/user/') ?>img/counter-icon2.png" alt="">
+                        <img src="{{ asset('assets/user/img/counter-icon2.png') }}" alt="">
                         <h1>8000+</h1>
                         <p>Unique Templates</p>
                     </a>
                 </div>
                 <div class="col-md-3 text-center">
                     <a href="javascript:void(0);" class="single-counter">
-                        <img src="<?php echo base_url('assets/user/') ?>img/counter-icon3.png" alt="">
+                        <img src="{{ asset('assets/user/img/counter-icon3.png') }}" alt="">
                         <h1>10000+</h1>
                         <p>Active Users</p>
                     </a>
                 </div>
                 <div class="col-md-3 text-center">
                     <a href="javascript:void(0);" class="single-counter">
-                        <img src="<?php echo base_url('assets/user/') ?>img/counter-icon4.png" alt="">
+                        <img src="{{ asset('assets/user/img/counter-icon4.png') }}" alt="">
                         <h1>100+</h1>
                         <p>Total Reviews</p>
                     </a>
@@ -753,23 +754,23 @@
     </div>
     <!--  footer area end -->
     <!-- jquery.js -->
-    <script src="<?php echo base_url('assets/user/') ?>js/jquery.js"></script>
+    <script src="{{ asset('assets/user/js/jquery.js') }}"></script>
     <!-- jquery.popper.min.js -->
-    <script src="<?php echo base_url('assets/user/') ?>js/popper.min.js"></script>
+    <script src="{{ asset('assets/user/js/popper.min.js') }}"></script>
     <!-- bootstrap.min.js -->
-    <script src="<?php echo base_url('assets/user/') ?>js/bootstrap.min.js"></script>
+    <script src="{{ asset('assets/user/js/bootstrap.min.js') }}"></script>
     <!-- jquery.slicknav.min.js -->
-    <script src="<?php echo base_url('assets/user/') ?>js/jquery.slicknav.min.js"></script>
+    <script src="{{ asset('assets/user/js/jquery.slicknav.min.js') }}"></script>
     <!-- jquery.magnific.min.js -->
-    <script src="<?php echo base_url('assets/user/') ?>js/jquery.magnific-popup.min.js"></script>
+    <script src="{{ asset('assets/user/js/jquery.magnific-popup.min.js') }}"></script>
     <!-- jquery.is sticky.min.js -->
-    <script src="<?php echo base_url('assets/user/') ?>js/jquery.sticky.js"></script>
+    <script src="{{ asset('assets/user/js/jquery.sticky.js') }}"></script>
     <!-- jquery.owl.min.js -->
-    <script src="<?php echo base_url('assets/user/') ?>js/owl.carousel.min.js"></script>
+    <script src="{{ asset('assets/user/js/owl.carousel.min.js') }}"></script>
     <!-- jquery.wow.min.js -->
-    <script src="<?php echo base_url('assets/user/') ?>js/wow.min.js"></script>
+    <script src="{{ asset('assets/user/js/wow.min.js') }}"></script>
     <!-- main.js -->
-    <script src="<?php echo base_url('assets/user/') ?>js/main.js"></script>
+    <script src="{{ asset('assets/user/js/main.js') }}"></script>
     <script>
         $(document).ready(function () {
             $(document).on("contextmenu", function (e) {

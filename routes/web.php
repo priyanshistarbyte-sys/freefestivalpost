@@ -28,10 +28,12 @@ use App\Http\Controllers\CouponCodeController;
 use App\Http\Controllers\RazorpayPaymentController;
 use Illuminate\Support\Facades\Route;
 
+// Route::get('/', function () {
+//     return redirect()->route('login');
+// });
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('welcome');
 });
-
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
