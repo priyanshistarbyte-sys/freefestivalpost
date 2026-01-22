@@ -14,17 +14,28 @@ class OtpController extends Controller
 {
     public function sendOtp(Request $request)
     {
-        $user = Admin::where('email',$request->email)->first();
-         if (!$user) {
-            return back()->withErrors('User not found');
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string'
+        ]);
+
+        $user = Admin::where('email', $request->email)->first();
+        
+        if (!$user) {
+            return back()->withErrors(['email' => 'Email not found']);
         }
+
+        // Validate password (MD5 format)
+        if (md5($request->password) !== $user->password) {
+            return back()->withErrors(['password' => 'Invalid password']);
+        }
+
         // Delete previous OTPs
         Otp::where('user_id', $user->id)->delete();
 
         // Generate 6-digit OTP
         $otpCode = rand(100000, 999999);
 
-       
         if(!empty($user->mobile))
         {
             // Create new OTP
@@ -38,9 +49,8 @@ class OtpController extends Controller
             // Format mobile number with country code
             $formattedNumber = $this->formatMobileNumber($user->mobile);
           
-
             if (!$formattedNumber) {
-                return back()->withErrors('Invalid mobile number format.');
+                return back()->withErrors(['mobile' => 'Invalid mobile number format.']);
             }
 
             // SMS functionality commented for local testing
@@ -56,7 +66,7 @@ class OtpController extends Controller
         }
         else
         {
-            return back()->withErrors('Mobile number not found');
+            return back()->withErrors(['mobile' => 'Mobile number not found']);
         }
     }
 

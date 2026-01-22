@@ -59,7 +59,7 @@
                     {
                         extend: 'print',
                         text: 'Print',
-                        title: 'Customframe',
+                        title: 'Home-Category',
                         className: 'btn btn-info btn-sm',
                         exportOptions: {
                             columns: [0,1,2,3,4,5,6]

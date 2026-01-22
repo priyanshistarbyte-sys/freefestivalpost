@@ -61,4 +61,9 @@ class Admin extends Authenticatable
             ->where('user_id', $user_id)
             ->value('tamp_count') ?? 0;
     }
+    
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
 }

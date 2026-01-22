@@ -60,7 +60,7 @@
                          </label>
                     </div>
                     <div class="d-flex justify-content-end gap-2 mt-4">
-                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="submit" class="btn btn-primary btn-lg">Create</button>
                     </div>
                 </div>
              </form>

@@ -26,6 +26,7 @@ use App\Http\Controllers\VideogifController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\CouponCodeController;
 use App\Http\Controllers\RazorpayPaymentController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -147,6 +148,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/complain', [ComplainController::class, 'index'])->name('complain.list');
     Route::get('/complain/reply/{id}', [ComplainController::class, 'reply'])->name('compain.reply');
     Route::post('/complain/reply/{id}', [ComplainController::class, 'replyStore'])->name('compain.reply.store');
+
+    //send-notification
+    Route::get('/notification', [NotificationController::class, 'index'])->name('notification.index');
+    Route::get('/notification/create', [NotificationController::class, 'create'])->name('notification.create');
+    Route::post('/notification/store', [NotificationController::class, 'store'])->name('notification.store');
+    Route::post('/notification/category-data',[NotificationController::class, 'getCategoryDataById'])->name('notification.getCategoryDataById');
+    Route::delete('/notification/{id}/delete', [NotificationController::class, 'destroy'])->name('notification.destroy');
+    
 
     // payment
     Route::get('/payment-failed', [PaymentController::class, 'failedList'])->name('payment.failed');

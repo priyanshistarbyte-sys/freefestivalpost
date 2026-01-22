@@ -30,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $helpers = [
             app_path('Helpers/RazorpayHelper.php'),
+            app_path('Helpers/NotificationHelper.php'),
         ];
 
         foreach ($helpers as $helper) {

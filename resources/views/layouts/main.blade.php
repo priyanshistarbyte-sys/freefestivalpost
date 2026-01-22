@@ -179,6 +179,9 @@
                         @can('font-manage')
                         <li class="{{ request()->routeIs('fonts.*') ? 'active' : '' }}"><a href="{{ route('fonts.index') }}"><span>Fonts</span></a></li>
                         @endcan
+                        @can('send-notification-manage')
+                        <li class="{{ request()->routeIs('notification.*') ? 'active' : '' }}"><a href="{{ route('notification.index') }}"><span>Send Notification</span></a></li>
+                        @endcan
                         @can('coupon-manage')
                         <li class="{{ request()->routeIs('coupon-code.*') ? 'active' : '' }}"><a href="{{ route('coupon-code.index') }}"><span>Coupon Code</span></a></li>
                         @endcan
