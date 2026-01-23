@@ -1105,7 +1105,7 @@ class Api extends REST_Controller
 				$this->db->select('*');
 				$this->db->where('mobile', $mobileRS);
 				$this->db->where('exp_date >',date('Y-m-d H:i:s'));
-				$this->db->order_by('paylink_id',"desc")->limit(1);
+				$this->db->order_by('id',"desc")->limit(1);
 				$query_link = $this->db->get('payment_link');
 
 				$totalrows = $query_link->num_rows();

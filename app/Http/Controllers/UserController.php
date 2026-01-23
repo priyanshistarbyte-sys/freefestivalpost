@@ -916,6 +916,7 @@ class UserController extends Controller
         $description = "Reference No. #" . $userId;
 
         $emailSend = ($email != "brandfotoss@gmail.com" && !empty($email));
+        
 
         $userData = [
             'token' => config('app.payment_token'), // Add this to your .env
@@ -935,12 +936,7 @@ class UserController extends Controller
         ];
 
         // Check existing payment link
-        $existingLink = DB::table('payment_link')
-            ->where('mobile', $mobile)
-            ->where('exp_date', '>', now())
-            ->orderBy('paylink_id', 'desc')
-            ->first();
-
+        $existingLink = DB::table('payment_link')->where('mobile', $mobile)->where('exp_date', '>', now())->orderBy('id', 'desc')->first();
         if ($existingLink) {
             $resendData = [
                 'token' => config('app.payment_token'),
