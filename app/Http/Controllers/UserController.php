@@ -859,7 +859,7 @@ class UserController extends Controller
         | 4. Active packages
         ------------------------------*/
         $userData['packageList'] = SubscriptionPlan::where('status', 1)
-            ->select('id', 'plan_name', 'price')
+            ->select('id', 'plan_name', 'price','discount')
             ->get();
 
         /* ------------------------------
@@ -891,6 +891,81 @@ class UserController extends Controller
 
         return view('users.user_detail', compact('userData'));
     }
+
+    public function sendPaymentLink(Request $request)
+    {
+        if (!$request->ajax()) {
+            return response()->json(['status' => 'error', 'message' => 'Invalid request']);
+        }
+
+        $userId = $request->input('user_id');
+        $amount = $request->input('amount');
+
+        if (empty($userId) || empty($amount)) {
+            return response()->json(['status' => 'error', 'message' => 'Some fields are required!']);
+        }
+
+        // Get user details
+        $user = Admin::select('b_email', 'mobile')->where('id', $userId)->first();
+        if (!$user) {
+            return response()->json(['status' => 'error', 'message' => 'User not found!']);
+        }
+
+        $mobile = $user->mobile;
+        $email = $user->b_email;
+        $description = "Reference No. #" . $userId;
+
+        $emailSend = ($email != "brandfotoss@gmail.com" && !empty($email));
+
+        $userData = [
+            'token' => config('app.payment_token'), // Add this to your .env
+            'amount' => $amount * 100,
+            'expire_by' => strtotime("+2 days"),
+            'reference_id' => "ref_" . time() . "_" . $userId,
+            'description' => $description,
+            'name' => "",
+            'email' => $email,
+            'contact' => "+91" . $mobile,
+            'smsOn' => true,
+            'emailOn' => $emailSend,
+            'user_id' => $userId,
+            'type' => "link",
+            'callback_url' => "",
+            'callback_method' => "",
+        ];
+
+        // Check existing payment link
+        $existingLink = DB::table('payment_link')
+            ->where('mobile', $mobile)
+            ->where('exp_date', '>', now())
+            ->orderBy('paylink_id', 'desc')
+            ->first();
+
+        if ($existingLink) {
+            $resendData = [
+                'token' => config('app.payment_token'),
+                'options' => "sms",
+                'paymentid' => $existingLink->paymentLinkId,
+                'link' => $existingLink->link,
+                'mobile' => $existingLink->mobile,
+            ];
+            $result = paymentlinkResend($resendData);
+        } else {
+            $result = paymentLinkCreateForUser_post($userData);
+        }
+
+        if ($result) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Payment link sent successfully...' . $mobile . " - " . $email
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error something else!'
+            ]);
+        }
+    }
    
     public function user_delete_notification($id)
     {
@@ -898,4 +973,6 @@ class UserController extends Controller
         $notification->delete();
         return redirect()->route('user.index')->with('success', 'Notification deleted successfully.');
     }
+
+    
 }

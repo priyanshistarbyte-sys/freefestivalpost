@@ -88,6 +88,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // user-profile-details
     Route::get('/user/{id}/details', [UserController::class, 'userdetails'])->name('user.details');
     Route::delete('/user/{id}/notification', [UserController::class, 'user_delete_notification'])->name('user-notification.delete');
+    Route::post('/user/send-payment-link', [UserController::class, 'sendPaymentLink'])->name('user.sendPaymentLink');
     
     // Custom Frame Routes
     Route::get('/user/{id}/customframe', [CustomframeController::class, 'index'])->name('user.customframe');

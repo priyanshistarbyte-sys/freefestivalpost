@@ -161,10 +161,84 @@
             </div>
         </div>
     </div>
+    <!-- Send Payment Link Form -->
+    <div class="card">
+        <div class="card-header bg-success text-white py-2">
+            <h6 class="mb-0">Send Payment Link</h6>
+        </div>
+        <div class="card-body p-2">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Select Package</label>
+                    <select class="form-select form-select-sm" id="packageSelect" onchange="setAmount()">
+                        <option value="">-- Select Package--</option>
+                        @foreach($userData['packageList'] as $package)
+                            <option value="{{ $package->id }}" data-price="{{ $package->price }}" data-discount="{{ $package->discount }}">{{ $package->plan_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Enter Amount</label>
+                    <input type="number" class="form-control form-control-sm" id="amountField" placeholder="Enter Amount" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">&nbsp;</label><br>
+                    <button type="button" class="btn btn-success btn-sm" onclick="sendPaymentLink()">Send Payment Link</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-     $(document).on('click', '.delete-btn', function(e) {
+function sendPaymentLink() {
+    const packageSelect = document.getElementById('packageSelect');
+    const amountField = document.getElementById('amountField');
+    
+    if (!packageSelect.value || !amountField.value) {
+        alert('Please select package and amount');
+        return;
+    }
+    
+    $.ajax({
+        url: '{{ route("user.sendPaymentLink") }}',
+        type: 'POST',
+        data: {
+            user_id: '{{ $userData["id"] }}',
+            amount: amountField.value,
+            packageid: packageSelect.value,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            if (response.status === 'success') {
+                alert(response.message);
+            } else {
+                alert(response.message);
+            }
+        },
+        error: function() {
+            alert('Error occurred while sending payment link');
+        }
+    });
+}
+
+function setAmount() {
+    const select = document.getElementById('packageSelect');
+    
+    const amountField = document.getElementById('amountField');
+    const selectedOption = select.options[select.selectedIndex];
+    
+    if (selectedOption.value) {
+        const price = parseFloat(selectedOption.getAttribute('data-price'));
+        const discount = parseFloat(selectedOption.getAttribute('data-discount')) || 0;
+        const finalPrice = price - (price * discount / 100);
+        amountField.value = finalPrice.toFixed(2);
+    } else {
+        amountField.value = '';
+    }
+}
+
+    $(document).on('click', '.delete-btn', function(e) {
                 e.preventDefault();
                 const deleteUrl = $(this).attr('data-url');
 
@@ -197,5 +271,5 @@
                         form.submit();
                     }
                 });
-        });
+    });
 </script>
