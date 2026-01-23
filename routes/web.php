@@ -71,6 +71,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('user', UserController::class);
     Route::post('/user/status/update', [UserController::class, 'updateStatus'])->name('admin.updateStatus');
 
+    Route::get('/active-premium-users', [UserController::class, 'activePremiumUsers'])->name('active.premium.users');
+
+
     // users transactions 
     Route::get('/users-transactions', [UserController::class, 'transactionList'])->name('users.transactions.list');
 
@@ -82,6 +85,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/{id}/change-password', [UserController::class, 'changePassword'])->name('user.changePassword');
     Route::post('/user/{id}/update-password', [UserController::class, 'updatePassword'])->name('user.updatePassword');
     
+    // user-profile-details
+    Route::get('/user/{id}/details', [UserController::class, 'userdetails'])->name('user.details');
+    Route::delete('/user/{id}/notification', [UserController::class, 'user_delete_notification'])->name('user-notification.delete');
     
     // Custom Frame Routes
     Route::get('/user/{id}/customframe', [CustomframeController::class, 'index'])->name('user.customframe');

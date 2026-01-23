@@ -117,7 +117,7 @@
                                 <h4 class="mb-2">{{ $totalPremiumUser }}</h4>
                                 <p class="mb-2">Total Premium User</p>
                                 <div class="small">
-                                    <span class="me-3">{{ $totalActivePremiumUser }} Active</span>
+                                    <a href="{{ route('active.premium.users') }}" class="text-decoration-none me-3 text-white">{{ $totalActivePremiumUser }} Active</a>
                                     <span class="me-3">{{ $totalTodayPremiumUser }} Paid Today</span>
                                     <span class="me-3">{{ $totalExpiredTodayUser }} Expired Today</span>
                                     <span class="me-3">{{ $totalExpiredUser }} Total Expired</span>

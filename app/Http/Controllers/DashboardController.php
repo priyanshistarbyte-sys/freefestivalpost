@@ -716,4 +716,9 @@ class DashboardController extends Controller
 
         return view('admin.day-wise-register-report');
     }
+
+    public function activePremiumUsers()
+    {
+        return redirect()->route('user.index', ['filter' => 'active_premium']);
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Feedback;
 use App\Models\Makepost;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
+use Carbon\Carbon;
+use App\Models\Payment;
+use App\Models\SubscriptionPlan;
+
+
 
 class UserController extends Controller
 {
@@ -21,6 +27,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+       
         if ($request->ajax()) {
 
             $type    = $request->input('type');
@@ -103,6 +110,11 @@ class UserController extends Controller
                     $query->where('a.ispaid', 0)
                         ->whereNull('a.planStatus');
                     break;
+            }
+
+            // Active Premium Users Filter
+            if ($request->get('filter') === 'active_premium') {
+                $query->where('a.ispaid', 1)->where('a.planStatus', 2);
             }
 
              /* Date Filters */
@@ -222,9 +234,18 @@ class UserController extends Controller
                 })
 
                 ->addColumn('actions', function ($user) {
-
                     $buttons = '';
+                    $user_details   = route('user.details', $user->id);
+                    // User details
+                    $buttons .= '
+                        <a href="#" class="btn btn-sm"
+                            data-ajax-popup="true" data-size="lg"
+                            data-title="User Detail" data-url="' . $user_details . '"
+                            data-bs-toggle="tooltip" data-bs-original-title="User Detail">
+                            <i class="fa fa-user me-2"></i>
+                        </a>';
 
+                    
                     $changepassword = route('user.changePassword', $user->id);
 
                     // Change password
@@ -625,6 +646,133 @@ class UserController extends Controller
         return view('users.postlist');
     }
 
+    public function activePremiumUsers(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $query = Admin::query()
+                ->where('role', 'User')      // change to 1 if numeric
+                ->where('ispaid', 1)
+                ->where('planStatus', 2)
+                ->select([
+                    'id',
+                    'business_name',
+                    'mobile',
+                    'ispaid',
+                    'planStatus',
+                    'expdate',
+                    'status',
+                    'otp',
+                    'created_at',
+                    'photo',
+                ]);
+
+            return DataTables::of($query)
+                ->addIndexColumn()
+
+                /* Post Count */
+                ->addColumn('post', function ($user) {
+                    return DB::table('makepost')
+                        ->where('user_id', $user->id)
+                        ->count();
+                })
+
+                /* App Version */
+                ->addColumn('app_version', function ($user) {
+                    return DB::table('notification')
+                        ->where('user_id', $user->id)
+                        ->latest('id')
+                        ->value('app_version');
+                })
+
+                /* Created */
+                ->editColumn('created_at', function ($user) {
+                    return $user->created_at
+                        ? $user->created_at->format('d-m-Y h:i A')
+                        : '';
+                })
+
+                /* Photo */
+                ->addColumn('photo', function ($user) {
+                    if (!$user->photo) {
+                        return 'No Logo';
+                    }
+
+                    $url = asset('storage/' . ltrim($user->photo, '/'));
+                    return "<a href='{$url}' target='_blank'>
+                                <img src='{$url}' width='30' height='30' class='rounded'>
+                            </a>";
+                })
+
+                /* Mobile */
+                ->editColumn('mobile', function ($user) {
+                    return "<a target='_blank'
+                                href='https://web.whatsapp.com/send?phone=91{$user->mobile}'
+                                style='color:#0088cc'>
+                                {$user->mobile}
+                            </a>";
+                })
+
+                /* Paid */
+                ->editColumn('ispaid', function () {
+                    return '<span class="badge bg-success">Paid</span>';
+                })
+
+                /* Status Toggle */
+                ->addColumn('status', function ($user) {
+                    $checked = $user->status == 1 ? 'checked' : '';
+                    return "
+                        <label class='custom-switch'>
+                            <input type='checkbox' class='status-toggle'
+                                data-id='{$user->id}' {$checked}>
+                            <span class='switch-slider'></span>
+                        </label>";
+                })
+
+                /* Expiry */
+                ->editColumn('expdate', function ($user) {
+                    return $user->expdate
+                        ? \Carbon\Carbon::parse($user->expdate)->format('d/m/Y')
+                        : '';
+                })
+
+                /* Actions */
+                ->addColumn('actions', function ($user) {
+                    $btn = '';
+
+                    $btn .= "<a href='#' class='btn btn-sm'
+                                data-ajax-popup='true'
+                                data-title='Change Password'
+                                data-url='".route('user.changePassword', $user->id)."'>
+                                <i class='fa fa-key'></i>
+                            </a>";
+
+                    $btn .= "<a href='".route('user.customframe', $user->id)."' class='btn btn-sm'>
+                                <i class='fa fa-eye'></i>
+                            </a>";
+
+                    if (auth()->user()->can('user-edit')) {
+                        $btn .= "<a href='".route('user.edit', $user->id)."' class='btn btn-sm'>
+                                    <i class='fa fa-edit'></i>
+                                </a>";
+                    }
+
+                    if (auth()->user()->can('user-delete')) {
+                        $btn .= "<button class='btn btn-sm delete-btn'
+                                    data-url='".route('user.destroy', $user->id)."'>
+                                    <i class='fa fa-trash'></i>
+                                </button>";
+                    }
+
+                    return $btn;
+                })
+
+                ->rawColumns(['photo','mobile','ispaid','status','actions'])
+                ->make(true);
+        }
+
+        return view('users.index');
+    }
     public function deletePost($id)
     {
         $post = Makepost::findOrFail($id);
@@ -632,4 +780,122 @@ class UserController extends Controller
         return redirect()->route('post.list')->with('success', 'Post deleted successfully.');
     }
 
+    public function userdetails($id)
+    {
+        
+        /* ------------------------------
+        | 1. User + total posts
+        ------------------------------*/
+        $user = Admin::where('id', $id)->firstOrFail();
+
+        $userData = $user->toArray();
+
+        /* Photo */
+        $userData['photo'] = $user->photo
+            ? asset('storage/' . ltrim($user->photo, '/'))
+            : asset('assets/images/Admin.png');
+
+        /* Date formatting */
+        $userData['created_at'] = $user->created_at
+            ? $user->created_at->format('d/m/Y H:i')
+            : '-';
+
+        $userData['updated_at'] = $user->updated_at
+            ? $user->updated_at->format('d/m/Y H:i')
+            : '-';
+
+        $userData['last_login'] = $user->last_login
+            ? Carbon::parse($user->last_login)->format('d/m/Y H:i')
+            : '-';
+
+        $userData['expdate'] = $user->expdate
+            ? Carbon::parse($user->expdate)->format('d/m/Y')
+            : '-';
+
+        $userData['totalPost'] = DB::table('makepost')
+            ->where('user_id', $id)
+            ->count();
+
+        /* ------------------------------
+        | 2. Payment history
+        ------------------------------*/
+        $payments = Payment::where('user_id', $id)
+            ->leftJoin('subscription_plans as s', 'payments.packageid', '=', 's.id')
+            ->select(
+                'payments.*',
+                's.plan_name',
+                's.duration',
+                's.duration_type',
+                's.price as plan_price'
+            )
+            ->orderByDesc('payments.id')
+            ->get()
+            ->map(function ($p) {
+                return [
+                    ...$p->toArray(),
+                    'created_at' => $p->created_at
+                        ? Carbon::parse($p->created_at)->format('d/m/Y H:i')
+                        : '-',
+                    'date' => $p->date
+                        ? Carbon::parse($p->date)->format('d/m/Y')
+                        : '-',
+                    'refundDate' => $p->refundDate
+                        ? Carbon::parse($p->refundDate)->format('d/m/Y H:i')
+                        : null,
+                ];
+            });
+
+        $userData['payments'] = $payments;
+
+        /* ------------------------------
+        | 3. Device / Notification info
+        ------------------------------*/
+        $userData['deviceInfo'] = DB::table('notification')
+            ->where('user_id', $id)
+            ->select('id','device_id', 'user_id', 'app_version', 'oprating_system')
+            ->get();
+
+        /* ------------------------------
+        | 4. Active packages
+        ------------------------------*/
+        $userData['packageList'] = SubscriptionPlan::where('status', 1)
+            ->select('id', 'plan_name', 'price')
+            ->get();
+
+        /* ------------------------------
+        | 5. Total custom frames
+        ------------------------------*/
+        $userData['totalCustomFrame'] = DB::table('customframe')
+            ->where('user_id', $id)
+            ->count();
+
+        /* ------------------------------
+        | 6. Payment Links
+        ------------------------------*/
+        $userData['paymentLinks'] = DB::table('payment_link')
+            ->where('user_id', $id)
+            ->select('id', 'mobile', 'attempts', 'exp_date', 'created_at')
+            ->orderByDesc('id')
+            ->get()
+            ->map(function ($link) {
+                return [
+                    ...(array)$link,
+                    'exp_date' => $link->exp_date
+                        ? Carbon::parse($link->exp_date)->format('d/m/Y H:i')
+                        : '-',
+                    'created_at' => $link->created_at
+                        ? Carbon::parse($link->created_at)->format('d/m/Y H:i')
+                        : '-',
+                ];
+            });
+
+        return view('users.user_detail', compact('userData'));
+    }
+   
+    public function user_delete_notification($id)
+    {
+        $notification = Notification::findOrFail($id);
+        $notification->delete();
+        return redirect()->route('user.index')->with('success', 'Notification deleted successfully.');
+    }
 }

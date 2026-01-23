@@ -66,4 +66,9 @@ class Admin extends Authenticatable
     {
         return $this->hasMany(Notification::class, 'user_id');
     }
+
+    public function posts()
+    {
+        return $this->hasMany(Makepost::class, 'user_id');
+    }
 }
