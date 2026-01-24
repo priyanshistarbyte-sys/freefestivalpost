@@ -4,11 +4,11 @@
     
         <div class="row">
             <div class="col-md-4 mb-3">
-                <div class="card bg-primary text-white">
+                <div class="card card-bg-primary text-white">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h4 class="mb-2">{{ $totalUser }}</h4>
+                                <h4 class="mb-2 special">{{ $totalUser }}</h4>
                                 <a href="{{ route('user.index') }}" class="mb-2 d-block text-white text-decoration-none">Total Users</a>
                                 <div class="small">
                                     <span class="me-3">{{ $totalDeactiveUser }} Inactive</span>
@@ -24,11 +24,11 @@
             </div>
 
             <div class="col-md-4 mb-3">
-                <div class="card bg-primary text-white">
+                <div class="card card-bg-primary text-white">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h4 class="mb-2">{{ $totalUserPost }}</h4>
+                                <h4 class="mb-2 special">{{ $totalUserPost }}</h4>
                                 <a href="{{ route('post.list') }}" class="mb-2 d-block text-white text-decoration-none">Total User Post</a>
                                 <div class="small">
                                     <span class="me-3">{{ $totalUserPostToday }} Today Total Post</span>
@@ -43,11 +43,11 @@
             </div>
 
             <div class="col-md-4 mb-3">
-                <div class="card bg-primary text-white">
+                <div class="card card-bg-primary text-white">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h4 class="mb-2">{{ $videoanalytics }}</h4>
+                                <h4 class="mb-2 special">{{ $videoanalytics }}</h4>
                                 <a href="{{ route('videogif.index') }}" class="mb-2 d-block text-white text-decoration-none">Total User Videos</a>
                                 <div class="small">
                                     <span class="me-3">{{ $videoanalyticsToday }} Today Total Videos</span>
@@ -63,11 +63,11 @@
         </div>
         <div class="row">
             <div class="col-md-4 mb-3">
-                <div class="card bg-primary text-white">
+                <div class="card card-bg-primary text-white">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h4 class="mb-2">{{ $totalTamplate }}</h4>
+                                <h4 class="mb-2 special">{{ $totalTamplate }}</h4>
                                 <a href="{{ route('tamplet.index') }}" class="mb-2 d-block text-white text-decoration-none">Total Tamplate</a>
                             </div>
                             <div class="align-self-center">
@@ -78,11 +78,11 @@
                 </div>
             </div>
             <div class="col-md-4 mb-3">
-                <div class="card bg-primary text-white">
+                <div class="card card-bg-primary text-white">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h4 class="mb-2">{{ $totalCategory }}</h4>
+                                <h4 class="mb-2 special">{{ $totalCategory }}</h4>
                                 <a href="{{ route('category.index') }}" class="mb-2 d-block text-white text-decoration-none">Total Category</a>
                             </div>
                             <div class="align-self-center">
@@ -93,11 +93,11 @@
                 </div>
             </div>
             <div class="col-md-4 mb-3">
-                <div class="card bg-primary text-white">
+                <div class="card card-bg-primary text-white">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h4 class="mb-2">{{ $totalSubCategory }}</h4>
+                                <h4 class="mb-2 special">{{ $totalSubCategory }}</h4>
                                 <a href="{{ route('sub-category.index') }}" class="mb-2 d-block text-white text-decoration-none">Total Sub Category</a>
                             </div>
                             <div class="align-self-center">
@@ -110,11 +110,11 @@
         </div>
         <div class="row">
             <div class="col-md-6 mb-2">
-                <div class="card bg-primary text-white">
+                <div class="card card-bg-primary text-white">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h4 class="mb-2">{{ $totalPremiumUser }}</h4>
+                                <h4 class="mb-2 special">{{ $totalPremiumUser }}</h4>
                                 <p class="mb-2">Total Premium User</p>
                                 <div class="small">
                                     <a href="{{ route('active.premium.users') }}" class="text-decoration-none me-3 text-white">{{ $totalActivePremiumUser }} Active</a>
@@ -131,11 +131,11 @@
                 </div>
             </div>
             <div class="col-md-6 mb-2">
-                <div class="card bg-primary text-white">
+                <div class="card card-bg-primary text-white">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h4 class="mb-2">{{ $totalTrialUser }}</h4>
+                                <h4 class="mb-2 special">{{ $totalTrialUser }}</h4>
                                 <p class="mb-2">Total Trial User</p>
                                 <div class="small">
                                     <span class="me-3">{{ $totalActiveTrialUser }} Active</span>
@@ -155,7 +155,7 @@
     
    
         <!-- Today Festival Post List -->
-        <div class="card">
+        <div class="card dashboard-card shadow-2xl">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0">Today Festival Post List</h5>
                 <div class="card-tools">
@@ -185,7 +185,7 @@
         </div>
 
         <!-- Upcoming Festival Post List -->
-        <div class="card">
+        <div class="card dashboard-card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0">UpComing Festival Post List</h5>
                 <div class="card-tools">
@@ -212,7 +212,7 @@
         </div>
 
         <!-- UpComing Festival List -->
-        <div class="card">
+        <div class="card dashboard-card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0">UpComing Festival List</h5>
                 <div class="card-tools">
@@ -249,7 +249,7 @@
         <div class="row">
             <!-- App Version Count -->
             <div class="col-xs-3 col-md-3">
-                <div class="card">
+                <div class="card dashboard-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">App Version Count</h5>
                         <div class="card-tools">
@@ -303,7 +303,7 @@
             </div>
             <!-- Videos Analytics Last - 7 Days -->
             <div class="col-xs-3 col-md-3">
-                <div class="card">
+                <div class="card dashboard-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Videos Analytics Last - 7 Days</h5>
                         <div class="card-tools">
@@ -342,7 +342,7 @@
             </div>
             <!-- Daily Crone Job Report -->
             <div class="col-xs-6 col-md-6">
-                <div class="card">
+                <div class="card dashboard-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Daily Crone Job Report</h5>
                         <div class="card-tools">
@@ -390,7 +390,7 @@
         <div class="row">
             <!-- Category Wise Tamplate Count -->
             <div class="col-xs-6 col-md-6">
-                <div class="card">
+                <div class="card dashboard-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Category Wise Tamplate Count</h5>
                         <div class="card-tools">
@@ -417,7 +417,7 @@
             </div>
             <!-- Category Wise Photos Count -->
             <div class="col-xs-6 col-md-6">
-                <div class="card">
+                <div class="card dashboard-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Category Wise Photos Count</h5>
                         <div class="card-tools">
@@ -446,7 +446,7 @@
         <div class="row">
             <!-- Paid User Last - 10 -->
             <div class="col-xs-6 col-md-6">
-                <div class="card">
+                <div class="card dashboard-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Paid User Last - 10</h5>
                         <div class="card-tools">
@@ -491,7 +491,7 @@
             </div>
             <!-- Trial User Last - 10 -->
             <div class="col-xs-6 col-md-6">
-                <div class="card">
+                <div class="card dashboard-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Trial User Last - 10</h5>
                         <div class="card-tools">
@@ -539,7 +539,7 @@
         <div class="row">
             <!-- Custom Report -->
             <div class="col-md-9 col-ms-12">
-                <div class="card">
+                <div class="card dashboard-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Custom Report</h5>
                         <div class="card-tools">
@@ -590,7 +590,7 @@
             </div>
             <!-- SMS Log -->
             <div class="col-md-3 col-ms-12">
-                <div class="card">
+                <div class="card dashboard-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">SMS Log</h5>
                         <div class="card-tools">

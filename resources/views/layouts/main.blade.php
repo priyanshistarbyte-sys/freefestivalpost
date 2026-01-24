@@ -50,7 +50,9 @@
    
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-brand">Admin</div>
+            <div class="sidebar-brand">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="Brand Fotos">
+            </div>
             <button class="sidebar-toggle" onclick="toggleSidebarCollapse()">
                 <i class="fa fa-bars"></i>
             </button>

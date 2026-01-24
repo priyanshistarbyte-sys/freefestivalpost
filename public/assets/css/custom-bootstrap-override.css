@@ -3,36 +3,36 @@
 /* Button Check States */
 .btn-check:checked + .btn,
 .btn-check:active + .btn {
-    background-color: #34495e !important;
-    border-color: #34495e !important;
+    background-color: #324991 !important;
+    border-color: #324991 !important;
     color: white !important;
 }
 
 .btn-check:focus + .btn {
-    background-color: #34495e !important;
-    border-color: #34495e !important;
+    background-color: #324991 !important;
+    border-color: #324991 !important;
     color: white !important;
 }
 
 /* Button Hover States */
 .btn:hover {
-    background-color: #34495e !important;
-    border-color: #34495e !important;
+    background-color: #324991 !important;
+    border-color: #324991 !important;
     color: white !important;
 }
 
 /* Button Active/Pointer States */
 .btn:active,
 .btn.active {
-    background-color: #34495e !important;
-    border-color: #34495e !important;
+    background-color: #324991 !important;
+    border-color: #324991 !important;
     color: white !important;
 }
 
 /* Button Focus States */
 .btn:focus,
 .btn:focus-visible {
-    background-color: #34495e !important;
-    border-color: #34495e !important;
+    background-color: #324991 !important;
+    border-color: #324991 !important;
     color: white !important;
 }

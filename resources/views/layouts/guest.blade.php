@@ -19,9 +19,9 @@
     </head>
     <body class="font-sans text-gray-900 antialiased">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+            <div class="flex w-full sm:max-w-md mt-6 px-6 py-2 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+                <a href="/" class="flex justify-center">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="Brand Fotos" class="w-50">
                 </a>
             </div>
 
