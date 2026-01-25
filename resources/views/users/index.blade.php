@@ -59,14 +59,14 @@
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Post</th>
-                            <th>Reg. Date</th>
-                            <th>App Version</th>
-                            <th>Logo</th>
                             <th>Business Name</th>
                             <th>Mobile</th>
-                            <th>ispaid</th>
+                            <th>Reg. Date</th>
+                            <th>App Version</th>
+                            <th>Post</th>
+                            <th>Logo</th>
                             <th>Status</th>
+                            <th>ispaid</th>
                             <th>Expiry</th>
                             <th>OTP</th>
                             <th>Actions</th>
@@ -123,22 +123,23 @@
                     }
                 ],
                 columns: [
-                    { data: 'id', name: 'a.id' },
-                    { data: 'post', name: 'post', searchable: false }, // computed
-                    { data: 'created_at', name: 'a.created_at' },
-                    { data: 'app_version', name: 'n.app_version' },
-                    { data: 'photo', name: 'photo', searchable: false, orderable: false },
+                    { data: 'id', name: 'a.id', width: "5%" },
                     { data: 'business_name', name: 'a.business_name' },
                     { data: 'mobile', name: 'a.mobile' },
-                    { data: 'ispaid', name: 'a.ispaid' },
+                    { data: 'created_at', name: 'a.created_at' },
+                    { data: 'app_version', name: 'n.app_version' },
+                    { data: 'post', name: 'post', searchable: false }, // computed
+                    { data: 'photo', name: 'photo', searchable: false, orderable: false },
                     { data: 'status', name: 'status', searchable: false, orderable: false },
+                    { data: 'ispaid', name: 'a.ispaid' },
                     { data: 'expdate', name: 'a.expdate' },
                     { data: 'otp', name: 'a.otp' },
                     {
                         data: 'actions',
                         name: 'actions',
                         searchable: false,
-                        orderable: false
+                        orderable: false,
+                        width: "13%"
                     }
                 ]
             });
