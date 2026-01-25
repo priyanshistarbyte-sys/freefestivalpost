@@ -75,7 +75,10 @@
                 processing: true,
                 serverSide: true,
                 searching: false,   
-                ordering: false,   
+                ordering: false,
+                autoWidth: false,
+                scrollX: false,
+                responsive: true,
                 pageLength: 10,
                 ajax: {
                     url: '{{ route("report.dayWiseSubscription") }}',

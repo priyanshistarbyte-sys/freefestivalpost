@@ -36,6 +36,9 @@
             var table = $('#repeatSubscriptionList').DataTable({
                 processing: true,
                 serverSide: true,
+                autoWidth: false,
+                scrollX: false,
+                responsive: true,
                 pageLength: 10,
                 ajax: {
                     url: '{{ route("report.repeatSubscription") }}',

@@ -380,3 +380,27 @@ label {
         display: none !important;
     }
 }
+
+/* DataTables */
+.buttons-excel, .buttons-print {
+    background: transparent !important;
+    padding: 5px 10px !important;
+    font-size: 12px !important;
+    color: #000 !important;
+}
+
+.dataTables_length {
+    margin-bottom: 0 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: linear-gradient(to bottom, #000e3dbf 0%, #000e3d 100%) !important;
+    color: #FFF !important;
+}
+
+.dataTables_paginate .paginate_button:not(.disabled):hover, .dataTables_paginate .paginate_button:not(.disabled):hover a, .dataTables_paginate .paginate_button:not(.disabled):hover span
+{
+    background: linear-gradient(to bottom, #000e3dbf 0%, #000e3d 100%) !important;
+    border-color: #000e3d !important;
+    color: #fff !important;
+}

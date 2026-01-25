@@ -272,6 +272,9 @@
             $('#ads-api-table').DataTable({
                 processing: true,
                 serverSide: true,
+                autoWidth: false,
+                scrollX: false,
+                responsive: true,
                 ajax: '{{ route('application.show',Crypt::encrypt($applicationAdd->id)) }}',
                 columns: [
                     {

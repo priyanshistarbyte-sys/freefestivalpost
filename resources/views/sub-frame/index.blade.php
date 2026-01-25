@@ -60,6 +60,9 @@
             $('#sub-frame-table').DataTable({
                 processing: true,
                 serverSide: true,
+                autoWidth: false,
+                scrollX: false,
+                responsive: true,
                 ajax: '{{ route('sub-frame.index') }}',
                 dom: 'Bfrtip',
                 buttons: [
