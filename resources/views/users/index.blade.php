@@ -27,6 +27,7 @@
                                 <option value="5">Trial Plan Expired User</option>
                                 <option value="4">Without Logo</option>
                                 <option value="8">Total Free User</option>
+                                <option value="9">Free Plan Expired User</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -58,7 +59,7 @@
                 <table class="table" id="users-table">
                     <thead>
                         <tr>
-                            <th>Id</th>
+                            <th>ID</th>
                             <th>Business Name</th>
                             <th>Mobile</th>
                             <th>Reg. Date</th>
@@ -66,7 +67,7 @@
                             <th>Post</th>
                             <th>Logo</th>
                             <th>Status</th>
-                            <th>ispaid</th>
+                            <th>Is Paid</th>
                             <th>Expiry</th>
                             <th>OTP</th>
                             <th>Actions</th>

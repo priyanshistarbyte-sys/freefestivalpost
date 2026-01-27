@@ -63,7 +63,7 @@
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <br />
-                        <h3 class="heading-bg"><b>Update Dialog Data</b></h3>
+                        <h3 class="heading-bg"><b>Dialog Data</b></h3>
                         <br />
                     </div>
                     <div class="col-md-6">

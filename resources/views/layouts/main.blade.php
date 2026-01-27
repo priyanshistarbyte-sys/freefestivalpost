@@ -385,26 +385,34 @@
     </script>
     <script>
         $(".dropdown-toggle").click(function () {
-            let parent = $(this).parent();
-            
+            let parent = $(this).parent('.dropdown');
             // Toggle current dropdown
-            parent.toggleClass('open');
-            parent.find('.submenu').slideToggle();
+            if (parent.hasClass('open')) {
+                // IF already open → close it
+                parent.removeClass('open');
+                submenu.slideUp();
+            } else {
+                // ELSE → open it & close others
+                $('.dropdown.open').removeClass('open').find('.submenu').slideUp();
+                parent.addClass('open');
+                submenu.slideDown();
+            }
             
-            // Close other dropdowns
-            $('.dropdown').not(parent).removeClass('open').find('.submenu').slideUp();
         });
         
         // Auto-open dropdown if submenu is active
         $('.submenu li.active').closest('.dropdown').addClass('open').find('.submenu').show();
         
         // Position submenu on hover for collapsed sidebar
-        $('.sidebar.collapsed .dropdown').hover(function() {
-            if ($('.sidebar').hasClass('collapsed')) {
-                const rect = this.getBoundingClientRect();
-                $(this).find('.submenu').css('top', rect.top + 'px');
-            }
-        });
+        // $('.sidebar.collapsed .dropdown').hover(function() {
+        //     if ($('.sidebar').hasClass('collapsed')) {
+        //         const rect = this.getBoundingClientRect();
+        //         console.log(react.top);
+        //         console.log(react.top-120);
+                
+        //         $(this).find('.submenu').css('top', rect.top-120 + 'px');
+        //     }
+        // });
     </script>
     @stack('scripts')
 </body>

@@ -41,6 +41,7 @@ body {
     padding: 0 15px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
     background: #ffffff;
+    min-height: 69px;
 }
 
 .sidebar-toggle {
@@ -117,7 +118,7 @@ body {
     border-left-color: #2bc32a;
 }
 
-.sidebar.collapsed .sidebar-menu li a {
+.sidebar.collapsed .sidebar-menu > li > a {
     padding: 15px;
     justify-content: center;
     position: relative;
@@ -127,7 +128,7 @@ body {
     margin-right: 0;
 }
 
-.sidebar.collapsed .sidebar-menu li a span {
+.sidebar.collapsed .sidebar-menu > li > a span {
     display: none;
 }
 
@@ -191,6 +192,7 @@ body {
     box-shadow: 2px 0 10px rgba(0,0,0,0.3);
     z-index: 9999;
     border-radius: 4px;
+    margin-top: -40px;
 }
 
 .sidebar.collapsed .dropdown:hover > .submenu {

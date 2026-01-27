@@ -51,83 +51,93 @@ class UserController extends Controller
                     'n.app_version',
                     'dp.tamp_count'
                 );
-        
-            if ($version) {
-                if (in_array($type, [6, 7])) {
-                    $query->where('dp.tamp_count', '>=', $version);
-                } else {
-                    $query->where('n.app_version', $version);
-                }
+
+            /* Join payments ONLY for paid users (type = 2) */
+            if ($type == 2) {
+                $query->leftJoin('payments as p', 'p.user_id', '=', 'a.id');
             }
-             /* User Type Filters */
+
+            /* Version Filter */
+            if ($version) {
+                $query->where('n.app_version', $version);
+            }
+
+            /* ===============================
+            USER TYPE FILTERS (CI MATCH)
+            ================================ */
             switch ($type) {
-                // Free User
+
+                // 1 = New User (NO condition in CI)
                 case 1:
-                    $query->where('a.ispaid', 0)
-                        ->whereNull('a.expdate')
-                        ->whereNull('a.planStatus');
                     break;
 
-                // Plan Active (Paid)
+                // 2 = Total Package Paid User
                 case 2:
                     $query->where('a.ispaid', 1)
                         ->where('a.planStatus', 2);
                     break;
 
-                // Plan Expired
+                // 3 = Trial Plan Active User
                 case 3:
-                    $query->where('a.planStatus', 2);
-                    break;
-
-                // Trial Active
-                case 4:
                     $query->where('a.ispaid', 1)
                         ->where('a.planStatus', 1);
                     break;
 
-                // Trial Expired
+                // 4 = Without Logo
+                case 4:
+                    $query->where(function ($q) {
+                        $q->whereNull('a.photo')
+                        ->orWhere('a.photo', '');
+                    });
+                    break;
+
+                // 5 = Trial Plan Expired User
                 case 5:
                     $query->where('a.ispaid', 0)
                         ->where('a.planStatus', 1);
                     break;
 
-                // Free User Wise Post Count
+                // 6 = Total Package Expired User
                 case 6:
-                    $query->where(function ($q) {
-                        $q->whereNull('a.planStatus')
-                        ->orWhere('a.planStatus', 1);
-                    });
-                    break;
-
-                // Paid User Wise Post Count
-                case 7:
                     $query->where('a.ispaid', 1)
                         ->where('a.planStatus', 2);
                     break;
 
-                // Total Free User
+                // 8 = Total Free User
                 case 8:
                     $query->where('a.ispaid', 0)
                         ->whereNull('a.planStatus');
                     break;
+                
+                case 9:
+                $query->where('a.ispaid', 0)
+                    ->where('a.planStatus', 2);
+                break;
             }
 
-            // Active Premium Users Filter
-            if ($request->get('filter') === 'active_premium') {
-                $query->where('a.ispaid', 1)->where('a.planStatus', 2);
+            /* ===============================
+            DATE FILTER (EXACT CI LOGIC)
+            ================================ */
+           if ($type == 2) {
+            // Paid users → payment date
+                if ($request->filled('start_date')) {
+                    $query->whereDate('p.pdate', '>=', $request->start_date);
+                }
+                if ($request->filled('end_date')) {
+                    $query->whereDate('p.pdate', '<=', $request->end_date);
+                }
             }
-
-             /* Date Filters */
-             if (in_array($type, [3, 5])) {
-                // Expiry date based
+            elseif (in_array($type, [6, 9])) {
+                // Expired users → expiry date
                 if ($request->filled('start_date')) {
                     $query->whereDate('a.expdate', '>=', $request->start_date);
                 }
                 if ($request->filled('end_date')) {
                     $query->whereDate('a.expdate', '<=', $request->end_date);
                 }
-            } else {
-                // Created date based
+            }
+            else {
+                // All other users → created date
                 if ($request->filled('start_date')) {
                     $query->whereDate('a.created_at', '>=', $request->start_date);
                 }
@@ -139,6 +149,7 @@ class UserController extends Controller
                     );
                 }
             }
+
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('post', function ($user) {
@@ -172,52 +183,13 @@ class UserController extends Controller
                             </a>';
                 })
                 ->editColumn('ispaid', function ($user) {
-                    $ispaidTitle = $this->userPaidStatus($user->ispaid, $user->planStatus);
-
-                    if ($user->ispaid == 0) {
-                        return '<i class="fa fa-times-circle iconfsize icolred"
-                                    data-toggle="tooltip" title="' . $ispaidTitle . '"></i>
-                                <span class="ms-1">' . $ispaidTitle . '</span>';
-                    }
-                    return '<i class="fa fa-check-circle iconfsize icolgreen"
-                                data-toggle="tooltip" title="' . $ispaidTitle . '"></i>
-                            <span class="ms-1">' . $ispaidTitle . '</span>';
+                    $title = $this->userPaidStatus($user->ispaid, $user->planStatus);
+                    $icon  = $user->ispaid ? 'fa-check-circle icolgreen' : 'fa-times-circle icolred';
+                    return '<i class="fa '.$icon.'"></i> '.$title;
                 })
+
                 
-                ->filterColumn('ispaid', function ($query, $keyword) {
-                    $keyword = strtolower(trim($keyword));
-
-                    switch ($keyword) {
-                        case 'paid':
-                            $query->where('a.ispaid', 1)
-                                ->where('a.planStatus', 2);
-                            break;
-
-                        case 'trial active':
-                            $query->where('a.ispaid', 1)
-                                ->where('a.planStatus', 1);
-                            break;
-
-                        case 'trial expired':
-                            $query->where('a.ispaid', 0)
-                                ->where('a.planStatus', 1);
-                            break;
-
-                        case 'paid expired':
-                            $query->where('a.ispaid', 0)
-                                ->where('a.planStatus', 2);
-                            break;
-
-                        case 'free':
-                            $query->where(function ($q) {
-                                $q->whereNull('a.planStatus')
-                                ->orWhere('a.planStatus', 0);
-                            })->where('a.ispaid', 0);
-                            break;
-                    }
-                })
-
-
+              
                 ->addColumn('status', function ($user) {
                     $checked = $user->status == 1 ? 'checked' : '';
                     return '
@@ -581,19 +553,21 @@ class UserController extends Controller
         }
     }
 
-    private function userPaidStatus($ispaid, $planStatus)
+     private function userPaidStatus($ispaid, $planStatus)
     {
-        if ($ispaid == 1 && $planStatus == 2) {
-            return 'Paid';
-        } elseif ($ispaid == 1 && $planStatus == 1) {
-            return 'Trial Active';
-        } elseif ($ispaid == 0 && $planStatus == 1) {
-            return 'Trial Expired';
-        } elseif ($ispaid == 0 && $planStatus == 2) {
-            return 'Paid Expired';
-        } else {
-            return 'Free';
+        if($ispaid==1 && $planStatus==2){
+            $paidStatus = "Paid";
+        }elseif($ispaid==1 && $planStatus==1){
+            $paidStatus = "Trial Active";
+        }elseif($ispaid==0 && $planStatus==1){
+            $paidStatus = "Trial Expired";
+        }elseif($ispaid==0 && $planStatus==2){
+            $paidStatus = "Free Plan Expired";
+        }else{
+            $paidStatus = "Free";
         }
+        
+        return $paidStatus;
     }
 
 
