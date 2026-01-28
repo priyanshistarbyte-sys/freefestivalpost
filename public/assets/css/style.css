@@ -39,7 +39,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 15px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid #c1ffc333;
     background: #ffffff;
     min-height: 69px;
 }
@@ -56,7 +56,7 @@ body {
 }
 
 .sidebar-toggle:hover {
-    background: rgba(255,255,255,0.1);
+    background: #c1ffc333;
 }
 
 .sidebar-brand {
@@ -108,12 +108,12 @@ body {
 }
 
 .sidebar-menu li a:hover {
-    background: rgba(255,255,255,0.1);
+    background: #c1ffc333;
     color: white;
 }
 
 .sidebar-menu li.active > a {
-    background: rgba(255,255,255,0.15);
+    background: #c1ffc333;
     color: white;
     border-left-color: #2bc32a;
 }
@@ -165,7 +165,7 @@ body {
 
 .submenu li a:hover {
     color: white;
-    background: rgba(255,255,255,0.1);
+    background: #c1ffc333;
 }
 
 .submenu li.active > a {
@@ -209,7 +209,7 @@ body {
     width: 6px;
 }
 .sidebar::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.1);
+    background: #c1ffc333;
     border-radius: 4px;
 }
 
