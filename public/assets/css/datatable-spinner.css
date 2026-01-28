@@ -1,0 +1,60 @@
+/* Custom DataTable Spinner Loading */
+.dataTables_processing {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    width: 200px !important;
+    margin-left: -100px !important;
+    margin-top: -26px !important;
+    text-align: center !important;
+    padding: 1rem !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    z-index: 1000 !important;
+}
+
+.dataTables_processing > div:last-child {
+    display: none !important;
+}
+
+.dataTables_processing::before {
+    content: '' !important;
+    display: inline-block !important;
+    width: 40px !important;
+    height: 40px !important;
+    border: 4px solid #f3f3f3 !important;
+    border-top: 4px solid #2c3e50 !important;
+    border-radius: 50% !important;
+    animation: spin 1s linear infinite !important;
+    margin-bottom: 10px !important;
+}
+
+.dataTables_processing::after {
+    content: 'Loading...' !important;
+    display: block !important;
+    font-size: 14px !important;
+    color: #2c3e50 !important;
+    font-weight: 500 !important;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Dark theme support */
+html.dark .dataTables_processing {
+    background: rgba(33, 37, 41, 0.9) !important;
+    border-color: #495057 !important;
+}
+
+html.dark .dataTables_processing::before {
+    border-color: #495057 !important;
+    border-top-color: #fff !important;
+}
+
+html.dark .dataTables_processing::after {
+    color: #fff !important;
+}

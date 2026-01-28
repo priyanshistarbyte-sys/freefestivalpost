@@ -39,6 +39,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/datatables-compact.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/spacing-override.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom-switch-fix.css') }}">
+    <!-- Custom DataTable Spinner -->
+    <link rel="stylesheet" href="{{ asset('assets/css/datatable-spinner.css') }}">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
 

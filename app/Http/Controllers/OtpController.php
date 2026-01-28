@@ -54,11 +54,11 @@ class OtpController extends Controller
             }
 
             // SMS functionality commented for local testing
-            $msg91Service = new Msg91Service();
-            $sent = $msg91Service->sendOtp($formattedNumber, $otpCode);
+            // $msg91Service = new Msg91Service();
+            // $sent = $msg91Service->sendOtp($formattedNumber, $otpCode);
             
             // For local testing - log OTP
-            // \Log::info("OTP for {$user->mobile}: {$otpCode}");
+            \Log::info("OTP for {$user->mobile}: {$otpCode}");
             
             session(['otp_user_id' => $user->id]);
             
