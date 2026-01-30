@@ -27,6 +27,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\CouponCodeController;
 use App\Http\Controllers\RazorpayPaymentController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -36,8 +37,31 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::get('/privacy', function () {
+    return view('frontend.privacy');
+})->name('privacy');
 
+Route::get('/refund-policy', function () {
+    return view('frontend.refund-policy');
+})->name('refund-policy');
+
+Route::get('/terms', function () {
+    return view('frontend.terms');
+})->name('terms');
+
+Route::get('/digital-policy', function () {
+    return view('frontend.digital-policy');
+})->name('digital-policy');
+
+Route::get('/contact-us', function () {
+    return view('frontend.contact-us');
+})->name('contact-us');
+
+Route::post('/contact-send', [ContactController::class, 'sendMail'])->name('contact.send');
+
+
+Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
+    
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/dashboard/today-festival-posts', [DashboardController::class, 'todayFestivalPosts'])->name('dashboard.today-festival-posts');
@@ -207,10 +231,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 });
 
-Route::middleware('auth')->group(function () {
+Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
 
 require __DIR__.'/auth.php';

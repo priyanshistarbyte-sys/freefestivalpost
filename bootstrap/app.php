@@ -19,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class
         ]);
+        
+        $middleware->redirectGuestsTo('/admin/login');
+        $middleware->redirectUsersTo('/admin/dashboard');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
@@ -27,6 +30,3 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('cron:daily-job')->dailyAt('01:00');
     })
     ->create();
-
-
-

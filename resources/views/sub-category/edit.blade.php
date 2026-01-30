@@ -44,9 +44,9 @@
                     <div class="mb-3 col-md-3 form-group">
                         <label for="is_parent" class="form-label">Want to choose a parent category?</label>
                         <select name="is_parent" id="is_parent" class="form-select">
-                            <option value="0" {{ $subCategory->is_parent == 0 ? 'selected' : '' }}>No (Main)
+                            <option value="0" {{ $subCategory->is_parent == 0 ? 'selected' : '' }}>No
                             </option>
-                            <option value="1" {{ $subCategory->is_parent == 1 ? 'selected' : '' }}>Yes (Child)
+                            <option value="1" {{ $subCategory->is_parent == 1 ? 'selected' : '' }}>Yes
                             </option>
                         </select>
                     </div>

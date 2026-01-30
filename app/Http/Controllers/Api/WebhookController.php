@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Admin;
 use App\Models\Payment;
-use App\Models\SubscriptionPlan;
 use App\Models\WebhookFailed;
 
 class WebhookController extends Controller
@@ -48,7 +47,7 @@ class WebhookController extends Controller
             }
 
             if ($event == "payment.authorized" && $status == "authorized") {
-                $transactionExists = Payment::where('ptransactionid', $payment_id)->exists();
+                $transactionExists = Payment::where('transactionid', $payment_id)->exists();
 
                 if (!$transactionExists) {
                     $mobile = str_replace("+91", "", $mobile);
@@ -57,19 +56,19 @@ class WebhookController extends Controller
                     $this->failedRepaymentRemove($mobile);
 
                     $user = Admin::find($user_id);
-                    $plan = SubscriptionPlan::where('price', $amount)->first();
+                    $plan = DB::table('subscription_plan')->where('price', $amount)->first();
 
                     if ($plan && $user_id && $user) {
                         $this->userSubPaymentHistory($user_id, $payment_id, $plan);
                     } else {
                         DB::table('webhook_authorized')->insert([
                             'date' => now()->format('Y-m-d'),
-                            'w_event' => $event,
+                            'event' => $event,
                             'transaction_id' => $payment_id,
                             'amount' => $amount,
                             'email' => $email,
                             'mobile' => $mobile,
-                            'w_status' => 0,
+                            'status' => 0,
                             'created_at' => now(),
                         ]);
                     }
@@ -124,7 +123,7 @@ class WebhookController extends Controller
 
                 WebhookFailed::create([
                     'date' => now()->format('Y-m-d'),
-                    'w_event' => $event,
+                    'event' => $event,
                     'transaction_id' => $payment_id,
                     'amount' => $amountRS,
                     'email' => $email,
@@ -138,12 +137,12 @@ class WebhookController extends Controller
         return response()->json(['status' => 'success']);
     }
 
-    private function userSubPaymentHistory($user_id, $ptransactionid, $plan)
+    private function userSubPaymentHistory($user_id, $transactionid, $plan)
     {
-        if ($user_id && $plan && $ptransactionid) {
-            $countPlan = Payment::where('u_id', $user_id)->count();
+        if ($user_id && $plan && $transactionid) {
+            $countPlan = Payment::where('user_id', $user_id)->count();
 
-            if ($countPlan > 0 && $plan->month == 0) {
+            if ($countPlan > 0 && $plan->is_free == 0) {
                 $data = [
                     'status' => 'error',
                     'message' => 'Sorry, You are not eligible for a trial plan. Thank you',
@@ -156,8 +155,8 @@ class WebhookController extends Controller
                     ->where('expdate', '>', now()->format('Y-m-d'))
                     ->first();
 
-                $customStatus = $plan->month == 0 ? 1 : 2;
-                $month = $plan->month == 0 ? '+7 days' : '+' . $plan->month . ' months';
+                $customStatus = $plan->is_free == 0 ? 1 : 2;
+                $month = $plan->is_free == 0 ? '+7 days' : '+' . $plan->duration . ' ' . $plan->duration_type;
 
                 if ($userDataCheck) {
                     $pexpdate = date("Y-m-d", strtotime($month, strtotime($userDataCheck->expdate)));
@@ -173,14 +172,14 @@ class WebhookController extends Controller
                 ]);
 
                 Payment::create([
-                    'u_id' => $user_id,
-                    'pamount' => $plan->price,
-                    'pdate' => now()->format('Y-m-d'),
-                    'ptransactionid' => $ptransactionid,
-                    'pstatus' => $plan->plan_name,
-                    'packageid' => $plan->plan_id,
-                    'pprice' => $plan->price,
-                    'pmonth' => $plan->month,
+                    'user_id' => $user_id,
+                    'amount' => $plan->price,
+                    'date' => now()->format('Y-m-d'),
+                    'transactionid' => $transactionid,
+                    'status' => $plan->plan_name,
+                    'packageid' => $plan->id,
+                    'price' => $plan->price,
+                    'month' => $plan->duration,
                     'ref_status' => 0,
                     'refund_id' => null,
                     'refundDate' => null,

@@ -230,6 +230,8 @@ document.getElementById('createNextYearTemplates').addEventListener('click', fun
             })
             .then(response => response.json())
             .then(data => {
+                console.log(data);
+                
                 if(data.success) {
                     Swal.fire('Success!', data.message, 'success');
                 } else {

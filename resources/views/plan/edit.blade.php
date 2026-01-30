@@ -238,7 +238,7 @@
                                 cancelButtonText: 'Cancel'
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    fetch(`{{ url('/plan/item') }}/${itemId}`, {
+                                    fetch(`{{ url('/admin/plan/item') }}/${itemId}`, {
                                         method: 'DELETE',
                                         headers: {
                                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),

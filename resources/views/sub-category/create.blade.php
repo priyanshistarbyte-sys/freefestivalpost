@@ -171,7 +171,7 @@
                 // When parent is selected, load subcategories based on category
                 let categoryId = document.getElementById('category_id').value;
 
-                fetch(`{{ url('/category') }}/${categoryId}/subcategories`)
+                fetch(`{{ url('/admin/category') }}/${categoryId}/subcategories`)
                     .then(response => response.json())
                     .then(data => {
                         let select = document.getElementById('parent_category');
@@ -192,7 +192,7 @@
         document.getElementById('category_id').addEventListener('change', function() {
             if (document.getElementById('is_parent').value == 1) {
                 let categoryId = this.value;
-                fetch(`{{ url('/category') }}/${categoryId}/subcategories`)
+                fetch(`{{ url('/admin/category') }}/${categoryId}/subcategories`)
                     .then(response => response.json())
                     .then(data => {
                         let select = document.getElementById('parent_category');

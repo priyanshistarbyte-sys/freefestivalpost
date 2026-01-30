@@ -114,7 +114,7 @@ class OtpController extends Controller
         Auth::loginUsingId($userId);
         session()->forget('otp_user_id');
 
-        return redirect()->intended('dashboard');
+        return redirect()->intended('/admin/dashboard');
     }
 
     private function formatMobileNumber($number)

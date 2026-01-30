@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: white;
+    color: #0F172A;
+    overflow-x: hidden;
+}
+
+/* Wave classes removed as we are using Tailwind utilities directly in HTML for better responsiveness */
+
+.btn-primary {
+    background-color: #00C853;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    transition: all 0.3s;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(0, 200, 83, 0.2), 0 2px 4px -1px rgba(0, 200, 83, 0.1);
+}
+
+.btn-primary:hover {
+    background-color: #16a34a;
+    box-shadow: 0 10px 15px -3px rgba(0, 200, 83, 0.3), 0 4px 6px -2px rgba(0, 200, 83, 0.1);
+}
+
+.mask-fade-sides {
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee {
+    animation: marquee 50s linear infinite;
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
+}
+
+/* Base Tailwind-like utilities for colors if needed outside Tailwind */
+.text-brand-primary {
+    color: #0F172A;
+}
+
+.bg-brand-primary {
+    background-color: #0F172A;
+}
+
+.text-brand-secondary {
+    color: #00C853;
+}
+
+.bg-brand-secondary {
+    background-color: #00C853;
+}
+
+.text-brand-accent {
+    color: #334155;
+}
+
+.bg-brand-light {
+    background-color: #F8FAFC;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}

@@ -483,7 +483,7 @@ class DashboardController extends Controller
         $nextYear = $currentYear + 1;
         
         $created = 0;
-        Tamplet::select(['sub_category_id', 'font_color', 'lablebg', 'font_size', 'lable', 'font_type', 'language', 'event_date', 'event', 'free_paid', 'type', 'planImgName', 'path'])
+        $abc = Tamplet::select(['sub_category_id', 'font_color', 'lablebg', 'font_size', 'lable', 'font_type', 'language', 'event_date', 'event', 'free_paid', 'planImgName', 'path'])
             ->where('event', 1)
             ->whereYear('event_date', $currentYear)
             ->whereNotExists(function ($query) use ($nextYear) {
@@ -510,24 +510,21 @@ class DashboardController extends Controller
                         'event_date' => $nextYearDate,
                         'event' => $template->event,
                         'free_paid' => $template->free_paid,
-                        'type' => $template->type,
                         'planImgName' => $template->planImgName,
                         'path' => $template->path,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
                 }
-                
                 Tamplet::insert($insertData);
                 $created += count($insertData);
             });
-        
         return response()->json([
             'success' => true,
             'message' => "Successfully created {$created} templates for next year."
         ]);
     }
-
+ 
     public function imagezipDownload(Request $request)
     {
         $categories = SubCategory::get();

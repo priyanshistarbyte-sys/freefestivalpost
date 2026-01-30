@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Admin;
 use App\Models\Tamplet;
-use App\Models\Makepost;
+
 
 class PostController extends Controller
 {
@@ -102,7 +102,7 @@ class PostController extends Controller
         $userNewFileName = $this->copyTemplate($template->path, $result['tamplate_id'], $result['user_id']);
         if (!$userNewFileName) return false;
 
-        if (in_array($template->type, [2, 5]) && $birthdayPhoto) {
+        if ($template->event == 1 && $birthdayPhoto) {
             $this->mergeBirthdayPhoto($userNewFileName, $birthdayPhoto, $template, $birthdayName);
         }
 
@@ -123,7 +123,7 @@ class PostController extends Controller
             $this->addBusinessNameAsLogo($templatePath, $userbusiness_name, $template);
         }
 
-        Makepost::create([
+        DB::table('makepost')->insert([
             'filename' => $userNewFileName,
             'user_id' => $result['user_id'],
             'tamplate_id' => $result['tamplate_id'],
@@ -250,7 +250,8 @@ class PostController extends Controller
 
     private function countUserPost($userId)
     {
-        return Makepost::where('user_id', $userId)
+        return DB::table('makepost')
+            ->where('user_id', $userId)
             ->whereDate('created_at', now()->format('Y-m-d'))
             ->count();
     }
