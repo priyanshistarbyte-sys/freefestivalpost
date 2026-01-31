@@ -34,7 +34,7 @@
     <nav id="navbar"
         class="fixed w-full z-50 transition-all duration-300 bg-[#0a192f]/90 backdrop-blur-md border-b border-white/5 py-4">
         <div class="container mx-auto px-6 flex items-center justify-between">
-            <a href="/" class="flex items-center gap-2 group">
+            <a href="{{ route('home') }}" class="flex items-center gap-2 group">
                 <img src="{{ asset('assets/logos/brandfotos-logo.png') }}" alt="BrandFotos Logic"
                     class="h-24 w-auto object-contain brightness-0 invert">
             </a>
@@ -229,7 +229,7 @@
                 </div>
             </div>
             <a href="https://wa.me/9537267999" target="_blank" rel="noopener noreferrer"
-                class="absolute bottom-6 right-6 flex items-center justify-center w-14 h-14 bg-[#25D366] rounded-full shadow-lg hover:bg-[#128C7E] transition-all z-50">
+                class="fixed bottom-6 right-6 flex items-center justify-center w-14 h-14 bg-[#25D366] rounded-full shadow-lg hover:bg-[#128C7E] transition-all z-50">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor"
                     class="w-8 h-8 text-white">
                     <path

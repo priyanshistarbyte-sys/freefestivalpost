@@ -38,21 +38,7 @@
         </div>
     </div>
 
-    <!-- Plan Images Upload -->
-    <div class="col-lg-6 col-md-12">
-        <div class="card shadow-sm">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Plan Images Upload</h5>
-                <button class="btn btn-sm btn-outline-secondary" onclick="toggleCard(this)">
-                    <i class="fas fa-minus"></i>
-                </button>
-            </div>
 
-            <div class="card-body text-muted text-center py-5">
-                Coming Soon...
-            </div>
-        </div>
-    </div>
 
 </div>
 @endsection

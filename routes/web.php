@@ -33,9 +33,11 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return redirect()->route('login');
 // });
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// })->name('home');
+
+ Route::get('/', [DashboardController::class, 'home'])->name('home');
 
 Route::get('/privacy', function () {
     return view('frontend.privacy');

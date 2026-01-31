@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SubCategory;
+use App\Models\SubscriptionPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +18,13 @@ use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
+
+    public function home()
+    {
+        $subscriptionPlans = SubscriptionPlan::with('descriptionsItem')->where('status', 1)->get();
+        return view('welcome',compact('subscriptionPlans'));
+    }
+    
     public function index()
     {
         if(\Auth::user()->role == 'Admin'){
@@ -530,7 +538,7 @@ class DashboardController extends Controller
         $categories = SubCategory::get();
         return view('admin.imagezipDownload',compact('categories'));
     }
-
+    
     public function imagezipDownloadStore(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -544,16 +552,36 @@ class DashboardController extends Controller
 
         $cat_id = $request->sub_category_id;
         $tamplets = $this->getTampList($cat_id);
+        
         $zip = new ZipArchive();
-        $zipFileName = 'images.zip';
+        $zipFileName = storage_path('app/temp/images.zip');
+        
+        // Create temp directory if it doesn't exist
+        if (!File::exists(dirname($zipFileName))) {
+            File::makeDirectory(dirname($zipFileName), 0755, true);
+        }
+        
         $zip->open($zipFileName, ZipArchive::CREATE);
+        $addedFiles = 0;
+        
         foreach ($tamplets as $tamplet) {
             $imagePath = storage_path('app/public/' . $tamplet->path);
             if (File::exists($imagePath)) {
                 $zip->addFile($imagePath, basename($imagePath));
+                $addedFiles++;
             }
         }
+        
         $zip->close();
+        
+        if ($addedFiles === 0) {
+            // Delete empty zip file
+            if (File::exists($zipFileName)) {
+                File::delete($zipFileName);
+            }
+            return redirect()->back()->with('error', 'No images exist currently for the selected category.');
+        }
+        
         return response()->download($zipFileName)->deleteFileAfterSend(true);
     }
     

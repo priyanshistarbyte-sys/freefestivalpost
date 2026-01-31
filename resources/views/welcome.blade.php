@@ -33,7 +33,7 @@
     <!-- Navbar -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent py-4">
         <div class="container mx-auto px-6 flex items-center justify-between">
-            <a href="/" class="flex items-center gap-2 group">
+            <a href="{{ route('home') }}" class="flex items-center gap-2 group">
                 <img src="{{ asset('assets/logos/brandfotos-logo.png') }}" alt="BrandFotos Logic"
                     class="h-24 w-auto object-contain text-brand-primary">
             </a>
@@ -160,14 +160,15 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="w-8 h-8">
-                            <polyline points="4 17 10 11 4 5" />
-                            <line x1="12" x2="20" y1="19" y2="19" />
+                            <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
+                            <path d="M12 18h.01"/>
                         </svg>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-brand-primary">Easy to Use Interface</h3>
                     <p class="text-gray-500 max-w-xs">Just select a template and we'll handle the rest. No design skills
                         needed.</p>
                 </div>
+
                 <!-- Item 2 -->
                 <div data-aos="fade-up" data-aos-delay="200" class="flex flex-col items-center">
                     <div
@@ -412,442 +413,64 @@
                 <p class="text-gray-500">Choose the perfect plan for your business growth.</p>
             </div>
 
-            <!-- Simplified Pricing Grid for HTML (Showing 3 main plans for brevity or typical layout, but code had loop. I'll include all 6 but in grid) -->
+            @php
+                $colors = [
+                    ['border' => 'border-gray-700', 'text' => 'text-gray-700', 'bg' => 'bg-gray-700', 'hover' => 'hover:bg-gray-800', 'icon' => 'text-gray-700'],
+                    ['border' => 'border-blue-500', 'text' => 'text-blue-600', 'bg' => 'bg-blue-500', 'hover' => 'hover:bg-blue-600', 'icon' => 'text-blue-500'],
+                    ['border' => 'border-cyan-500', 'text' => 'text-cyan-600', 'bg' => 'bg-cyan-500', 'hover' => 'hover:bg-cyan-600', 'icon' => 'text-cyan-500'],
+                    ['border' => 'border-green-500', 'text' => 'text-green-600', 'bg' => 'bg-green-500', 'hover' => 'hover:bg-green-600', 'icon' => 'text-green-500'],
+                    ['border' => 'border-purple-500', 'text' => 'text-purple-600', 'bg' => 'bg-purple-500', 'hover' => 'hover:bg-purple-600', 'icon' => 'text-purple-500'],
+                    ['border' => 'border-pink-500', 'text' => 'text-pink-600', 'bg' => 'bg-pink-500', 'hover' => 'hover:bg-pink-600', 'icon' => 'text-pink-500']
+                ];
+            @endphp
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                <!-- Free Plan -->
-                <div data-aos="fade-up"
-                    class="relative bg-white rounded-3xl p-6 shadow-xl border-t-8 border-gray-700 flex flex-col transition-all hover:-translate-y-2 hover:shadow-2xl">
-                    <h3 class="text-xl font-bold text-gray-700 mb-2">Free Trial 7 Days</h3>
-                    <div class="text-4xl font-extrabold text-gray-800 mb-6">₹0</div>
-                    <ul class="space-y-3 mb-8 flex-grow">
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-gray-700 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>All Unlimited Post & Video Download</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-gray-700 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Business Posts & Videos</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-gray-700 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Social Media Page Create</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-gray-700 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Remove Watermark</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-gray-700 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Profile Logo Set</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-gray-700 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Remove Ads</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-gray-700 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Personal Account Assistant</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-gray-700 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>50+ Frame, Color Variation 500+</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-400 line-through"><svg
-                                class="w-5 h-5 text-gray-300 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>Unique Business Custom Frame</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-gray-700 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Support 24/7</li>
-                    </ul>
-                    <button
-                        class="w-full py-3 rounded-full font-bold text-white transition-all shadow-md hover:shadow-lg bg-gray-700 hover:bg-gray-800">Select
-                        Plan</button>
-                </div>
-
-                <!-- Basic Plan -->
-                <div data-aos="fade-up" data-aos-delay="100"
-                    class="relative bg-white rounded-3xl p-6 shadow-xl border-t-8 border-blue-500 flex flex-col transition-all hover:-translate-y-2 hover:shadow-2xl">
-                    <h3 class="text-xl font-bold text-blue-600 mb-2">Basic Plan</h3>
-                    <div class="text-4xl font-extrabold text-blue-600 mb-6">₹399</div>
-                    <ul class="space-y-3 mb-8 flex-grow">
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Festival Posts & Videos</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Business Posts & Videos</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Family & Status Images</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Remove Watermark</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Daily Use Images</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Remove Ads</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Default Frame 50+</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Color Variation 500+</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-400 line-through"><svg
-                                class="w-5 h-5 text-gray-300 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>Custom Frame 0</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Support 24/7</li>
-                    </ul>
-                    <button
-                        class="w-full py-3 rounded-full font-bold text-white transition-all shadow-md hover:shadow-lg bg-blue-500 hover:bg-blue-600">Select
-                        Plan</button>
-                </div>
-
-                <!-- Advance Plan -->
-                <div data-aos="fade-up" data-aos-delay="200"
-                    class="relative bg-white rounded-3xl p-6 shadow-xl border-t-8 border-cyan-500 flex flex-col transition-all hover:-translate-y-2 hover:shadow-2xl">
-                    <h3 class="text-xl font-bold text-cyan-600 mb-2">Advance Plan - 6 Month</h3>
-                    <div class="text-4xl font-extrabold text-cyan-600 mb-6">₹699</div>
-                    <ul class="space-y-3 mb-8 flex-grow">
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>All Festival Posts & Videos</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Business Posts & Videos</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Family & Status Images</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Remove Watermark</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Daily Use Images</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Remove Ads</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Default Frame 50+</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Color Variation 500+</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Custom Frame 1</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Customer Support Available 24/7</li>
-                    </ul>
-                    <button
-                        class="w-full py-3 rounded-full font-bold text-white transition-all shadow-md hover:shadow-lg bg-cyan-500 hover:bg-cyan-600">Select
-                        Plan</button>
-                </div>
-
-                <!-- Premium Plan -->
-                <div data-aos="fade-up" data-aos-delay="300"
-                    class="relative bg-white rounded-3xl p-6 shadow-xl border-t-8 border-green-500 flex flex-col transition-all hover:-translate-y-2 hover:shadow-2xl">
-                    <div
-                        class="absolute top-0 right-0 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg rounded-tr-sm shadow-sm z-10 uppercase tracking-wide">
-                        Recommended</div>
-                    <h3 class="text-xl font-bold text-green-600 mb-2">Premium Plan</h3>
-                    <div class="text-4xl font-extrabold text-green-600 mb-6">₹999</div>
-                    <ul class="space-y-3 mb-8 flex-grow">
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Festival Posts & Videos</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Business Posts & Videos</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Family & Status Images</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Remove Watermark + Remove Ads</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Daily WhatsApp Status Images</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Festival AI Images</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Default Frame 50+</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Color Variation 500+</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Unique Business Custom Frame 1</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Customer Support 24/7</li>
-                    </ul>
-                    <button
-                        class="w-full py-3 rounded-full font-bold text-white transition-all shadow-md hover:shadow-lg bg-green-500 hover:bg-green-600">Select
-                        Plan</button>
-                </div>
-
-                <!-- Business Plan 6 Month -->
-                <div data-aos="fade-up" data-aos-delay="400"
-                    class="relative bg-white rounded-3xl p-6 shadow-xl border-t-8 border-purple-500 flex flex-col transition-all hover:-translate-y-2 hover:shadow-2xl">
-                    <h3 class="text-xl font-bold text-purple-600 mb-2">Business Plan - 6 Month</h3>
-                    <div class="text-4xl font-extrabold text-purple-600 mb-6">₹1299</div>
-                    <ul class="space-y-3 mb-8 flex-grow">
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-purple-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>All Festival Posts & Videos</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-purple-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Business Posts & Videos</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-purple-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Family & Status Images</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-purple-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Remove Watermark + Remove Ads</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-purple-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Daily Use Status Images</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-purple-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Festival AI Images</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-purple-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Default Frame 50+</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-purple-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Color Variation 500+</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-purple-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Unique Business Custom Frame 2</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-purple-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Customer Support 24/7</li>
-                    </ul>
-                    <button
-                        class="w-full py-3 rounded-full font-bold text-white transition-all shadow-md hover:shadow-lg bg-purple-500 hover:bg-purple-600">Select
-                        Plan</button>
-                </div>
-
-                <!-- Business Plan 12 Month -->
-                <div data-aos="fade-up" data-aos-delay="500"
-                    class="relative bg-white rounded-3xl p-6 shadow-xl border-t-8 border-pink-500 flex flex-col transition-all hover:-translate-y-2 hover:shadow-2xl">
-                    <h3 class="text-xl font-bold text-pink-600 mb-2">Business Plan - 12 Month</h3>
-                    <div class="text-4xl font-extrabold text-pink-600 mb-6">₹1499</div>
-                    <ul class="space-y-3 mb-8 flex-grow">
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-pink-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>All Festival Posts & Videos</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-pink-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Business Posts & Videos</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-pink-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Family & Status Images</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-pink-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Remove Watermark + Remove Ads</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-pink-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Daily Use Status Images</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-pink-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Festival AI Images</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-pink-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Default Frame 50+</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-pink-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Color Variation 500+</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-pink-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Unique Business Custom Frame 2</li>
-                        <li class="flex items-start gap-3 text-sm text-gray-600"><svg
-                                class="w-5 h-5 text-pink-500 mt-0.5 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>Customer Support 24/7</li>
-                    </ul>
-                    <button
-                        class="w-full py-3 rounded-full font-bold text-white transition-all shadow-md hover:shadow-lg bg-pink-500 hover:bg-pink-600">Select
-                        Plan</button>
-                </div>
+                @foreach($subscriptionPlans as $index => $plan)
+                    @php
+                        $colorIndex = $index % 6;
+                        $color = $colors[$colorIndex];
+                        $delay = $index * 100;
+                    @endphp
+                    
+                    <div data-aos="fade-up" data-aos-delay="{{ $delay }}"
+                        class="relative bg-white rounded-3xl p-6 shadow-xl border-t-8 {{ $color['border'] }} flex flex-col transition-all hover:-translate-y-2 hover:shadow-2xl">
+                       
+                        <h3 class="text-xl font-bold {{ $color['text'] }} mb-2">{{ $plan->plan_name }}</h3>
+                        
+                        <div class="text-4xl font-extrabold {{ $color['text'] }} mb-6">
+                            @if($plan->discount > 0 && $plan->discount_price != $plan->price)
+                                <div>
+                                    <span class="text-lg line-through text-gray-400">₹{{ number_format($plan->price, 0) }}</span>
+                                    <br>
+                                    ₹{{ number_format($plan->discount_price, 0) }}
+                                </div>
+                            @else
+                                ₹{{ number_format($plan->discount_price, 0) }}
+                            @endif
+                        </div>
+                        
+                        <ul class="space-y-3 mb-8 flex-grow">
+                            @foreach($plan->descriptionsItem as $item)
+                                <li class="flex items-start gap-3 text-sm {{ $item->sign == 1 ? 'text-gray-600' : 'text-gray-400 line-through' }}">
+                                    @if($item->sign == 1)
+                                        <svg class="w-5 h-5 {{ $color['icon'] }} mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    @else
+                                        <svg class="w-5 h-5 text-gray-300 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    @endif
+                                    {{ $item->title }}
+                                </li>
+                            @endforeach
+                        </ul>
+                        
+                        <button class="w-full py-3 rounded-full font-bold text-white transition-all shadow-md hover:shadow-lg {{ $color['bg'] }} {{ $color['hover'] }}">
+                            Select Plan
+                        </button>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -999,7 +622,7 @@
 
     <!-- Footer -->
     <div class="flex flex-col">
-        <footer class="relative bg-gradient-to-b from-[#050A24] to-[#08103d] text-white z-10 pt-32 lg:pt-40 mt-0">
+        <footer class="relative bg-gradient-to-b from-[#050A24] to-[#08103d] text-white z-10 pt-32 lg:pt-10 mt-0">
             <div class="absolute bottom-full left-0 w-full overflow-hidden leading-none">
                 <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
                     preserveAspectRatio="none" class="fill-[#050A24] block w-full h-10 md:h-24 lg:h-32">
@@ -1011,7 +634,7 @@
 
             <div class="container mx-auto px-4 text-center">
                 <nav class="flex flex-wrap justify-center gap-8 mb-12 text-sm font-medium">
-                    <a href="/" class="hover:text-blue-400 transition-colors">Home</a>
+                    <a href="{{ route('home') }}" class="hover:text-blue-400 transition-colors">Home</a>
                     <a href="#about" class="hover:text-blue-400 transition-colors">About</a>
                     <a href="#features" class="hover:text-blue-400 transition-colors">Features</a>
 
@@ -1072,7 +695,7 @@
                 </div>
             </div>
             <a href="https://wa.me/9537267999" target="_blank" rel="noopener noreferrer"
-                class="absolute bottom-6 right-6 flex items-center justify-center w-14 h-14 bg-[#25D366] rounded-full shadow-lg hover:bg-[#128C7E] transition-all z-50">
+                class="fixed bottom-6 right-6 flex items-center justify-center w-14 h-14 bg-[#25D366] rounded-full shadow-lg hover:bg-[#128C7E] transition-all z-50">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor"
                     class="w-8 h-8 text-white">
                     <path
