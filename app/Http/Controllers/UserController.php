@@ -791,35 +791,22 @@ class UserController extends Controller
             ->count();
 
         /* ------------------------------
-        | 2. Payment history
+        | 2. User Purchase Plans History
         ------------------------------*/
-        $payments = Payment::where('user_id', $id)
-            ->leftJoin('subscription_plans as s', 'payments.packageid', '=', 's.id')
+        
+        $userData['payments'] = DB::table('user_subscription_plan as usp')->leftJoin('payments as p', 'p.id', '=', 'usp.id')
+            ->leftJoin('subscription_plans as sp', 'usp.packageid', '=', 'sp.id')
+            ->where('usp.user_id', $id)
             ->select(
-                'payments.*',
-                's.plan_name',
-                's.duration',
-                's.duration_type',
-                's.price as plan_price'
+                'sp.plan_name',
+                'usp.start_date',
+                'usp.end_date',
+                DB::raw('COALESCE(p.price, 0) as price'),
+                'p.transactionid',
+                'usp.status'
             )
-            ->orderByDesc('payments.id')
-            ->get()
-            ->map(function ($p) {
-                return [
-                    ...$p->toArray(),
-                    'created_at' => $p->created_at
-                        ? Carbon::parse($p->created_at)->format('d/m/Y H:i')
-                        : '-',
-                    'date' => $p->date
-                        ? Carbon::parse($p->date)->format('d/m/Y')
-                        : '-',
-                    'refundDate' => $p->refundDate
-                        ? Carbon::parse($p->refundDate)->format('d/m/Y H:i')
-                        : null,
-                ];
-            });
-
-        $userData['payments'] = $payments;
+            ->orderByDesc('usp.start_date')
+            ->get();
 
         /* ------------------------------
         | 3. Device / Notification info

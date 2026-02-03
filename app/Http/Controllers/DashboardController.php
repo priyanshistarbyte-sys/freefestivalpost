@@ -708,7 +708,6 @@ class DashboardController extends Controller
         return view('admin.repeat-subscription-report');
     }
 
-   
     public function daywiseRegister(Request $request)
     {
         if ($request->ajax()) {

@@ -92,7 +92,8 @@
                         <thead>
                             <tr>
                                 <th>Plan</th>
-                                <th>Date</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
                                 <th>Amount</th>
                                 <th>Tran ID</th>
                                 <th>Status</th>
@@ -101,11 +102,16 @@
                         <tbody>
                             @foreach($userData['payments'] as $payment)
                             <tr>
-                                <td>{{ $payment['plan_name'] ?? 'Business Plan' }}</td>
-                                <td>{{ $payment['date'] }}</td>
-                                <td>₹{{ $payment['plan_price'] }}</td>
-                                <td>{{ substr($payment['transactionid'] ?? '-', 0, 10) }}...</td>
-                                <td><span class="badge bg-success">{{ $payment['status'] }}</span></td>
+                                <td>{{ $payment->plan_name ?? '-' }}</td>
+                                <td>{{ $payment->start_date ? \Carbon\Carbon::parse($payment->start_date)->format('d/m/Y') : '-' }}</td>
+                                <td>{{ $payment->end_date ? \Carbon\Carbon::parse($payment->end_date)->format('d/m/Y') : '-' }}</td>
+                                <td>₹{{ number_format($payment->price, 2) }}</td>
+                                <td>{{ $payment->transactionid ?? '-' }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $payment->status == 'active' ? 'success' : 'danger' }}">
+                                        {{ ucfirst($payment->status) }}
+                                    </span>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
