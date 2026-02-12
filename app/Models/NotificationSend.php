@@ -14,6 +14,8 @@ class NotificationSend extends Model
         'image',
         'url',
         'status',
+        'page',
+        'page_data',
         'created_at',
         'updated_at'
     ];

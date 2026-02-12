@@ -12,6 +12,7 @@ class SubCategory extends Model
     protected $fillable = [
         'category_id',
         'parent_category',
+        'is_trending',
         'is_parent',
         'is_child',
         'image',

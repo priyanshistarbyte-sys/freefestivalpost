@@ -44,6 +44,8 @@ return new class extends Migration
                 $table->string('state',50)->nullable();
                 $table->string('pincode',15)->nullable();
                 $table->string('lang',10)->nullable();
+                $table->string('referral_code',50)->nullable();
+                $table->string('used_referral_code',50)->nullable();
                 $table->timestamps();
             });
         }

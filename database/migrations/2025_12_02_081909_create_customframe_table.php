@@ -20,8 +20,7 @@ return new class extends Migration
                 $table->string('image');
                 $table->integer('free_paid')->default('1');
                 $table->integer('status')->default('0');
-                $table->text('data')->nullable();
-                $table->text('logosection')->nullable();
+                $table->integer('user_customize')->default('0')->comment('0: Panel, 1: API');
                 $table->timestamps();
             });
         }

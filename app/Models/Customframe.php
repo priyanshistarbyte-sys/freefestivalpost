@@ -14,7 +14,7 @@ class Customframe extends Model
         'image',
         'free_paid',
         'status',
-        'data',
+        'user_customize',
         'created_at',
         'updated_at'
     ];

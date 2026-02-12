@@ -195,8 +195,7 @@
                         @can('faq-manage')
                         <li class="{{ request()->routeIs('faqs.*') ? 'active' : '' }}"><a href="{{ route('faqs.index') }}"><span>FAQ</span></a></li>
                         @endcan
-                        <li class="{{ request()->routeIs('image-zip.download') ? 'active' : '' }}}"><a href="{{ route('image-zip.download') }}"><span>Images Copy</span></a></li>
-                        
+                        <li class="{{ request()->routeIs('image-zip.download') ? 'active' : '' }}"><a href="{{ route('image-zip.download') }}"><span>Images Copy</span></a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -210,12 +209,6 @@
                                 <span>Payment Failed</span>
                             </a>
                         </li>
-                        {{-- <li class="{{ request()->routeIs('order.list') ? 'active' : '' }}">
-                            <a href="{{ route('order.list') }}">
-                                <span>Order Create List</span>
-                            </a>
-                        </li> --}}
-                        
                         <li class="{{ request()->routeIs('payment.paid-subscription') ? 'active' : '' }}">
                             <a href="{{ route('payment.paid-subscription') }}">
                                 <span>Paid Subscription</span>

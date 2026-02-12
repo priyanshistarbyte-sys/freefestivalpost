@@ -60,6 +60,14 @@ class SubCategoryController extends Controller
                                 <span class="switch-slider"></span>
                             </label>';
                 })
+                ->addColumn('is_trending', function ($subCategory) {
+                       $checked = $subCategory->is_trending == 1 ? 'checked' : '';
+                        return '
+                            <label class="custom-switch">
+                                <input type="checkbox" class="trending-toggle" data-id="'.$subCategory->id.'" '.$checked.'>
+                                <span class="switch-slider"></span>
+                            </label>';
+                })
                 ->addColumn('actions', function ($subCategory) {
                     $buttons = '';
                     $editUrl = route('sub-category.edit', $subCategory->id);
@@ -79,7 +87,7 @@ class SubCategoryController extends Controller
 
                     return $buttons;
                 })
-                ->rawColumns(['category', 'image', 'noti_banner', 'status', 'actions'])
+                ->rawColumns(['category', 'image', 'noti_banner', 'status','is_trending','actions'])
                 ->make(true);
         }
         return view('sub-category.index');
@@ -117,6 +125,7 @@ class SubCategoryController extends Controller
         $subCategory->image = $path_image ?? '';
         $subCategory->category_id = $request->category_id;
         $subCategory->is_parent = $request->is_parent ?? 0;
+        $subCategory->is_trending = $request->is_trending ?? 0;
         $subCategory->parent_category = $request->is_parent == 1 ? $request->parent_category : 0;
         $subCategory->mtitle = $request->mtitle;
         $subCategory->mslug = SubCategory::slug_string($request->mtitle);
@@ -218,6 +227,7 @@ class SubCategoryController extends Controller
         $subCategory->category_id = $request->category_id;
         $subCategory->mtitle = $request->mtitle;
         $subCategory->is_parent = $request->parent_category ? 1 : 0;
+        $subCategory->is_trending = $request->is_trending ?? 0;
         $subCategory->parent_category = $request->parent_category ?: 0;
         $subCategory->event_date = $request->event_date ?: null;
         $subCategory->status = $request->status ?? 0;
@@ -368,5 +378,18 @@ class SubCategoryController extends Controller
         }
         
         return response()->download($filePath, 'subcategory_template.csv');
+    }
+
+    public function updateTrending(Request $request)
+    {
+        $subCategory = SubCategory::find($request->id);
+        if (!$subCategory) {
+            return response()->json(['success' => false, 'message' => 'Sub Category not found']);
+        }
+
+        $subCategory->is_trending = $request->is_trending;
+        $subCategory->save();
+
+        return response()->json(['success' => true, 'message' => 'Trending updated successfully']);
     }
 }

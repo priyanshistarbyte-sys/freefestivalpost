@@ -32,6 +32,7 @@
                             <th>Tag</th>
                             <th>TagBG</th>
                             <th>Status</th>
+                            <th>Is Trending</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -126,6 +127,12 @@
                         searchable: false
                     },
                     {
+                        data: 'is_trending',
+                        name: 'is_trending',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
                         data: 'actions',
                         name: 'actions',
                         orderable: false,
@@ -193,5 +200,30 @@
                 }
             });
         });
+         $(document).on('change', '.trending-toggle', function () {
+            let trending = $(this).is(':checked') ? 1 : 0;
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: "{{ route('subcategory.updateTrending') }}",
+                type: "POST",
+                data: {
+                    id: id,
+                    is_trending: trending,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success('Trending updated successfully');
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function () {
+                    toastr.error('Something went wrong!');
+                }
+            });
+        });
+        
     </script>
 @endpush

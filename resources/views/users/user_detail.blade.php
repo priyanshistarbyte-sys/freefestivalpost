@@ -24,16 +24,13 @@
                                     <td>{{ $userData['b_email'] ?? '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Expiry Date</strong></td>
-                                    <td>
-                                        @if($userData['expdate'] && $userData['expdate'] != '-')
-                                            <span class="badge bg-success">{{ $userData['expdate'] }}</span>
-                                        @else
-                                            <span class="badge bg-secondary">-</span>
-                                        @endif
-                                    </td>
+                                    <td><strong>Referral Code</strong></td>
+                                    <td>{{ $userData['referral_code'] ?? '-' }}</td>
                                 </tr>
-                                 
+                                <tr>
+                                    <td><strong>Referral Used Count</strong></td>
+                                    <td>{{ \App\Models\Admin::where('used_referral_code', $userData['referral_code'])->whereNotNull('used_referral_code')->count() }}</td>
+                                </tr>
                             </table>
                     </div>
                     <div class="col-md-6">
@@ -61,9 +58,16 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td><strong>Used Rreferral Code</strong></td>
+                                <td>{{ $userData['used_referral_code'] ?? '-' }}</td>
+                            </tr>
+                            <tr>
                                 <td><strong>Status</strong></td>
                                 <td>
-                                    @if($userData['status'] == 1)
+                                    @php
+                                        $activePayment = collect($userData['payments'])->where('status', '1')->where('end_date', '>=', now()->format('Y-m-d'))->first();
+                                    @endphp
+                                    @if($activePayment)
                                         <span class="badge bg-success">Active</span>
                                     @else
                                         <span class="badge bg-danger">Inactive</span>
@@ -108,9 +112,13 @@
                                 <td>₹{{ number_format($payment->price, 2) }}</td>
                                 <td>{{ $payment->transactionid ?? '-' }}</td>
                                 <td>
-                                    <span class="badge bg-{{ $payment->status == 'active' ? 'success' : 'danger' }}">
-                                        {{ ucfirst($payment->status) }}
-                                    </span>
+                                    @if($payment->status == '0')
+                                        <span class="badge bg-danger">Expire</span>
+                                    @elseif($payment->status == '1')
+                                        <span class="badge bg-success">Active</span>
+                                    @else
+                                        <span class="badge bg-warning" style="color:black">Upcoming</span>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach

@@ -19,6 +19,7 @@ return new class extends Migration
                     $table->string('is_parent')->default(0);
                     $table->unsignedBigInteger('is_child')->default(0);
                     $table->string('parent_category')->default(0);
+                    $table->string('is_trending')->default(0);
                     $table->text('image');
                     $table->date('event_date')->nullable();
                     $table->string('mtitle');

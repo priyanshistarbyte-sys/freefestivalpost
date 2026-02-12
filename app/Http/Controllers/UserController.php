@@ -50,7 +50,7 @@ class UserController extends Controller
                     'a.photo',
                     'n.app_version',
                     'dp.tamp_count'
-                );
+                )->orderBy('a.id', 'desc');
 
             /* Join payments ONLY for paid users (type = 2) */
             if ($type == 2) {
@@ -527,6 +527,7 @@ class UserController extends Controller
                 
 
                 return DataTables::of($query)
+                    ->addIndexColumn()
                     ->editColumn('date', function ($row) {
                         return $row->date
                             ? \Carbon\Carbon::parse($row->date)->format('d-m-Y')
@@ -543,6 +544,30 @@ class UserController extends Controller
 
                     ->editColumn('ispaid', function ($row) {
                         return ($row->ispaid == 0)  ? 'Free' : 'Paid';
+                    })
+                    ->filterColumn('business_name', function($query, $keyword) {
+                        $query->where('a.business_name', 'like', "%{$keyword}%");
+                    })
+                    ->filterColumn('mobile', function($query, $keyword) {
+                        $query->where('a.mobile', 'like', "%{$keyword}%");
+                    })
+                    ->filterColumn('plan_name', function($query, $keyword) {
+                        $query->where('s.plan_name', 'like', "%{$keyword}%");
+                    })
+                    ->filterColumn('payment_status', function($query, $keyword) {
+                        $query->where('p.status', 'like', "%{$keyword}%");
+                    })
+                    ->filterColumn('user_id', function($query, $keyword) {
+                        $query->where('p.user_id', 'like', "%{$keyword}%");
+                    })
+                    ->filterColumn('date', function($query, $keyword) {
+                        $query->where('p.date', 'like', "%{$keyword}%");
+                    })
+                    ->filterColumn('amount', function($query, $keyword) {
+                        $query->where('p.amount', 'like', "%{$keyword}%");
+                    })
+                    ->filterColumn('transactionid', function($query, $keyword) {
+                        $query->where('p.transactionid', 'like', "%{$keyword}%");
                     })
                     ->rawColumns(['date','created_at','payment_status','ispaid'])
                     ->make(true);
@@ -794,8 +819,8 @@ class UserController extends Controller
         | 2. User Purchase Plans History
         ------------------------------*/
         
-        $userData['payments'] = DB::table('user_subscription_plan as usp')->leftJoin('payments as p', 'p.id', '=', 'usp.id')
-            ->leftJoin('subscription_plans as sp', 'usp.packageid', '=', 'sp.id')
+        $userData['payments'] = DB::table('user_subscription_plan as usp')->leftJoin('payments as p', 'p.id', '=', 'usp.payment_id')
+            ->leftJoin('subscription_plans as sp', 'usp.package_id', '=', 'sp.id')
             ->where('usp.user_id', $id)
             ->select(
                 'sp.plan_name',
@@ -805,7 +830,6 @@ class UserController extends Controller
                 'p.transactionid',
                 'usp.status'
             )
-            ->orderByDesc('usp.start_date')
             ->get();
 
         /* ------------------------------
@@ -931,5 +955,4 @@ class UserController extends Controller
         return redirect()->route('user.index')->with('success', 'Notification deleted successfully.');
     }
 
-    
 }

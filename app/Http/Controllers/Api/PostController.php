@@ -13,13 +13,12 @@ class PostController extends Controller
 {
     public function makePostByUser(Request $request)
     {
-        $token = $request->input('token');
         $user_id = $request->input('user_id');
         
-        if (!$this->checkToken($user_id, $token)) {
+        if (!$user_id) {
             return response()->json([
                 'status' => false,
-                'message' => 'User is not authorized to use.',
+                'message' => 'User ID is required.',
                 'data' => []
             ]);
         }
@@ -75,13 +74,26 @@ class PostController extends Controller
 
     private function makePost($result)
     {
-        if (empty($result)) return false;
+        if (empty($result)) return null;
 
-        $business_logo = $result['logo'];
-        $personName = $result['name'];
-        $userbusiness_name = $result['business_name'];
-        $business_email = $result['email'];
-        
+        $template = Tamplet::find($result['tamplate_id']);
+        if (!$template) {
+            \Log::error('Template not found: ' . $result['tamplate_id']);
+            return null;
+        }
+
+        $userNewFileName = $this->copyTemplate($template->path ?? '', $result['tamplate_id'], $result['user_id']);
+        if (!$userNewFileName) {
+            \Log::error('Failed to copy template. Path: ' . ($template->path ?? 'empty'));
+            return null;
+        }
+
+        $templatePath = storage_path('app/public/' . $userNewFileName);
+
+        if ($template->event == 1 && $result['birthdayPhoto']) {
+            $this->mergeBirthdayPhoto($userNewFileName, $result['birthdayPhoto'], $template, $result['birthdayName']);
+        }
+
         $business_mobile = '';
         if ($result['mobile2'] && $result['mobile1']) {
             $business_mobile = "+91 " . $result['mobile1'] . ' / ' . "+91 " . $result['mobile2'];
@@ -91,46 +103,32 @@ class PostController extends Controller
             $business_mobile = "+91 " . $result['mobile2'];
         }
 
-        $business_website = $result['website'];
-        $business_address = $result['address'];
-        $birthdayPhoto = $result['birthdayPhoto'];
-        $birthdayName = $result['birthdayName'];
+        if (file_exists($templatePath)) {
+            $this->addTextElements($templatePath, $template, [
+                'email' => $result['email'],
+                'website' => $result['website'],
+                'mobile' => $business_mobile,
+                'address' => $result['address'],
+                'personName' => $result['name'],
+                'businessName' => $result['business_name']
+            ]);
 
-        $template = Tamplet::find($result['tamplate_id']);
-        if (!$template) return false;
-
-        $userNewFileName = $this->copyTemplate($template->path, $result['tamplate_id'], $result['user_id']);
-        if (!$userNewFileName) return false;
-
-        if ($template->event == 1 && $birthdayPhoto) {
-            $this->mergeBirthdayPhoto($userNewFileName, $birthdayPhoto, $template, $birthdayName);
-        }
-
-        $templatePath = public_path("media/upload/" . $userNewFileName);
-
-        $this->addTextElements($templatePath, $template, [
-            'email' => $business_email,
-            'website' => $business_website,
-            'mobile' => $business_mobile,
-            'address' => $business_address,
-            'personName' => $personName,
-            'businessName' => $userbusiness_name
-        ]);
-
-        if ($business_logo && $template->logo_pos) {
-            $this->addLogo($templatePath, $business_logo, $template->logo_pos);
-        } elseif (!$business_logo && $template->logo_pos && $userbusiness_name) {
-            $this->addBusinessNameAsLogo($templatePath, $userbusiness_name, $template);
+            if ($result['logo'] && $template->logo_pos) {
+                $this->addLogo($templatePath, $result['logo'], $template->logo_pos);
+            } elseif (!$result['logo'] && $template->logo_pos && $result['business_name']) {
+                $this->addBusinessNameAsLogo($templatePath, $result['business_name'], $template);
+            }
         }
 
         DB::table('makepost')->insert([
-            'filename' => $userNewFileName,
+            'post' => $userNewFileName,
             'user_id' => $result['user_id'],
-            'tamplate_id' => $result['tamplate_id'],
-            'created_at' => now()
+            'tamp_id' => $result['tamplate_id'],
+            'created_at' => now(),
+            'updated_at' => now()
         ]);
 
-        return url('media/upload/' . $userNewFileName);
+        return asset('storage/' . $userNewFileName);
     }
 
     private function addTextElements($templatePath, $template, $data)
@@ -217,14 +215,28 @@ class PostController extends Controller
 
     private function copyTemplate($filename, $templateId, $userId)
     {
-        $sourcePath = public_path("media/template/" . $filename);
-        if (!file_exists($sourcePath)) return false;
+        if (empty($filename)) {
+            \Log::error('Empty filename in copyTemplate');
+            return false;
+        }
+        
+        // Template is stored in storage/public/uploads/tamplet/images/
+        $sourcePath = storage_path('app/public/' . $filename);
+        if (!file_exists($sourcePath)) {
+            \Log::error('Source file not found: ' . $sourcePath);
+            return false;
+        }
+
+        $uploadDir = storage_path('app/public/uploads/posts');
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
 
         $newFileName = time() . '_' . $templateId . '_' . $userId . '.png';
-        $destinationPath = public_path("media/upload/" . $newFileName);
+        $destinationPath = $uploadDir . '/' . $newFileName;
 
         if (copy($sourcePath, $destinationPath)) {
-            return $newFileName;
+            return 'uploads/posts/' . $newFileName;
         }
         return false;
     }
@@ -268,7 +280,7 @@ class PostController extends Controller
 
     private function mergeBirthdayPhoto($templateFileName, $birthdayPhoto, $template, $birthdayName)
     {
-        $templatePath = public_path("media/upload/" . $templateFileName);
+        $templatePath = storage_path('app/public/' . $templateFileName);
         $birthdayPhotoPath = public_path('media/birthday_user/' . $birthdayPhoto);
         
         if (!file_exists($birthdayPhotoPath)) return;

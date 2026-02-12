@@ -30,106 +30,106 @@
     </div>
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('assets/js/jszip.min.js') }}"></script>
     <script src="{{ asset('assets/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('assets/js/buttons.print.min.js') }}"></script>
-<script>
-    function previewImage(input, previewId) {
-    const preview = document.getElementById(previewId);
-    const label = input.nextElementSibling;
-    
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-                label.classList.add('has-file');
-            };
-            
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            preview.style.display = 'none';
-            label.classList.remove('has-file');
-        }
-    }
-</script>
-<script>
-    $(document).ready(function() {
-        $('#category-table').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            scrollX: false,
-            responsive: true,
-            pageLength: 100,
-            ajax: '{{ route('category.index') }}',
-            dom: '<"d-flex justify-content-between align-items-center mb-3"<"d-flex align-items-center gap-2"Bl><f>>rtip',
-            lengthMenu: [[10, 25, 50, 100, 500, 1000], [10, 25, 50, 100, 500, 1000]],
-            buttons: [
-                {
-                    extend: 'excelHtml5',
-                    text: 'Excel',
-                    title: 'Category',
-                    className: 'btn btn-success btn-sm',
-                    exportOptions: {
-                        columns: [0,2]
-                    }
-                },
-                {
-                    extend: 'print',
-                    text: 'Print',
-                    title: 'Category',
-                    className: 'btn btn-info btn-sm',
-                    exportOptions: {
-                        columns: [0,2]
-                    }
-                }
-            ],
-            columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                { data: 'icon', name: 'icon', orderable: false, searchable: false },
-                { data: 'title', name: 'title'},
-                { data: 'actions', name: 'actions', orderable: false, searchable: false },
-            ]
-        });
+    <script>
+        function previewImage(input, previewId) {
+        const preview = document.getElementById(previewId);
+        const label = input.nextElementSibling;
         
-        $(document).on('click', '.delete-btn', function(e) {
-            e.preventDefault();
-            const deleteUrl = $(this).attr('data-url');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    label.classList.add('has-file');
+                };
+                
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.style.display = 'none';
+                label.classList.remove('has-file');
+            }
+        }
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#category-table').DataTable({
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                scrollX: false,
+                responsive: true,
+                pageLength: 100,
+                ajax: '{{ route('category.index') }}',
+                dom: '<"d-flex justify-content-between align-items-center mb-3"<"d-flex align-items-center gap-2"Bl><f>>rtip',
+                lengthMenu: [[10, 25, 50, 100, 500, 1000], [10, 25, 50, 100, 500, 1000]],
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        title: 'Category',
+                        className: 'btn btn-success btn-sm',
+                        exportOptions: {
+                            columns: [0,2]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        title: 'Category',
+                        className: 'btn btn-info btn-sm',
+                        exportOptions: {
+                            columns: [0,2]
+                        }
+                    }
+                ],
+                columns: [
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                    { data: 'icon', name: 'icon', orderable: false, searchable: false },
+                    { data: 'title', name: 'title'},
+                    { data: 'actions', name: 'actions', orderable: false, searchable: false },
+                ]
+            });
             
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'You want to delete this record?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#dc3545',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Continue',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const form = $('<form>', {
-                        'method': 'POST',
-                        'action': deleteUrl
-                    });
-                    form.append($('<input>', {
-                        'type': 'hidden',
-                        'name': '_token',
-                        'value': '{{ csrf_token() }}'
-                    }));
-                    form.append($('<input>', {
-                        'type': 'hidden',
-                        'name': '_method',
-                        'value': 'DELETE'
-                    }));
-                    $('body').append(form);
-                    form.submit();
-                }
+            $(document).on('click', '.delete-btn', function(e) {
+                e.preventDefault();
+                const deleteUrl = $(this).attr('data-url');
+                
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You want to delete this record?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Continue',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const form = $('<form>', {
+                            'method': 'POST',
+                            'action': deleteUrl
+                        });
+                        form.append($('<input>', {
+                            'type': 'hidden',
+                            'name': '_token',
+                            'value': '{{ csrf_token() }}'
+                        }));
+                        form.append($('<input>', {
+                            'type': 'hidden',
+                            'name': '_method',
+                            'value': 'DELETE'
+                        }));
+                        $('body').append(form);
+                        form.submit();
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 @endpush

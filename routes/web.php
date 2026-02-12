@@ -86,6 +86,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/sub-category-export', [SubCategoryController::class, 'export'])->name('subcategory.export');
     Route::post('/sub-category-import', [SubCategoryController::class, 'import'])->name('subcategory.import');
     Route::get('/sub-category-template', [SubCategoryController::class, 'downloadTemplate'])->name('subcategory.template');
+    Route::post('/sub-category/trending/update', [SubCategoryController::class, 'updateTrending'])->name('subcategory.updateTrending');
 
     // Role
      Route::resource('roles', RoleController::class);
@@ -188,7 +189,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::post('/notification/store', [NotificationController::class, 'store'])->name('notification.store');
     Route::post('/notification/category-data',[NotificationController::class, 'getCategoryDataById'])->name('notification.getCategoryDataById');
     Route::delete('/notification/{id}/delete', [NotificationController::class, 'destroy'])->name('notification.destroy');
-    
+    Route::post('/notification/page-data',[NotificationController::class, 'getPageDataById'])->name('notification.getPageDataById');
 
     // payment
     Route::get('/payment-failed', [PaymentController::class, 'failedList'])->name('payment.failed');

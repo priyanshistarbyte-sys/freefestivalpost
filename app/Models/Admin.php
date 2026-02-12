@@ -51,6 +51,8 @@ class Admin extends Authenticatable
         'state',
         'pincode',
         'lang',
+        'referral_code',
+        'used_referral_code',
     ];
 
    

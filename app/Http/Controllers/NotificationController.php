@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\HomeCategory;
+use App\Models\Category;
+use App\Models\PhotoStatus;
+
+
+
 
 class NotificationController extends Controller
 {
@@ -17,7 +23,17 @@ class NotificationController extends Controller
         if ($request->ajax()) {
             $query = NotificationSend::orderBy('id', 'desc');
             return DataTables::of($query)
-                 ->editColumn('created_at', function ($notification) {
+                ->addColumn('image', function ($notification) {
+                    $imagePath = $notification->image
+                        ? asset('storage/' . ltrim($notification->image, '/'))
+                        : asset('assets/images/default.jpg');
+                    return '
+                    <a class="image-popup-no-margins" href="' . $imagePath . '">
+						<img class="img-responsive" src="' . $imagePath . '" alt="Image" class="dataTable-app-img rounded" width="20" height="20">
+					</a>
+                    ';
+                })
+                ->editColumn('created_at', function ($notification) {
                     return $notification->created_at
                         ? \Carbon\Carbon::parse($notification->created_at)->format('d-m-Y h:i A')
                         : '';
@@ -34,7 +50,7 @@ class NotificationController extends Controller
                             ';
                     return $buttons;
                 })
-                ->rawColumns(['created_at','actions'])
+                ->rawColumns(['image','created_at','actions'])
                 ->make(true);
         }
         return view('notification.index');
@@ -69,10 +85,12 @@ class NotificationController extends Controller
         $fina_url = $this->buildFinalUrl($url);
         
         $dataInsert = [
-            'title' => $title,
-            'url' => $fina_url,
-            'message' => $message,
-            'status' => 1,
+            'title'     => $title,
+            'url'       => $fina_url,
+            'message'   => $message,
+            'status'    => 1,
+            'page'      => $request->page ?? 'null',
+            'page_data' => $request->page_data ?? 'null',
         ];
         
         $img_icone = $this->handleImageUpload($request, $dataInsert);
@@ -283,5 +301,55 @@ class NotificationController extends Controller
 
         $category = SubCategory::find($categoryId);
         return $category ? $category->mtitle : 'Unknown';
+    }
+
+    public function getPageDataById(Request $request) 
+    {
+        $pageType = $request->page_type;
+
+        if (empty($pageType)) {
+            return response()->json(['status' => 'error', 'message' => 'Page type required', 'data' => []]);
+        }
+
+        $data = [];
+
+        switch ($pageType) {
+            case 'home':
+                $data = HomeCategory::where('status', 1)
+                    ->with('category:id,mtitle')
+                    ->get()
+                    ->map(function($item) {
+                        return ['id' => $item->id, 'title' => $item->title];
+                    });
+                break;
+
+            case 'main_category':
+                $data = Category::orderBy('sort', 'asc')
+                    ->get(['id', 'title'])
+                    ->map(function($item) {
+                        return ['id' => $item->id, 'title' => $item->title];
+                    });
+                break;
+
+            case 'sub_category':
+                $data = SubCategory::where('status', 1)
+                    ->get(['id', 'mtitle'])
+                    ->map(function($item) {
+                        return ['id' => $item->id, 'title' => $item->mtitle];
+                    });
+                break;
+
+            case 'status':
+                $data = PhotoStatus::get(['id', 'title'])
+                    ->map(function($item) {
+                        return ['id' => $item->id, 'title' => $item->title];
+                    });
+                break;
+
+            default:
+                return response()->json(['status' => 'error', 'message' => 'Invalid page type', 'data' => []]);
+        }
+
+        return response()->json(['status' => 'success', 'data' => $data]);
     }
 }

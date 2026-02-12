@@ -51,11 +51,9 @@ class FrameController extends Controller
                     $buttons  = '';
                     $editUrl  = route('frame.edit', $frame->id);
                     $buttons .= '
-                            <a href="#" class="btn btn-sm"
-                               data-ajax-popup = "true" data-size = "md"  data-title= "Edit Frame" data-url = "' . $editUrl . '"
-                               data-bs-toggle  = "tooltip" data-bs-original-title = "Edit">
-                            <i class="fa fa-edit me-2"></i>
-                            </a>
+                             <a href="' . $editUrl . '" class="btn btn-sm">
+                                <i class="fa fa-edit me-2"></i>
+                             </a>
                             ';
                     $deleteUrl  = route('frame.destroy', $frame->id);
                     $buttons   .= '

@@ -410,51 +410,12 @@ class DashboardController extends Controller
         return view('admin.dashboard');
     }
 
-    // public function paidWiseUserCount(Request $request)
-    // {
-    //     if ($request->ajax()) {
-
-    //         $query = DB::table('payments as p')
-    //             ->leftJoin('admin as u', 'p.user_id', '=', 'u.id')
-    //             ->where('p.month', '!=', 0)
-    //             ->orderBy('p.id', 'DESC')
-    //             ->limit(10)
-    //             ->select(
-    //                 'p.id',
-    //                 'p.date',
-    //                 'u.mobile',
-    //                 'p.transactionid',
-    //                 'p.price',
-    //                 'p.month'
-    //             );
-
-    //         return DataTables::of($query)
-    //             ->addIndexColumn()
-
-    //             // Date format
-    //             ->editColumn('date', function ($row) {
-    //                 return Carbon::parse($row->date)->format('d-m-Y');
-    //             })
-
-    //             // Price format
-    //             ->editColumn('price', function ($row) {
-    //                 return '₹ ' . number_format($row->price, 2);
-    //             })
-
-    //             ->rawColumns(['price'])
-    //             ->make(true);
-    //     }
-
-    //     return view('admin.dashboard');
-    // }
-
     public function settings()
     {
         $settings = DB::table('setting')->pluck('value', 'option_name')->toArray();
 
         return view('admin.settings', compact('settings'));
     }
-
 
     public function updateSettings(Request $request)
     {
@@ -594,7 +555,6 @@ class DashboardController extends Controller
         }
         return $tamplets;
     }
-
     
     public function dayWiseSubscription(Request $request)
     {

@@ -34,7 +34,7 @@ class ApiController extends Controller
                 'data' => []
             ]);
         }
-
+ 
         $result = [
             'user_id' => $user_id,
             'logo' => $logo,
@@ -209,13 +209,13 @@ class ApiController extends Controller
             // This is a simplified version - you'll need to implement the full image processing
 
             DB::table('makepost')->insert([
-                'filename' => $userNewFileName,
+                'post' => $userNewFileName,
                 'user_id' => $result['user_id'],
-                'tamplate_id' => $result['tamplate_id'],
+                'tamp_id' => $result['tamplate_id'],
                 'created_at' => now()
             ]);
 
-            return url('media/upload/' . $userNewFileName);
+            return asset('storage/' . ltrim($userNewFileName, '/'));
         }
 
         return false;
@@ -223,17 +223,22 @@ class ApiController extends Controller
 
     private function myCopy($filename, $tamplate, $userid)
     {
-        $imagePath = public_path("media/template/" . $filename);
-        $newPath = public_path("media/upload/");
+        $sourcePath = storage_path('app/public/' . $filename);
         $ext = '.png';
-        $newFileName = time() . '_' . $tamplate . '_' . $userid . $ext;
-        $newName = $newPath . $newFileName;
+        $newFileName = 'uploads/posts/' . time() . '_' . $tamplate . '_' . $userid . $ext;
+        $destinationPath = storage_path('app/public/' . $newFileName);
 
-        if (!file_exists($imagePath)) {
+        if (!file_exists($sourcePath)) {
             return false;
         }
 
-        $copied = copy($imagePath, $newName);
+        // Ensure destination directory exists
+        $destinationDir = dirname($destinationPath);
+        if (!is_dir($destinationDir)) {
+            mkdir($destinationDir, 0755, true);
+        }
+
+        $copied = copy($sourcePath, $destinationPath);
         return $copied ? $newFileName : false;
     }
 

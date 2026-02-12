@@ -19,6 +19,8 @@ return new class extends Migration
                 $table->text('image')->nullable();
                 $table->text('url')->nullable();
                 $table->integer('status')->default(1);
+                $table->string('page')->nullable();
+                $table->string('page_data')->nullable();
                 $table->timestamps();
             });
         }

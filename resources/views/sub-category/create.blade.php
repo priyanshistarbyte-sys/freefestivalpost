@@ -108,6 +108,13 @@
                         </label>
                     </div>
                     <div class="mb-3 col-md-3 form-group">
+                        <label class="form-label" for="is_trending">Trending</label></br>
+                        <label class="custom-switch">
+                            <input type="checkbox" name="is_trending" value="1" checked>
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    <div class="mb-3 col-md-3 form-group">
                         <label class="form-label" for="plan_auto">Plan / Auto</label>
                         <div class="radio-group">
                             <label class="radio-container">Only Plan

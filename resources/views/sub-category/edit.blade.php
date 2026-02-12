@@ -139,6 +139,13 @@
                         </label>
                     </div>
                     <div class="mb-3 col-md-3 form-group">
+                        <label class="form-label" for="is_trending">Trending</label></br>
+                        <label class="custom-switch">
+                            <input type="checkbox" name="is_trending" value="1"  {{ $subCategory->is_trending == 1 ? 'checked' : '' }}>
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    <div class="mb-3 col-md-3 form-group">
                         <label class="form-label">Plan / Auto</label>
                         <div class="radio-group">
 

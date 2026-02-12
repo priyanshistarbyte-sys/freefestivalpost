@@ -138,7 +138,24 @@
                         <label for="image" class="form-label">Notification Banner</label>
                         <input type="file" class="form-control" id="image" name="image" accept="image/*">
                      </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="page" class="form-label">Select Page Type</label>
+                        <select name="page" id="page" class="form-control">
+                            <option value="">-- Select Page --</option>
+                            <option value="home">Home</option>
+                            <option value="main_category">Main Category</option>
+                            <option value="sub_category">Sub Category</option>
+                            <option value="status">Status</option>
+                        </select>
+                    </div>
                      <div class="col-md-6 mb-3">
+                        <label for="page_data" class="form-label">Select Item</label>
+                        <select name="page_data" id="page_data" class="form-control">
+                            <option value="">-- Select --</option>
+                          
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
                          <label for="message" class="form-label">Message*</label>
                          <textarea rows="4" name="message" id="message" placeholder="Enter Message"
                             class="form-control"></textarea>
@@ -198,6 +215,31 @@ $(document).ready(function () {
         }
     });
 
+    /* PAGE CHANGE */
+    $('#page').on('change', function () {
+        let pageType = $(this).val();
+        let $pageData = $('#page_data');
+
+        $pageData.html('<option value="">-- Select --</option>');
+
+        if (!pageType) return;
+
+        $.ajax({
+            url: "{{ route('notification.getPageDataById') }}",
+            type: "POST",
+            data: {
+                page_type: pageType,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (res) {
+                if (res.status === 'success' && res.data.length > 0) {
+                    $.each(res.data, function (i, item) {
+                        $pageData.append('<option value="' + item.id + '">' + item.title + '</option>');
+                    });
+                }
+            }
+        });
+    });
 });
 </script>
 @endpush
