@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-         if (!Schema::hasTable('sms_log')) {
+        if (!Schema::hasTable('sms_log')) {
             Schema::create('sms_log', function (Blueprint $table) {
-                $table->id();
+                $table->bigIncrements('id');
                 $table->date('date')->nullable();
                 $table->string('type')->nullable();
                 $table->string('mobile')->nullable();
                 $table->integer('otp')->nullable();
-                $table->dateTime('created_at');
+                $table->dateTime('created_at')->nullable();
             });
         }
     }

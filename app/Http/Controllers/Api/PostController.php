@@ -18,7 +18,7 @@ class PostController extends Controller
         if (!$user_id) {
             return response()->json([
                 'status' => false,
-                'message' => 'User ID is required.',
+                'message' => 'User is not authorized to use.',
                 'data' => []
             ]);
         }
