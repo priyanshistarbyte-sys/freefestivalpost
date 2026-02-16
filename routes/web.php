@@ -28,7 +28,11 @@ use App\Http\Controllers\CouponCodeController;
 use App\Http\Controllers\RazorpayPaymentController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\WhatsappMediaController;
+use App\Http\Controllers\WhatsappTemplateController;
+use App\Http\Controllers\WhatsappBulkSendController;
 use Illuminate\Support\Facades\Route;
+
 
 // Route::get('/', function () {
 //     return redirect()->route('login');
@@ -231,6 +235,29 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/razorpay/success', [RazorpayPaymentController::class, 'success'])->name('razorpay.success');
     Route::post('/razorpay/failed-list', [RazorpayPaymentController::class, 'getFailedList'])->name('razorpay.failed.list');
     Route::post('/razorpay/success-list', [RazorpayPaymentController::class, 'getSuccessList'])->name('razorpay.success.list');
+
+    // whatsapp
+    Route::get('/whatsapp/media', [WhatsappMediaController::class, 'index'])->name('whatsapp-media.index');
+    Route::get('/whatsapp/media/create', [WhatsappMediaController::class, 'create'])->name('whatsapp-media.create');
+    Route::post('/whatsapp/media/store', [WhatsappMediaController::class, 'store'])->name('whatsapp-media.store');
+    Route::get('/whatsapp/{id}/media/edit', [WhatsappMediaController::class, 'edit'])->name('whatsapp-media.edit');
+    Route::put('/whatsapp/{id}/media/update', [WhatsappMediaController::class, 'update'])->name('whatsapp-media.update');
+    Route::delete('/whatsapp/{id}/media/delete', [WhatsappMediaController::class, 'destroy'])->name('whatsapp-media.delete');
+
+    Route::get('/whatsapp/template', [WhatsappTemplateController::class, 'index'])->name('whatsapp-template.index');
+    Route::get('/whatsapp/template/create', [WhatsappTemplateController::class, 'create'])->name('whatsapp-template.create');
+    Route::post('/whatsapp/template/store', [WhatsappTemplateController::class, 'store'])->name('whatsapp-template.store');
+    Route::get('/whatsapp/{id}/template/edit', [WhatsappTemplateController::class, 'edit'])->name('whatsapp-template.edit');
+    Route::put('/whatsapp/{id}/template/update', [WhatsappTemplateController::class, 'update'])->name('whatsapp-template.update');
+    Route::delete('/whatsapp/{id}/template/delete', [WhatsappTemplateController::class, 'destroy'])->name('whatsapp-template.delete');
+    Route::post('/whatsapp/status/update', [WhatsappTemplateController::class, 'updateStatus'])->name('whatsapp-template.updateStatus');
+    Route::post('/whatsapp/bulk-status/update', [WhatsappTemplateController::class, 'updateBulkStatus'])->name('whatsapp-template.updateBulkStatus');
+
+    Route::get('/whatsapp/bulk/send', [WhatsappBulkSendController::class, 'index'])->name('whatsapp-bulk-send.index');
+    Route::post('/whatsapp/bulk/send', [WhatsappBulkSendController::class, 'sendBulkCamping'])->name('whatsapp-bulk.send');
+    
+    // Route::get('/whatsapp/bulk/add', [WhatsappMediaController::class, 'index'])->name('whatsapp-bulk-add.index');
+    // Route::get('/whatsapp/media', [WhatsappMediaController::class, 'index'])->name('whatsapp-media.index');
 
 });
 

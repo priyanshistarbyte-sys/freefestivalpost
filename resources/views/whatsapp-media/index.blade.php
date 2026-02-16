@@ -1,26 +1,24 @@
 @extends('layouts.main')
-@section('title', 'Photo Status')
+@section('title', 'WhatsApp Media')
+
 @section('content')
     <div class="page-header">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="card-title">Photo Status List</h4>
+            <h4 class="card-title">WhatsApp Media List</h4>
             <a href="#" class="btn btn-primary" data-ajax-popup="true" data-size="md"
-                data-title="{{ __('Create Photo Status') }}" data-url="{{ route('photo-status.create') }}"
-                data-bs-toggle="tooltip" data-bs-original-title="{{ __('Create') }}"><i class="fa fa-plus me-2"></i>Add</a>
+                data-title="{{ __('Create WhatsApp Media') }}" data-url="{{ route('whatsapp-media.create') }}" data-bs-toggle="tooltip"
+                data-bs-original-title="{{ __('Create') }}"><i class="fa fa-plus me-2"></i>Add</a>
         </div>
     </div>
-
     <div class="card">
         <div class="card-body">
             <div class="table-container">
-                <table class="table" id="photo-status-table">
+                <table class="table" id="whatsapp-media-table">
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>Image</th>
                             <th>Title</th>
-                            <th>Lable</th>
-                            <th>Lable BG</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -58,33 +56,33 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#photo-status-table').DataTable({
+            $('#whatsapp-media-table').DataTable({
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
                 scrollX: false,
                 responsive: true,
                 pageLength: 100,
-                ajax: '{{ route('photo-status.index') }}',
+                ajax: '{{ route('whatsapp-media.index') }}',
                 dom: '<"d-flex justify-content-between align-items-center mb-3"<"d-flex align-items-center gap-2"Bl><f>>rtip',
                 lengthMenu: [[10, 25, 50, 100, 500, 1000], [10, 25, 50, 100, 500, 1000]],
                 buttons: [
                     {
                         extend: 'excelHtml5',
                         text: 'Excel',
-                        title: 'Photo-Status',
+                        title: 'Whatsapp-Media',
                         className: 'btn btn-success btn-sm',
                         exportOptions: {
-                            columns: [0,1,2,3,4]
+                            columns: [0,1,2]
                         }
                     },
                     {
                         extend: 'print',
                         text: 'Print',
-                        title: 'Photo-Status',
+                        title: 'Whatsapp-Media',
                         className: 'btn btn-info btn-sm',
                         exportOptions: {
-                            columns: [0,1,2,3,4]
+                            columns: [0,1,2]
                         }
                     }
                 ],
@@ -103,14 +101,6 @@
                     {
                         data: 'title',
                         name: 'title'
-                    },
-                    {
-                        data: 'lable',
-                        name: 'lable'
-                    },
-                    {
-                        data: 'lablebg',
-                        name: 'lablebg'
                     },
                     {
                         data: 'actions',

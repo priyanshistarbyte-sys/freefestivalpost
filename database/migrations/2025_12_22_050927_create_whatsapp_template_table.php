@@ -24,7 +24,7 @@ return new class extends Migration
                 $table->text('note')->nullable();
                 $table->integer('bulk_status');
                 $table->integer('sort');
-                $table->dateTime('created_at');
+                $table->timestamps();
             });
         }
     }

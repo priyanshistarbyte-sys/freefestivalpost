@@ -226,6 +226,35 @@
                         <i class="fa fa-comments"></i> <span>Complain</span>
                     </a>
                 </li>
+           
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle">
+                        <i class="fab fa-whatsapp"></i> <span>Whatsapp</span>
+                        <i class="fa fa-angle-right arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="{{ request()->routeIs('whatsapp-media.index') ? 'active' : '' }}">
+                            <a href="{{ route('whatsapp-media.index') }}">
+                                <span>WhatsApp Media</span>
+                            </a>
+                        </li>
+                        <li class="{{ request()->routeIs('whatsapp-template.index') ? 'active' : '' }}">
+                            <a href="{{ route('whatsapp-template.index') }}">
+                                <span>WhatsApp Template</span>
+                            </a>
+                        </li>
+                        <li class="{{ request()->routeIs('whatsapp-bulk-send.index') ? 'active' : '' }}">
+                            <a href="{{ route('whatsapp-bulk-send.index') }}">
+                                <span>WhatsApp Bulk Add</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="">
+                                <span>Auto Send Message</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 
             </ul>
         </nav>

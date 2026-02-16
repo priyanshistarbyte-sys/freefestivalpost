@@ -20,7 +20,7 @@ return new class extends Migration
                 $table->integer('status');
                 $table->string('msg_type')->nullable();
                 $table->text('response')->nullable();
-                $table->dateTime('created_at');
+                $table->timestamps();
             });
         }
     }
