@@ -7,6 +7,7 @@ use App\Models\WhatsappTemplate;
 use App\Models\CampingList;
 use App\Models\Admin;
 use App\Models\WebhookFailed;
+use App\Services\WhatsappApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -133,13 +134,11 @@ class WhatsappBulkSendController extends Controller
                     ]);
                 }
                 
-                $fileName = time() . '_' . Str::slug($file->getClientOriginalName());
-                $file->move(public_path('media/whatsappTemp/files'), $fileName);
+                $csvFilePath = $file->store('uploads/whatsapp/csv', 'public');
+                $fullPath = storage_path('app/public/' . $csvFilePath);
                 
-                $csvFilePath = public_path('media/whatsappTemp/files/' . $fileName);
-                
-                if(file_exists($csvFilePath)){
-                    $csvData = file_get_contents($csvFilePath);
+                if(file_exists($fullPath)){
+                    $csvData = file_get_contents($fullPath);
                     $rows = str_getcsv($csvData, "\n");
                     $csvArray = [];
                     
@@ -396,6 +395,8 @@ class WhatsappBulkSendController extends Controller
         
         $csvArray = array_merge($mynumber, $csvArray);
         
+        $whatsappService = new WhatsappApiService();
+        
         foreach($csvArray as $key => $users){
             $mobile = $users[0];
             $userResult = Admin::where('mobile', $users[0])->first();
@@ -409,8 +410,8 @@ class WhatsappBulkSendController extends Controller
                 $userName = $users[1];
             }
             
-            // Call your WhatsApp API helper function here
-            set_whatsapp_api_tamplate($mobile, $tamp_name, $userName, $expired, $team, $cam_id, $custom_auto);
+            // Call WhatsApp API
+            $whatsappService->set_whatsapp_api_tamplate($mobile, $tamp_name, $userName, $expired, $team, $cam_id, $custom_auto);
             
             if($sleep_cnt == 50){
                 sleep(1);

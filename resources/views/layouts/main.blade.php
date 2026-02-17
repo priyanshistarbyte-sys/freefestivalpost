@@ -248,11 +248,6 @@
                                 <span>WhatsApp Bulk Add</span>
                             </a>
                         </li>
-                        <li class="">
-                            <a href="">
-                                <span>Auto Send Message</span>
-                            </a>
-                        </li>
                     </ul>
                 </li>
                 

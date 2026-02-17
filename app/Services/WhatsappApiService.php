@@ -1,10 +1,13 @@
 <?php
 
+namespace App\Services;
+
 use App\Models\WhatsappLog;
 use App\Models\WhatsappTemplate;
 
-if (!function_exists('send_media_whatsapp_temp')) {
-    function send_media_whatsapp_temp($mobile, $tamp_name, $paramiter)
+class WhatsappApiService
+{
+    public function set_whatsapp_api_tamplate($mobile, $tamp_name, $userName, $expired, $team, $cam_id, $custom_auto)
     {
         $tampData = WhatsappTemplate::where('template', $tamp_name)->first();
         
@@ -12,11 +15,46 @@ if (!function_exists('send_media_whatsapp_temp')) {
             return false;
         }
 
+        // Build parameter string
+        $paramiter = $this->buildParameters($userName, $expired, $team);
+        
+        // Call send function
+        return $this->send_media_whatsapp_temp($mobile, $tamp_name, $paramiter, $tampData, $cam_id, $custom_auto);
+    }
+
+    private function buildParameters($userName, $expired, $team)
+    {
+        $params = [];
+        
+        if (!empty($userName)) {
+            $params[] = '{"type": "text", "text": "' . $userName . '"}';
+        }
+        
+        if (!empty($expired)) {
+            $params[] = '{"type": "text", "text": "' . $expired . '"}';
+        }
+        
+        if (!empty($team)) {
+            $params[] = '{"type": "text", "text": "' . $team . '"}';
+        }
+        
+        if (empty($params)) {
+            return '';
+        }
+        
+        return '{
+            "type": "body",
+            "parameters": [' . implode(',', $params) . ']
+        }';
+    }
+
+    private function send_media_whatsapp_temp($mobile, $tamp_name, $paramiter, $tampData, $cam_id, $custom_auto)
+    {
         $mobileCode = "91" . $mobile;
         $language = $tampData->lang;
         $img_url = $tampData->media;
 
-        $url = "https://graph.facebook.com/v17.0/108289462325948/messages";
+        $url = "https://graph.facebook.com/v17.0/" . env('WHATSAPP_PHONE_ID', '108289462325948') . "/messages";
         
         $data = '{
             "messaging_product": "whatsapp",
@@ -69,19 +107,34 @@ if (!function_exists('send_media_whatsapp_temp')) {
         curl_close($curl);
         
         if ($err) {
+            WhatsappLog::create([
+                'cam_id' => $cam_id,
+                'mobile' => $mobile,
+                'tamp_name' => $tampData->id,
+                'status' => 0,
+                'msg_type' => $custom_auto,
+                'response' => $err,
+                'created_at' => now(),
+            ]);
             return false;
         } else {
-            log_whatsApp_send_API($mobile, $tampData->id, $tampData->type);
+            WhatsappLog::create([
+                'cam_id' => $cam_id,
+                'mobile' => $mobile,
+                'tamp_name' => $tampData->id,
+                'status' => 1,
+                'msg_type' => $custom_auto,
+                'response' => $response,
+                'created_at' => now(),
+            ]);
             return true;
         }
     }
-}
 
-if (!function_exists('send_media_whatsapp_direct')) {
-    function send_media_whatsapp_direct($mobile, $message)
+public function send_media_whatsapp_direct($mobile, $message)
     {
         $mobileCode = "91" . $mobile;
-        $url = "https://graph.facebook.com/v17.0/108289462325948/messages";
+        $url = "https://graph.facebook.com/v17.0/" . env('WHATSAPP_PHONE_ID', '108289462325948') . "/messages";
         
         $data = '{
             "messaging_product": "whatsapp",
@@ -115,19 +168,6 @@ if (!function_exists('send_media_whatsapp_direct')) {
         $response = curl_exec($curl);
         curl_close($curl);
         
-        echo $response;
-    }
-}
-
-if (!function_exists('log_whatsApp_send_API')) {
-    function log_whatsApp_send_API($mobile, $temp_id, $temp_type)
-    {
-        WhatsappLog::create([
-            'mobile' => $mobile,
-            'tamp_name' => $temp_id,
-            'status' => 1,
-            'msg_type' => $temp_type,
-            'created_at' => now(),
-        ]);
+        return $response;
     }
 }

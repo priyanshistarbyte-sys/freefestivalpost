@@ -5,7 +5,6 @@
   <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="card-title mb-0">Send WhatsApp Bulk</h4>
-              <button type="button" class="btn btn-warning" id="createNextYearTemplates">Create Templates for Next Year</button>
         </div>
         <div class="card-body">
               @if ($errors->any())
@@ -133,38 +132,65 @@ $(document).ready(function() {
         e.preventDefault();
         
         if(!$('#cam_title').val()) {
-            alert('Camping Name is required');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Camping Name is required'
+            });
             return false;
         }
         
-        if(!confirm('Are you sure Want to Send?')) {
-            return false;
-        }
-        
-        const submitBtn = $(this).find('button[type="submit"]');
-        submitBtn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Sending...');
-        
-        const formData = new FormData(this);
-        
-        $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                submitBtn.prop('disabled', false).html('Submit');
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to send this campaign?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, send it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const submitBtn = $(this).find('button[type="submit"]');
+                submitBtn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Sending...');
                 
-                if(response.status === 'success') {
-                    alert(response.message);
-                    window.location.reload();
-                } else {
-                    alert(response.message);
-                }
-            },
-            error: function(xhr) {
-                submitBtn.prop('disabled', false).html('Submit');
-                alert('Error: ' + (xhr.responseJSON?.message || 'Something went wrong'));
+                const formData = new FormData(this);
+                
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        submitBtn.prop('disabled', false).html('Submit');
+                        
+                        if(response.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        submitBtn.prop('disabled', false).html('Submit');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || 'Something went wrong'
+                        });
+                    }
+                });
             }
         });
     });
