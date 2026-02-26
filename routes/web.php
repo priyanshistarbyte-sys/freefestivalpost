@@ -31,6 +31,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\WhatsappMediaController;
 use App\Http\Controllers\WhatsappTemplateController;
 use App\Http\Controllers\WhatsappBulkSendController;
+use App\Http\Controllers\AccountController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -64,6 +65,10 @@ Route::get('/contact-us', function () {
 })->name('contact-us');
 
 Route::post('/contact-send', [ContactController::class, 'sendMail'])->name('contact.send');
+
+Route::get('/delete-account', function () {
+    return view('frontend.delete-account');
+})->name('delete-account');
 
 
 Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
