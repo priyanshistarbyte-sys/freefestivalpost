@@ -30,40 +30,37 @@
         }
     </script>
     <style>
-        .container { padding-left: 6%; padding-right: 5%; padding-top: 2%; }
-        :root{--bg:#f7f7fb;--card:#fff;--ink:#111;--muted:#666;--danger:#b91c1c;--brand:#2f3e9e}
-        .wrap{max-width:720px;margin:24px auto;padding:0 16px}
-        .card{padding: 100px 20px;position: relative;border: none}
-        h1{margin:0}
-        h2{margin:6px 0 0;font-size:18px;color:#eee;opacity:.95}
-        .danger{color:var(--danger)}
-        label{display:block;margin:14px 0 6px;font-weight:600}
-        input[type="text"], input[type="number"], input[type="password"], textarea, select{
-            width:100%;padding:12px 12px;border:1px solid #d7d8e1;border-radius:8px;background:#fff;font:inherit
+        .danger{color:#ef4444}
+        label{display:block;margin:14px 0 6px;font-weight:600;color:#e5e7eb}
+        input[type="text"], input[type="number"], input[type="password"]{
+            width:100%;padding:12px;border:1px solid rgba(100,255,218,0.1);border-radius:8px;background:rgba(17,34,64,0.4);color:#fff;font:inherit;backdrop-filter:blur(10px)
         }
-        textarea{min-height:110px;resize:vertical}
-        .hint{font-size:13px;color:var(--muted);margin-top:4px}
-        .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus{
+            outline:none;border-color:rgba(100,255,218,0.3);background:rgba(17,34,64,0.6)
+        }
+        .hint{font-size:13px;color:#9ca3af;margin-top:4px}
         .ack{display:flex;gap:10px;align-items:flex-start;margin-top:12px}
         .btns{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
         button{appearance:none;border:0;border-radius:10px;padding:12px 16px;font-weight:700;cursor:pointer}
-        .btn-danger{background:var(--danger);color:#fff}
+        .btn-danger{background:#b91c1c;color:#fff;display:flex;align-items:center;padding:12px 16px;border-radius:10px;text-decoration:none;font-weight:700}
+        .btn-danger:hover{background:#991b1b}
         .btn-danger[disabled]{opacity:.6;cursor:not-allowed}
-        .btn-ghost{background:#eef0ff;color:#2f3e9e; display: flex; align-items: center; padding: 5px 15px; border-radius: 10px; text-decoration: none;}
+        .btn-ghost{background:rgba(100,255,218,0.1);color:#64ffda;display:flex;align-items:center;padding:12px 16px;border-radius:10px;text-decoration:none;font-weight:700}
+        .btn-ghost:hover{background:rgba(100,255,218,0.2)}
         .state{margin-top:14px;font-size:14px}
-        .state.ok{color:#166534}
-        .state.err{color:#991b1b}
-        .hr{height:1px;background:#ececf4;margin:18px 0}
-        .note{background:#fff7f7;border:1px solid #ffd8d8;color:#7a1111;padding:12px;border-radius:10px}
+        .state.ok{color:#10b981}
+        .state.err{color:#ef4444}
+        .hr{height:1px;background:rgba(100,255,218,0.1);margin:18px 0}
+        .note{background:rgba(185,28,28,0.1);border:1px solid rgba(239,68,68,0.3);color:#fca5a5;padding:12px;border-radius:10px;margin-bottom:20px}
         .spinner{display:inline-block;width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;vertical-align:-2px;animation:spin .9s linear infinite;margin-right:6px}
         @keyframes spin{to{transform:rotate(360deg)}}
     </style>
 </head>
 
-<body class="text-gray-300 font-sans antialiased overflow-x-hidden selection:bg-brand-secondary selection:text-white">
+<body class="bg-[#0a192f] text-white font-sans antialiased overflow-x-hidden">
 
     <!-- Navbar -->
-    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-[#050A24]/90 backdrop-blur-md py-4">
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-[#0a192f]/90 backdrop-blur-md border-b border-white/5 py-4">
         <div class="container mx-auto px-6 flex items-center justify-between">
             <a href="{{ route('home') }}" class="flex items-center gap-2 group">
                 <img src="{{ asset('assets/logos/brandfotos-logo.png') }}" alt="BrandFotos Logic"
@@ -96,35 +93,40 @@
 
         <!-- Mobile Menu -->
         <div id="mobile-menu"
-            class="hidden md:hidden bg-[#0F172A] border-b border-gray-800 overflow-hidden shadow-lg absolute w-full left-0 top-full">
+            class="hidden md:hidden bg-white border-b border-gray-100 overflow-hidden shadow-lg absolute w-full left-0 top-full">
             <div class="flex flex-col p-6 gap-4">
                 <a href="/#features"
-                    class="text-lg text-white hover:text-brand-secondary font-medium">Features</a>
+                    class="text-lg text-gray-800 hover:text-brand-secondary font-medium">Features</a>
                 <a href="/#templates-slider"
-                    class="text-lg text-white hover:text-brand-secondary font-medium">Templates</a>
+                    class="text-lg text-gray-800 hover:text-brand-secondary font-medium">Templates</a>
                 <a href="/#pricing"
-                    class="text-lg text-white hover:text-brand-secondary font-medium">Pricing</a>
-                <a href="/#about" class="text-lg text-white hover:text-brand-secondary font-medium">About</a>
-                <a href="https://play.google.com/store/apps/details?id=com.freefestivalpost.freefestivalpost&pcampaignid=web_share"
-                    target="_blank" class="btn-primary w-full mt-4 text-center block">Get App</a>
+                    class="text-lg text-gray-800 hover:text-brand-secondary font-medium">Pricing</a>
+                <a href="/#about" class="text-lg text-gray-800 hover:text-brand-secondary font-medium">About</a>
+                <button class="btn-primary w-full mt-4">Get App</button>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="min-h-screen pt-32 md:pt-48 pb-12 px-4 md:px-6">
-        <div class="container mx-auto max-w-7xl">
-            <!-- Breadcrumb / Header area if needed, or just straight to card -->
-            <!-- <div class="mb-8 pl-4">
-                <div class="flex items-center gap-2 text-sm text-gray-400">
-                    <span class="bg-teal-900/50 text-teal-400 px-2 py-0.5 rounded text-xs font-bold">BF</span>
-                    <span>BRAND FOTOS - CREATIVE FOR EVERY FESTIVAL</span>
-                </div>
-            </div> -->
+    <div class="min-h-screen bg-[#0a192f] text-white pt-32 md:pt-48 pb-12 relative overflow-hidden">
+        <!-- Background Gradients -->
+        <div class="fixed top-0 right-0 w-[500px] h-[500px] bg-[#64ffda] rounded-full blur-[120px] opacity-[0.15] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+        <div class="fixed bottom-0 left-0 w-[500px] h-[500px] bg-[#112240] rounded-full blur-[120px] opacity-40 translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
 
-            <!-- Main Card -->
-            <div class="rounded-[2rem] border border-gray-800 overflow-hidden shadow-2xl relative">
-                <div class="card">
+        <div class="container mx-auto px-4 max-w-4xl relative z-10">
+            <!-- Breadcrumb / Header -->
+            <div class="flex items-center gap-2 mb-8">
+                <div class="w-8 h-8 bg-gradient-to-br from-[#64ffda] to-[#112240] rounded-full flex items-center justify-center font-bold text-[#0a192f] text-sm shadow-lg shadow-[#64ffda]/20">BF</div>
+                <span class="text-gray-400 text-sm font-medium tracking-wide">BRAND FOTOS • DELETE ACCOUNT</span>
+            </div>
+
+            <!-- Glass Card -->
+            <div class="backdrop-blur-xl bg-[#112240]/40 border border-[#64ffda]/10 rounded-[2rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-[#64ffda] rounded-full blur-[100px] opacity-10 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+
+                <h1 class="text-3xl md:text-4xl font-bold mb-8 text-[#64ffda] relative z-10">Delete Account</h1>
+
+                <div class="relative z-10">
                 <p class="note"><strong>Warning:</strong> Deleting your account is <em>permanent</em>. Your profile, posts, and settings will be removed. This cannot be undone.</p>
 
                 <!-- Progressive enhancement: works without JS too -->
@@ -151,15 +153,14 @@
 
                     <div class="btns">
                         <button type="submit" class="btn-danger" id="submitBtn" disabled>
-                            <span class="spinner" id="spin" style="display:none"></span>Delete my account
+                            <span class="spinner" id="spin" style="display:none"></span>Delete
                         </button>
-                        <a class="btn-ghost" href="/">Cancel</a>
+                        <a class="btn-ghost" href="{{ route('home') }}">Cancel</a>
                     </div>
 
                     <div class="state" id="stateMsg" aria-live="polite"></div>
                 </form>
-
-            </div>
+                </div>
             </div>
         </div>
     </div>
@@ -167,7 +168,7 @@
 
     <!-- Footer -->
     <div class="flex flex-col">
-        <footer class="relative bg-transparent text-white z-10 pt-12 pb-8 border-t border-white/5">
+        <footer class="relative bg-gradient-to-b from-[#050A24] to-[#08103d] text-white z-10 pt-12 mt-0">
             <div class="container mx-auto px-4 text-center">
                 
                 <div class="flex justify-center gap-6 mb-8 text-gray-400">
@@ -214,7 +215,7 @@
                     <a href="{{ route('contact-us') }}" class="hover:underline">Contact Us</a>
                 </div>
 
-                <div class="text-xs text-gray-600 flex justify-center items-center">
+                <div class="text-xs text-white pb-8 flex justify-center items-center">
                     <p>© 2025 All Right Revervd by BRAND FOTOS</p>
                 </div>
             </div>
@@ -251,6 +252,82 @@
                 navbar.classList.add('shadow-lg');
             } else {
                 navbar.classList.remove('shadow-lg');
+            }
+        });
+
+        // Delete Account Form Logic
+        const form = document.getElementById('deleteForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const spinner = document.getElementById('spin');
+        const stateMsg = document.getElementById('stateMsg');
+        const numberInput = document.getElementById('number');
+        const passwordInput = document.getElementById('password');
+        const confirmInput = document.getElementById('confirm');
+        const ackCheckbox = document.getElementById('ack');
+
+        // Enable/disable submit button based on form validity
+        function checkFormValidity() {
+            const isValid = numberInput.value.trim() !== '' && 
+                          passwordInput.value.trim() !== '' && 
+                          confirmInput.value === 'DELETE' && 
+                          ackCheckbox.checked;
+            submitBtn.disabled = !isValid;
+        }
+
+        numberInput.addEventListener('input', checkFormValidity);
+        passwordInput.addEventListener('input', checkFormValidity);
+        confirmInput.addEventListener('input', checkFormValidity);
+        ackCheckbox.addEventListener('change', checkFormValidity);
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (submitBtn.disabled) return;
+
+            submitBtn.disabled = true;
+            spinner.style.display = 'inline-block';
+            stateMsg.textContent = '';
+            stateMsg.className = 'state';
+
+            const formData = new FormData();
+            formData.append('number', numberInput.value.trim());
+            formData.append('password', passwordInput.value);
+            formData.append('confirm', confirmInput.value);
+
+            try {
+                const response = await fetch('http://localhost:3000/api/v2/delete-account', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        number: numberInput.value.trim(),
+                        password: passwordInput.value,
+                        confirm: confirmInput.value
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    stateMsg.textContent = data.message || 'Account deleted successfully.';
+                    stateMsg.classList.add('ok');
+                    form.reset();
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 2000);
+                } else {
+                    stateMsg.textContent = data.message || 'Failed to delete account. Please try again.';
+                    stateMsg.classList.add('err');
+                    submitBtn.disabled = false;
+                }
+            } catch (error) {
+                stateMsg.textContent = 'Network error. Please check your connection and try again.';
+                stateMsg.classList.add('err');
+                submitBtn.disabled = false;
+            } finally {
+                spinner.style.display = 'none';
             }
         });
     </script>
