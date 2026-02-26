@@ -84,16 +84,19 @@
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="has_mask">Has Mask</label></br>
                         <label class="custom-switch">
-                            <input type="checkbox" name="has_mask" id="has_mask" value="1" {{ $tamplet->planImgName ? 'checked' : '' }}>
+                            <input type="checkbox" name="has_mask" id="has_mask" value="1" {{ $tamplet->mask ? 'checked' : '' }}>
                             <span class="switch-slider"></span>
                         </label>
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="mask" class="form-label">Mask</label></br>
-                        <input type="file" name="mask" id="mask" accept="image" {{ !$tamplet->planImgName ? 'disabled' : '' }}>
-                        @if($tamplet->planImgName)
-                            <div class="mt-2">
-                                <img src="{{ asset('storage/' . $tamplet->planImgName) }}" width="50" height="50">
+                        <input type="file" name="mask[]" id="mask" multiple accept="image/*" {{ !$tamplet->mask ? 'disabled' : '' }}>
+                        @if($tamplet->mask)
+                            @php $masks = json_decode($tamplet->mask, true) ?? []; @endphp
+                            <div class="mt-2 d-flex">
+                                @foreach($masks as $maskPath)
+                                    <img src="{{ asset('storage/' . $maskPath) }}" width="50" height="50" class="me-1">
+                                @endforeach
                             </div>
                         @endif
                     </div>

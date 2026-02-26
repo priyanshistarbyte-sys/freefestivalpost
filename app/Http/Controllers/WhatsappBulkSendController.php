@@ -387,7 +387,7 @@ class WhatsappBulkSendController extends Controller
         
         $mynumber = [
             "0" => [
-                "0" => "8141631370",
+                "0" => "8140331370",
                 "1" => "Techbit Infotech",
                 "2" => "",
             ]
@@ -410,8 +410,24 @@ class WhatsappBulkSendController extends Controller
                 $userName = $users[1];
             }
             
-            // Call WhatsApp API
-            $whatsappService->set_whatsapp_api_tamplate($mobile, $tamp_name, $userName, $expired, $team, $cam_id, $custom_auto);
+            // Send direct text message instead of template
+            $message = "Hello {$userName}, Welcome to BrandFotos! Your account is active.";
+            if(!empty($expired)) {
+                $message = "Hello {$userName}, Your plan expires on {$expired}. Renew now!";
+            }
+            
+            $whatsappService->send_media_whatsapp_direct($mobile, $message);
+            
+            // Log the message
+            WhatsappLog::create([
+                'cam_id' => $cam_id,
+                'mobile' => $mobile,
+                'tamp_name' => $tampData->id,
+                'status' => 1,
+                'msg_type' => $custom_auto,
+                'response' => 'Direct message sent',
+                'created_at' => now(),
+            ]);
             
             if($sleep_cnt == 50){
                 sleep(1);

@@ -86,7 +86,7 @@
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="mask" class="form-label">Mask</label></br>
-                        <input type="file" name="mask" id="mask" accept="image" disabled>
+                        <input type="file" name="mask[]" id="mask" multiple accept="image/*" disabled>
                     </div>
                     <div class="col-md-2 mb-3">
                         <label for="free_paid" class="form-label">Free / Paid</label></br>
