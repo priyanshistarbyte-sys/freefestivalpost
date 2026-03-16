@@ -137,6 +137,10 @@ class SubCategoryController extends Controller
         $subCategory->noti_banner = $path_banner ?? '';
         $subCategory->noti_quote = $request->noti_quote ?? '';
         $subCategory->mask = $request->mask ?? '';
+        $subCategory->sequence = $request->sequence ?? 0;
+        $subCategory->home_status = $request->home_status ?? 0;
+        $subCategory->is_show_on_home = $request->is_show_on_home ?? 0;
+        $subCategory->is_new          = $request->is_new ?? 0;
         $subCategory->save();
 
         // IF PARENT CATEGORY SELECTED → UPDATE ITS is_child
@@ -236,7 +240,10 @@ class SubCategoryController extends Controller
         $subCategory->lablebg = $request->label_bg ?? '';
         $subCategory->noti_quote = $request->noti_quote ?? '';
         $subCategory->mask = $request->mask ?? '';
-
+        $subCategory->sequence = $request->sequence ?? 0;
+        $subCategory->home_status = $request->home_status ?? 0;
+        $subCategory->is_show_on_home = $request->is_show_on_home ?? 0;
+        $subCategory->is_new          = $request->is_new ?? 0;
         $subCategory->save();
 
          // IF PARENT CATEGORY SELECTED → UPDATE ITS is_child

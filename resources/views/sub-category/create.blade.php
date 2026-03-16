@@ -67,6 +67,10 @@
                                 class="form-control" value="">
                         </div>
                     </div>
+                    <div class="mb-3 col-md-3 form-group">
+                        <label for="sequence" class="form-label">Sequence</label>
+                        <input type="number" name="sequence" id="sequence" class="form-control" placeholder="Enter Sequence" required>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-md-4 form-group">
@@ -100,17 +104,38 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="mb-3 col-md-3 form-group">
+                    <div class="mb-3 col-md-2 form-group">
                         <label class="form-label" for="status">Status</label></br>
                         <label class="custom-switch">
                             <input type="checkbox" name="status" value="1" checked>
                             <span class="switch-slider"></span>
                         </label>
                     </div>
-                    <div class="mb-3 col-md-3 form-group">
+                    <div class="mb-3 col-md-2 form-group">
                         <label class="form-label" for="is_trending">Trending</label></br>
                         <label class="custom-switch">
                             <input type="checkbox" name="is_trending" value="1" checked>
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                     <div class="mb-3 col-md-2 form-group">
+                        <label class="form-label" for="home_status">Home Status</label></br>
+                        <label class="custom-switch">
+                            <input type="checkbox" name="home_status" value="1" checked>
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    <div class="mb-3 col-md-2 form-group">
+                        <label class="form-label" for="is_show_on_home">Show on Home</label></br>
+                        <label class="custom-switch">
+                            <input type="checkbox" name="is_show_on_home" value="1" checked>
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    <div class="mb-3 col-md-2 form-group">
+                        <label class="form-label" for="is_new">New</label></br>
+                        <label class="custom-switch">
+                            <input type="checkbox" name="is_new" value="1" checked>
                             <span class="switch-slider"></span>
                         </label>
                     </div>
