@@ -5,6 +5,11 @@
         </div>
         <h2 style="font-size: 1.75rem; font-weight: 700; color: #000e3d; margin-bottom: 0.5rem;">Verify OTP</h2>
         <p style="color: #666; font-size: 0.875rem;">Enter the 6-digit code sent to your mobile</p>
+        @if(session('success'))
+            <div style="background: #e8f5e9; border: 1px solid #4caf50; border-radius: 6px; padding: 0.75rem; font-size: 0.875rem; color: #2e7d32; font-weight: 600;">
+                {{ session('success') }}
+            </div>
+        @endif
     </div>
 
     <form method="POST" action="{{ route('otp.verify') }}">

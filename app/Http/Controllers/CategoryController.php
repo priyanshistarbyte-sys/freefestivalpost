@@ -31,6 +31,18 @@ class CategoryController extends Controller
 					</a>
                     ';
                 })
+                 ->addColumn('thumb', function ($category) {
+                    $imagePath = $category->thumb ? asset('storage/' . ltrim($category->thumb, '/')) : null;
+                    if (!empty($category->thumb)) {
+                        return '
+                            <a class="image-popup-no-margins" href="' . $imagePath . '">
+                                <img class="img-responsive" src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">
+                            </a>
+                            ';
+                    } else {
+                        return '<img src="' . asset('assets/images/default.jpg') . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">';
+                    }
+                })
                 ->addColumn('actions', function ($category) {
                     $buttons = '';
                     $editUrl = route('category.edit', $category->id);
@@ -53,7 +65,7 @@ class CategoryController extends Controller
 
                     return $buttons;
                 })
-                ->rawColumns(['icon', 'actions'])
+                ->rawColumns(['icon','thumb','actions'])
                 ->make(true);
         }
         return view('category.index');
@@ -75,6 +87,7 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'title'  => ['required', 'string', 'max:255'],
             'icon'   => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'thumb'   => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
 
         if ($validator->fails()) {
@@ -82,10 +95,15 @@ class CategoryController extends Controller
             return redirect()->back()->with('error', $messages->first());
         }
         $path_icon = $request->file('icon')->store('uploads/images/category_icon', 'public');
+        $path_thumb = $request->file('thumb')->store('uploads/images/category_thumb', 'public');
         $category = new Category();
         $category->title = $request->title;
         $category->icon = $path_icon ?? '';
         $category->sort = $request->sort ?? 0;
+        $category->thumb = $path_thumb ?? '';
+        $category->status = $request->status ?? 0;
+        $category->is_show_on_home  = $request->is_show_on_home ?? 0;
+        $category->is_new = $request->is_new ?? 0;
         $category->save();
 
         return redirect()->route('category.index')->with('success', 'Category created successfully.');
@@ -112,10 +130,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'title'  => ['required', 'string', 'max:255'],
             'icon'   => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'thumb'   => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
 
         if ($validator->fails()) {
@@ -124,8 +143,11 @@ class CategoryController extends Controller
         }
 
         $data = [
-            'title' => $request->title,
-            'sort'      => $request->sort ?? 0,
+            'title'  => $request->title,
+            'sort'   => $request->sort ?? 0,
+            'status' => $request->status ?? 0,
+            'is_show_on_home' => $request->is_show_on_home ?? 0,
+            'is_new' => $request->is_new ?? 0,
         ];
         if ($request->hasFile('icon')) {
             // Delete old icon if exists
@@ -134,6 +156,14 @@ class CategoryController extends Controller
             }
             // Upload new icon
             $data['icon'] = $request->file('icon')->store('uploads/images/category_icon', 'public');
+        }
+        if ($request->hasFile('thumb')) {
+            // Delete old thumb if exists
+            if ($category->thumb && Storage::disk('public')->exists($category->thumb)) {
+                Storage::disk('public')->delete($category->thumb);
+            }
+            // Upload new thumb
+            $data['thumb'] = $request->file('thumb')->store('uploads/images/category_thumb', 'public');
         }
         $category->update($data);
         return redirect()->route('category.index')->with('success', 'Category updated successfully.');
@@ -152,10 +182,30 @@ class CategoryController extends Controller
                 if ($category->icon && Storage::disk('public')->exists($category->icon)) {
                     Storage::disk('public')->delete($category->icon);
                 }
+                if ($category->thumb && Storage::disk('public')->exists($category->thumb)) {
+                    Storage::disk('public')->delete($category->thumb);
+                }
                 $category->delete();
                 return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
             } else {
                 return redirect()->back()->with('error', 'This Category is used in one or more Account');
         }
+    }
+
+    public function getSubCategories($id)
+    {
+        $subCategories = SubCategory::where('category_id', $id)->orderBy('id', 'desc')->get()->map(function ($sub) {
+            $imagePath = $sub->image ? asset('storage/' . ltrim($sub->image, '/')) : asset('assets/images/default.jpg');
+            return [
+                'id'     => $sub->id,
+                'image'  => $imagePath,
+                'mtitle' => $sub->mtitle,
+                'status' => $sub->status,
+                'edit_url'   => route('sub-category.edit', $sub->id),
+                'delete_url' => route('sub-category.destroy', $sub->id),
+            ];
+        });
+
+        return response()->json($subCategories);
     }
 }

@@ -87,6 +87,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
 
     // categories
     Route::resource('category', CategoryController::class);
+    Route::get('/category/{id}/subcategories', [CategoryController::class, 'getSubCategories'])->name('category.subcategories');
 
     // sub-category
     Route::resource('sub-category', SubCategoryController::class);

@@ -18,6 +18,10 @@ return new class extends Migration
                 $table->integer('sort')->default(0);
                 $table->integer('sub')->default(0);
                 $table->string('icon');
+                $table->text('thumb');
+                $table->integer('status')->default('0');
+                $table->integer('is_show_on_home')->default('0');
+                $table->integer('is_new')->default('0');
                 $table->timestamps();
             });
         }

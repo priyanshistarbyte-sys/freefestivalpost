@@ -148,17 +148,17 @@ class TampletController extends Controller
 
     public function update(Request $request, Tamplet $tamplet)
     {
-       
+    //    dd($request->all());
         $validator = Validator::make($request->all(), [
-            'type'            => ['required'],
+            'sub_category_id'            => ['required'],
             'image.*'         => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp'],
-            'mask'            => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp'],
+            'mask.*'          => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp'],
         ]);
         if ($validator->fails()) {
             return redirect()->back()->with('error', $validator->errors()->first());
         }
         
-        $tamplet->sub_category_id = $request->type;
+        $tamplet->sub_category_id = $request->sub_category_id;
         $tamplet->font_color      = $request->font_color;
         $tamplet->lablebg         = $request->lablebg;
         $tamplet->font_size       = $request->font_size;
@@ -185,7 +185,7 @@ class TampletController extends Controller
             if ($tamplet->planImgName) {
                 Storage::disk('public')->delete($tamplet->planImgName);
             }
-            $mask                 = $request->file('mask');
+            $mask                 = is_array($request->file('mask')) ? $request->file('mask')[0] : $request->file('mask');
             $maskName             = time() . '_' . $mask->getClientOriginalName();
             $maskPath             = $mask->storeAs('uploads/tamplet/masks', $maskName, 'public');
             $tamplet->planImgName = $maskPath;

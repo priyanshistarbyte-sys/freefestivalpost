@@ -14,6 +14,10 @@ class Category extends Model
         'sort',
         'sub',
         'icon',
+        'thumb',
+        'status',
+        'is_show_on_home',
+        'is_new',
         'created_at',
         'updated_at'
     ];

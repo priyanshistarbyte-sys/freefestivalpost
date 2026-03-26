@@ -23,9 +23,43 @@
             </div>
             <div class="mb-3">
                 <div class="form-group">
+                    <label for="thumb" class="form-label">Thumb</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" name="thumb" id="thumb" class="file-input" accept="image/*" onchange="previewImage(this, 'thumb-preview')">
+                        <label for="thumb" class="file-input-label">
+                            <img id="thumb-preview" class="file-preview" alt="Thumb preview">
+                            <i class="fas fa-cloud-upload-alt file-input-icon"></i>
+                            <span class="file-input-text">Choose icon file or drag and drop</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-group">
                     <label for="sort" class="form-label">Sort</label> 
                     <input type="number" name="sort" id="sort" class="form-control" min="0"  value="0" placeholder="Enter Sort Order" required>
                 </div>
+            </div>
+            <div class="mb-3 col-md-4 form-group">
+                <label class="form-label" for="status">Status</label></br>
+                <label class="custom-switch">
+                    <input type="checkbox" name="status" value="1" checked>
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+            <div class="mb-3 col-md-4 form-group">
+                <label class="form-label" for="is_show_on_home">Show on Home</label></br>
+                <label class="custom-switch">
+                    <input type="checkbox" name="is_show_on_home" value="1" checked>
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+             <div class="mb-3 col-md-4 form-group">
+                <label class="form-label" for="is_new">New</label></br>
+                <label class="custom-switch">
+                    <input type="checkbox" name="is_new" value="1" checked>
+                    <span class="switch-slider"></span>
+                </label>
             </div>
         </div>
     </div>

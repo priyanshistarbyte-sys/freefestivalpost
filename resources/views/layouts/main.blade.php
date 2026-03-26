@@ -76,7 +76,6 @@
                     <ul class="submenu">
                         <li class="{{ request()->routeIs('category.index') ? 'active' : '' }}"><a href="{{ route('category.index') }}"><span>Category</span></a></li>
                         <li class="{{ request()->routeIs('sub-category.*') ? 'active' : '' }}"><a href="{{ route('sub-category.index') }}"><span>Sub Category</span></a></li>
-                        <li class="{{ request()->routeIs('home-category.*') ? 'active' : '' }}"><a href="{{ route('home-category.index') }}"><span>Home Category</span></a></li>
                     </ul>
                 </li>
                 <li class="dropdown">

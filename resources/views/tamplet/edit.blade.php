@@ -13,12 +13,13 @@
                 @method('PUT')
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="type" class="form-label">Category</label>
-                        <select class="form-select" name="type" id="type" required>
+                        <label for="sub_category_id" class="form-label">Category</label>
+                        <select class="form-select" name="sub_category_id" id="sub_category_id" required>
                             @foreach ($categories ?? [] as $category)
                                 <option value="{{ $category->id }}" {{ $tamplet->sub_category_id == $category->id ? 'selected' : '' }}>{{ $category->mtitle }}</option>
                             @endforeach
                         </select>
+                        
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="event_date" class="form-label">Event Date:</label>

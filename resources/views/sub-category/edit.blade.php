@@ -67,20 +67,20 @@
                 </div>
                 <div class="row">
                     {{-- Event Date --}}
-                    <div class="mb-3 col-md-3 form-group">
+                    <div class="mb-3 col-md-4 form-group">
                         <label for="event_date" class="form-label">Event Date</label>
                         <input type="date" name="event_date" class="form-control"
                             value="{{ $subCategory->event_date }}">
                     </div>
                     {{-- Label --}}
-                    <div class="mb-3  col-md-3 form-group">
+                    <div class="mb-3  col-md-4 form-group">
                         <label for="label" class="form-label">Label</label>
                         <input type="text" name="label" id="label" class="form-control" placeholder="Enter Label"
                             value="{{ $subCategory->lable }}">
                     </div>
 
                     {{-- Label BG --}}
-                    <div class="mb-3  col-md-3 form-group">
+                    <div class="mb-3  col-md-4 form-group">
                         <label for="label_bg" class="form-label">Label Background Color</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa fa-paint-brush"></i></span>
@@ -88,10 +88,7 @@
                                 placeholder="Enter Label BG" value="{{ $subCategory->lablebg }}">
                         </div>
                     </div>
-                    <div class="mb-3 col-md-3 form-group">
-                        <label for="sequence" class="form-label">Sequence</label>
-                       <input type="number" name="sequence" id="sequence" class="form-control" placeholder="Enter Sequence" value="{{ $subCategory->sequence }}" required>
-                    </div>
+                    
                 </div>
                 <div class="row">
                     <div class="mb-3 col-md-4 form-group">
@@ -149,27 +146,7 @@
                             <span class="switch-slider"></span>
                         </label>
                     </div>
-                    <div class="mb-3 col-md-2 form-group">
-                        <label class="form-label" for="home_status">Home Status</label></br>
-                        <label class="custom-switch">
-                            <input type="checkbox" name="home_status" value="1" {{ $subCategory->home_status == 1 ? 'checked' : '' }}>
-                            <span class="switch-slider"></span>
-                        </label>
-                    </div>
-                    <div class="mb-3 col-md-2 form-group">
-                        <label class="form-label" for="is_show_on_home">Show on Home</label></br>
-                        <label class="custom-switch">
-                            <input type="checkbox" name="is_show_on_home" value="1" {{ $subCategory->is_show_on_home == 1 ? 'checked' : '' }}>
-                            <span class="switch-slider"></span>
-                        </label>
-                    </div>
-                    <div class="mb-3 col-md-2 form-group">
-                        <label class="form-label" for="is_new">New</label></br>
-                        <label class="custom-switch">
-                            <input type="checkbox" name="is_new" value="1" {{ $subCategory->is_new == 1 ? 'checked' : '' }}>
-                            <span class="switch-slider"></span>
-                        </label>
-                    </div>
+                  
                     <div class="mb-3 col-md-3 form-group">
                         <label class="form-label">Plan / Auto</label>
                         <div class="radio-group">
