@@ -143,9 +143,9 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::delete('/feedback/{id}', [UserController::class, 'deleteFeedback'])->name('feedback.delete');
 
     // home-category
-    Route::resource('home-category', HomeCategoryController::class);  
-    Route::post('/home-category/status/update', [HomeCategoryController::class, 'updateStatus'])->name('homecategory.updateStatus');
-    Route::post('/home-category/show/update', [HomeCategoryController::class, 'showHome'])->name('homecategory.showHome');
+    // Route::resource('home-category', HomeCategoryController::class);  
+    // Route::post('/home-category/status/update', [HomeCategoryController::class, 'updateStatus'])->name('homecategory.updateStatus');
+    // Route::post('/home-category/show/update', [HomeCategoryController::class, 'showHome'])->name('homecategory.showHome');
 
     //plan
     Route::resource('plan', SubscriptionPlanController::class);
