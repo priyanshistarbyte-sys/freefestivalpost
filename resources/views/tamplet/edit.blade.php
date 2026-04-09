@@ -85,18 +85,24 @@
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="has_mask">Has Mask</label></br>
                         <label class="custom-switch">
-                            <input type="checkbox" name="has_mask" id="has_mask" value="1" {{ $tamplet->mask ? 'checked' : '' }}>
+                            <input type="checkbox" name="has_mask" id="has_mask" value="1" {{ $tamplet->has_mask ? 'checked' : '' }}>
                             <span class="switch-slider"></span>
                         </label>
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="mask" class="form-label">Mask</label></br>
-                        <input type="file" name="mask[]" id="mask" multiple accept="image/*" {{ !$tamplet->mask ? 'disabled' : '' }}>
-                        @if($tamplet->mask)
-                            @php $masks = json_decode($tamplet->mask, true) ?? []; @endphp
-                            <div class="mt-2 d-flex">
-                                @foreach($masks as $maskPath)
-                                    <img src="{{ asset('storage/' . $maskPath) }}" width="50" height="50" class="me-1">
+                        <input type="file" name="mask[]" id="mask" multiple accept="image/*" {{ !$tamplet->has_mask ? 'disabled' : '' }}>
+
+                        {{-- ✅ SHOW MASK IMAGES --}}
+                        @if(!empty($tamplet->planImgName) && count($tamplet->planImgName) > 0)
+                            <div class="mt-2 d-flex flex-wrap">
+                                @foreach($tamplet->planImgName as $maskPath)
+                                    <div style="position: relative;">
+                                        <img src="{{ asset('storage/' . $maskPath) }}" 
+                                            width="60" height="60" 
+                                            style="object-fit: cover; border:1px solid #ddd; border-radius:5px;"
+                                            class="me-1 mb-1">
+                                    </div>
                                 @endforeach
                             </div>
                         @endif

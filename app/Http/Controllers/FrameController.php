@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Frame;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -76,7 +77,8 @@ class FrameController extends Controller
      */
     public function create()
     {
-        return view('frames.create');
+        $categories = SubCategory::where('status','1')->get();
+        return view('frames.create',compact('categories'));
     }
 
       /**
@@ -110,7 +112,7 @@ class FrameController extends Controller
         $frame->status      = $request->status ?? 0;
         $frame->free_paid   = $request->free_paid ?? 0;  
         $frame->image       = $imagePath;
-
+        $frame->sub_category_id = $request->sub_category_id ?? null;
         $frame->save(); 
         return redirect()->route('frame.index')->with('success', 'Frame created successfully.');
     }
@@ -128,7 +130,9 @@ class FrameController extends Controller
      */
     public function edit(Frame $frame)
     {
-        return view('frames.edit',compact('frame'));
+        $categories = SubCategory::where('status','1')->get();
+
+        return view('frames.edit',compact('frame','categories'));
     }
 
       /**
@@ -165,6 +169,7 @@ class FrameController extends Controller
         $frame->logosection = $request->logosection;
         $frame->status      = $request->status ?? 0;
         $frame->free_paid   = $request->free_paid ?? 0;  
+        $frame->sub_category_id = $request->sub_category_id ?? null;
         $frame->save();
 
         return redirect()->route('frame.index')->with('success', 'Frame updated successfully.');

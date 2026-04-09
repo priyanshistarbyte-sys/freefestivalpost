@@ -105,14 +105,14 @@
                         </div>
                         <div class="row">
                             <div class="mb-3 col-md-6 form-group">
-                                <label class="form-label" for="d_isDisplay">Update - Is Display (0 - Off, 1 - On)</label>
+                                <label class="form-label" for="isDisplay">Update - Is Display (0 - Off, 1 - On)</label>
                                 <div class="radio-group">
                                     <label class="radio-container">Off
-                                        <input type="radio" name="d_isDisplay" value="0" checked>
+                                        <input type="radio" name="isDisplay" value="0" checked>
                                         <span class="radio-checkmark"></span>
                                     </label>
                                     <label class="radio-container">On
-                                        <input type="radio" name="d_isDisplay" value="1">
+                                        <input type="radio" name="isDisplay" value="1">
                                         <span class="radio-checkmark"></span>
                                     </label>
                                 </div>
@@ -163,14 +163,14 @@
                             <input type="file" class="form-control" id="image" name="image">
                         </div>
                         <div class="mb-3 col-md-4 form-group">
-                            <label class="form-label" for="d_other_isDisplay">Offer - Is Display (0 - Off, 1 - On)</label>
+                            <label class="form-label" for="other_isDisplay">Offer - Is Display (0 - Off, 1 - On)</label>
                             <div class="radio-group">
                                 <label class="radio-container">Off
-                                    <input type="radio" name="d_other_isDisplay" value="0" checked>
+                                    <input type="radio" name="other_isDisplay" value="0" checked>
                                     <span class="radio-checkmark"></span>
                                 </label>
                                 <label class="radio-container">On
-                                    <input type="radio" name="d_other_isDisplay" value="1">
+                                    <input type="radio" name="other_isDisplay" value="1">
                                     <span class="radio-checkmark"></span>
                                 </label>
                             </div>

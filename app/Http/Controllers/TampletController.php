@@ -41,14 +41,19 @@ class TampletController extends Controller
                     ';
                 })
                 ->addColumn('mask', function ($tamplet) {
-                    if(!$tamplet->planImgName){
+                    $masks = $tamplet->planImgName;
+                    if (empty($masks)) {
                         return '<span class="badge bg-danger">No Mask</span>';
-                    }else{
-                        $imagePath = $tamplet->planImgName
-                            ? asset('storage/' . ltrim($tamplet->planImgName, '/'))
-                            : asset('assets/images/default.jpg');
-                        return '<img src="' . $imagePath . '" alt="Icon" class="dataTable-app-img rounded" width="20" height="20">';
                     }
+                    $html = '<div class="d-flex flex-wrap gap-1">';
+                    foreach ($masks as $mask) {
+                        $url = asset('storage/' . trim($mask));
+                        $html .= '<a href="' . $url . '" target="_blank">
+                                    <img src="' . $url . '" width="35" height="35" style="object-fit:cover;border:1px solid #ddd;border-radius:4px;">
+                                  </a>';
+                    }
+                    $html .= '</div>';
+                    return $html;
                 })
                 ->addColumn('free_paid', function ($tamplet) {
                     if ($tamplet->free_paid == 1) {
@@ -90,47 +95,60 @@ class TampletController extends Controller
         return view('tamplet.create',compact('categories','fonts'));
     }
 
+   
+
     public function store(Request $request)
     {
-      
         $validator = Validator::make($request->all(), [
             'sub_category_id' => ['required'],
             'image.*'         => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp'],
-            'mask'            => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp'],
+            'mask.*'          => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp'],
         ]);
+
         if ($validator->fails()) {
             return redirect()->back()->with('error', $validator->errors()->first());
         }
 
         $subCategory = SubCategory::find($request->sub_category_id);
         $mslug = $subCategory ? $subCategory->mslug : 'default';
-        $maskPath = null;
-       
+
+        // ✅ STEP 1: STORE ALL MASKS IN ARRAY
+        $maskPaths = [];
 
         if ($request->has('has_mask') && $request->hasFile('mask')) {
-            $maskPath = $request->file('mask')->store('uploads/tamplet/masks', 'public');
+            foreach ($request->file('mask') as $index => $mask) {
+                $maskPaths[$index] = $mask->storeAs('uploads/tamplet/masks', $mask->getClientOriginalName(), 'public');
+            }
         }
 
+        // ✅ STEP 2: STORE IMAGES + ASSIGN ALL MASKS AS JSON
         if ($request->hasFile('image')) {
             foreach ($request->file('image') as $index => $img) {
-                $tamplet                  = new Tamplet();
+
+                $tamplet = new Tamplet();
                 $tamplet->sub_category_id = $request->sub_category_id;
                 $tamplet->font_color      = $request->font_color;
                 $tamplet->lablebg         = $request->lable_bg;
                 $tamplet->font_size       = $request->font_size;
-                $tamplet->lable           = $request->label_new;
+                $tamplet->lable           = $request->label;
                 $tamplet->font_type       = $request->font_type;
                 $tamplet->language        = $request->language;
                 $tamplet->event_date      = $request->event_date;
                 $tamplet->event           = $request->event ? 1 : 0;
                 $tamplet->free_paid       = $request->free_paid ? 1 : 0;
-                $tamplet->planImgName     = $maskPath;
-                $imgName                  = $mslug . '_' . time() . '_' . $index . '_' . $img->getClientOriginalName();
-                $stored                   = $img->storeAs('uploads/tamplet/images', $imgName, 'public');
-                $tamplet->path            = $stored;
+                $tamplet->has_mask        = $request->has('has_mask') ? 1 : 0;
+
+                // Store all mask paths as array (model cast handles JSON encoding)
+                $tamplet->planImgName = !empty($maskPaths) ? array_values($maskPaths) : null;
+
+                $imgName = $mslug . '_' . time() . '_' . $index . '_' . $img->getClientOriginalName();
+                $stored  = $img->storeAs('uploads/tamplet/images', $imgName, 'public');
+
+                $tamplet->path = $stored;
                 $tamplet->save();
             }
         }
+
         return redirect()->route('tamplet.index')->with('success', 'Tamplet created successfully.');
     }
 
@@ -168,6 +186,7 @@ class TampletController extends Controller
         $tamplet->event_date      = $request->event_date;
         $tamplet->event           = $request->has('event') ? 1 : 0; 
         $tamplet->free_paid       = $request->has('free_paid') ? 1 : 0;
+      
         
         if ($request->hasFile('image')) {
             if ($tamplet->path) {
@@ -181,15 +200,18 @@ class TampletController extends Controller
             $tamplet->path = $stored;
         }
         
-        if ($request->hasFile('mask')) {
-            if ($tamplet->planImgName) {
-                Storage::disk('public')->delete($tamplet->planImgName);
+        $tamplet->has_mask = $request->has('has_mask') ? 1 : 0;
+
+        if ($request->has('has_mask') && $request->hasFile('mask')) {
+            $maskPaths = $tamplet->planImgName ?? [];
+            foreach ($request->file('mask') as $index => $mask) {
+                $maskPaths[] = $mask->storeAs('uploads/tamplet/masks', $mask->getClientOriginalName(), 'public');
             }
-            $mask                 = is_array($request->file('mask')) ? $request->file('mask')[0] : $request->file('mask');
-            $maskName             = time() . '_' . $mask->getClientOriginalName();
-            $maskPath             = $mask->storeAs('uploads/tamplet/masks', $maskName, 'public');
-            $tamplet->planImgName = $maskPath;
+            $tamplet->planImgName = array_values($maskPaths);
         } elseif (!$request->has('has_mask')) {
+            foreach ($tamplet->planImgName ?? [] as $oldMask) {
+                Storage::disk('public')->delete($oldMask);
+            }
             $tamplet->planImgName = null;
         }
         
@@ -205,9 +227,12 @@ class TampletController extends Controller
         if ($tamplet->path) {
             Storage::disk('public')->delete($tamplet->path);
         }
-        // Delete planImgName file
-        if ($tamplet->planImgName && Storage::disk('public')->exists($tamplet->planImgName)) {
-            Storage::disk('public')->delete($tamplet->planImgName);
+        // Delete planImgName files
+        $masks = is_array($tamplet->planImgName) ? $tamplet->planImgName : ($tamplet->planImgName ? [$tamplet->planImgName] : []);
+        foreach ($masks as $mask) {
+            if ($mask && Storage::disk('public')->exists($mask)) {
+                Storage::disk('public')->delete($mask);
+            }
         }
 
         $tamplet->delete();

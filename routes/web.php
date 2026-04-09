@@ -12,7 +12,6 @@ use App\Http\Controllers\CustomframeController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FontController;
 use App\Http\Controllers\FrameController;
-use App\Http\Controllers\HomeCategoryController;
 use App\Http\Controllers\PhotoStatusController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PositionController;
@@ -136,16 +135,9 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::delete('/user/{id}/customframe/delete/{cid}', [CustomframeController::class, 'destroy'])->name('delete.customframe');
     Route::post('/customframe/status/update', [CustomframeController::class, 'updateStatus'])->name('customframe.updateStatus');
 
-
-
     // feedback list    
     Route::get('/feedback', [UserController::class, 'feedbackList'])->name('feedback.list');
     Route::delete('/feedback/{id}', [UserController::class, 'deleteFeedback'])->name('feedback.delete');
-
-    // home-category
-    // Route::resource('home-category', HomeCategoryController::class);  
-    // Route::post('/home-category/status/update', [HomeCategoryController::class, 'updateStatus'])->name('homecategory.updateStatus');
-    // Route::post('/home-category/show/update', [HomeCategoryController::class, 'showHome'])->name('homecategory.showHome');
 
     //plan
     Route::resource('plan', SubscriptionPlanController::class);

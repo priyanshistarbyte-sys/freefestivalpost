@@ -151,11 +151,11 @@ class ApplicationAddController extends Controller
         $dailog->link             = $request->link ?? null;
         $dailog->appversion       = $request->appversion ?? null;
         $dailog->description      = $request->description ?? null;
-        $dailog->d_isDisplay        = $request->d_isDisplay ?? null;
+        $dailog->isDisplay        = $request->isDisplay ?? null;
         $dailog->forcefully       = $request->forcefully ?? null;
         $dailog->o_type             = $request->o_type ?? null;
         $dailog->o_link             = $request->o_link ?? null;
-        $dailog->d_other_isDisplay  = $request->d_other_isDisplay ?? null;
+        $dailog->other_isDisplay  = $request->other_isDisplay ?? null;
         $dailog->other_forcefully = $request->other_forcefully ?? null;
         $dailog->image              = $imagePath;
         $dailog->save();
@@ -305,11 +305,11 @@ class ApplicationAddController extends Controller
         $dailog->link             = $request->link ?? null;
         $dailog->appversion       = $request->appversion ?? null;
         $dailog->description      = $request->description ?? null;
-        $dailog->d_isDisplay        = $request->d_isDisplay ?? null;
+        $dailog->isDisplay        = $request->isDisplay ?? null;
         $dailog->forcefully       = $request->forcefully ?? null;
         $dailog->o_type             = $request->o_type ?? null;
         $dailog->o_link             = $request->o_link ?? null;
-        $dailog->d_other_isDisplay  = $request->d_other_isDisplay ?? null;
+        $dailog->other_isDisplay  = $request->other_isDisplay ?? null;
         $dailog->other_forcefully = $request->other_forcefully ?? null;
         $dailog->image              = $imagePath;
         $dailog->save();

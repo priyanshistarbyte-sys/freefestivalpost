@@ -20,6 +20,8 @@ return new class extends Migration
                 $table->text('image');
                 $table->longText('data')->nullable();
                 $table->longText('logosection')->nullable();
+                $table->unsignedBigInteger('sub_category_id')->nullable();
+                $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('set null');
                 $table->timestamps();
             });
         }

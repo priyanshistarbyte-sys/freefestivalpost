@@ -14,6 +14,8 @@ class Tamplet extends Model
         'event_date',
         'event',
         'path',
+        'has_mask',
+        'mask',
         'font_type',
         'font_size',
         'font_color',
@@ -24,6 +26,23 @@ class Tamplet extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function getPlanImgNameAttribute($value)
+    {
+        if (empty($value)) return [];
+        // Handle old JSON-encoded data
+        if (str_starts_with(trim($value), '[')) {
+            $decoded = json_decode($value, true);
+            if (is_string($decoded)) $decoded = json_decode($decoded, true);
+            return is_array($decoded) ? $decoded : [];
+        }
+        return array_filter(explode(',', $value));
+    }
+
+    public function setPlanImgNameAttribute($value)
+    {
+        $this->attributes['planImgName'] = is_array($value) ? implode(',', $value) : $value;
+    }
 
     public function category()
     {

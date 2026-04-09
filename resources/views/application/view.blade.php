@@ -105,8 +105,8 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{{ $dailogs->d_isDisplay == 1 ? 'On' : 'Off' }}</td>
-                                <td>{{ $dailogs->d_other_isDisplay == 1 ? 'On' : 'Off' }}</td>
+                                <td>{{ $dailogs->isDisplay == 1 ? 'On' : 'Off' }}</td>
+                                <td>{{ $dailogs->other_isDisplay == 1 ? 'On' : 'Off' }}</td>
                                 <td>{{ $dailogs->title ?? '' }}</td>
                                 <td>
                                     <div style="max-width: 400px; white-space: normal; word-wrap: break-word;">

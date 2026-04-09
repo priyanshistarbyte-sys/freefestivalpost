@@ -15,6 +15,15 @@
                 <div class="row">
                      <div class="col-lg-6 col-md-12">
                         <div class="mb-3">
+                            <label for="sub_category_id" class="form-label">Category</label>
+                             <select class="form-select" name="sub_category_id" id="sub_category_id">
+                                <option value="">Select Category</option>
+                                @foreach ($categories ?? [] as $category)
+                                    <option value="{{ $category->id }}" {{ $frame->sub_category_id == $category->id ? 'selected' : '' }}>{{ $category->mtitle }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="frame_name" class="form-label">Frame Name</label>
                             <input type="text" name="frame_name" id="frame_name" class="form-control" value="{{ old('frame_name', $frame->frame_name) }}" placeholder="Enter Frame Name" required>
                         </div>
