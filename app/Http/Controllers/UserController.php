@@ -34,7 +34,7 @@ class UserController extends Controller
             $version = $request->input('version');
 
             $query = Admin::from('admin as a')
-                ->leftJoin('notification as n', 'a.id', '=', 'n.user_id')
+                ->leftJoin(DB::raw('(SELECT user_id, app_version FROM notification WHERE id IN (SELECT MAX(id) FROM notification GROUP BY user_id)) as n'), 'n.user_id', '=', 'a.id')
                 ->leftJoin('daily_post_count as dp', 'a.id', '=', 'dp.user_id')
                 ->where('a.role', 'User')
                 ->select(
@@ -54,7 +54,7 @@ class UserController extends Controller
 
             /* Join payments ONLY for paid users (type = 2) */
             if ($type == 2) {
-                $query->leftJoin('payments as p', 'p.user_id', '=', 'a.id');
+                $query->leftJoin(DB::raw('(SELECT user_id, pdate FROM payments WHERE id IN (SELECT MAX(id) FROM payments GROUP BY user_id)) as p'), 'p.user_id', '=', 'a.id');
             }
 
             /* Version Filter */
@@ -153,7 +153,7 @@ class UserController extends Controller
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('post', function ($user) {
-                    return $user->countUserPostTotal($user->id);
+                    return $user->tamp_count ?? 0;
                 })
                 ->filterColumn('post', function ($query, $keyword) {
                         $query->where('dp.tamp_count', 'LIKE', "%{$keyword}%");
@@ -462,8 +462,7 @@ class UserController extends Controller
             $query = Feedback::from('feedback as f')
                 ->leftJoin('admin as a', 'a.id', '=', 'f.user_id')
                 ->select('f.*', 'a.business_name', 'a.mobile')
-                ->orderByRaw('f.id DESC')
-                ->get();
+                ->orderByRaw('f.id DESC');
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->editColumn('created_at', function ($feedback) {
@@ -601,8 +600,7 @@ class UserController extends Controller
         if ($request->ajax()) {
              $query = DB::table('makepost as m')
                 ->leftJoin('admin as a', 'm.user_id', '=', 'a.id')
-                ->select('m.*', 'a.name','a.mobile')
-               ->get();
+                ->select('m.*', 'a.name','a.mobile');
               return DataTables::of($query)
                 ->addIndexColumn()
                 ->editColumn('tamplate', function ($row) {
@@ -649,21 +647,25 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
 
-            $query = Admin::query()
-                ->where('role', 'User')      // change to 1 if numeric
-                ->where('ispaid', 1)
-                ->where('planStatus', 2)
+            $query = Admin::from('admin as a')
+                ->leftJoin(DB::raw('(SELECT user_id, COUNT(id) as post_count FROM makepost GROUP BY user_id) as mp'), 'mp.user_id', '=', 'a.id')
+                ->leftJoin(DB::raw('(SELECT user_id, app_version FROM notification n1 WHERE id = (SELECT MAX(id) FROM notification n2 WHERE n2.user_id = n1.user_id)) as nv'), 'nv.user_id', '=', 'a.id')
+                ->where('a.role', 'User')
+                ->where('a.ispaid', 1)
+                ->where('a.planStatus', 2)
                 ->select([
-                    'id',
-                    'business_name',
-                    'mobile',
-                    'ispaid',
-                    'planStatus',
-                    'expdate',
-                    'status',
-                    'otp',
-                    'created_at',
-                    'photo',
+                    'a.id',
+                    'a.business_name',
+                    'a.mobile',
+                    'a.ispaid',
+                    'a.planStatus',
+                    'a.expdate',
+                    'a.status',
+                    'a.otp',
+                    'a.created_at',
+                    'a.photo',
+                    'mp.post_count',
+                    'nv.app_version',
                 ]);
 
             return DataTables::of($query)
@@ -671,17 +673,12 @@ class UserController extends Controller
 
                 /* Post Count */
                 ->addColumn('post', function ($user) {
-                    return DB::table('makepost')
-                        ->where('user_id', $user->id)
-                        ->count();
+                    return $user->post_count ?? 0;
                 })
 
                 /* App Version */
                 ->addColumn('app_version', function ($user) {
-                    return DB::table('notification')
-                        ->where('user_id', $user->id)
-                        ->latest('id')
-                        ->value('app_version');
+                    return $user->app_version ?? '';
                 })
 
                 /* Created */

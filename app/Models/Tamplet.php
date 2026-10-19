@@ -27,7 +27,7 @@ class Tamplet extends Model
         'updated_at'
     ];
 
-    public function getPlanImgNameAttribute($value)
+    public function getmaskAttribute($value)
     {
         if (empty($value)) return [];
         // Handle old JSON-encoded data
@@ -39,9 +39,9 @@ class Tamplet extends Model
         return array_filter(explode(',', $value));
     }
 
-    public function setPlanImgNameAttribute($value)
+    public function setmaskAttribute($value)
     {
-        $this->attributes['planImgName'] = is_array($value) ? implode(',', $value) : $value;
+        $this->attributes['mask'] = is_array($value) ? implode(',', $value) : $value;
     }
 
     public function category()

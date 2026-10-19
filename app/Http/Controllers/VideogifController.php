@@ -56,7 +56,7 @@ class VideogifController extends Controller
                         return '<span class="text-danger">No Video</span>';
                     }
 
-                    $videoPath = asset('storage/' . $Videogif->path);
+                    $videoPath = asset('storage/app/public/' . $Videogif->path);
 
                     return '
                         <video width="160" height="90" controls preload="metadata">

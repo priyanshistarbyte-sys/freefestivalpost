@@ -86,7 +86,7 @@ class CategoryController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title'  => ['required', 'string', 'max:255'],
-            'icon'   => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'icon'   => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             'thumb'   => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
 
@@ -94,11 +94,15 @@ class CategoryController extends Controller
             $messages = $validator->getMessageBag();
             return redirect()->back()->with('error', $messages->first());
         }
-        $path_icon = $request->file('icon')->store('uploads/images/category_icon', 'public');
+
+        if($request->hasFile('icon')) {
+            $path_icon = $request->file('icon')->store('uploads/images/category_icon', 'public');
+        }
+        
         $path_thumb = $request->file('thumb')->store('uploads/images/category_thumb', 'public');
         $category = new Category();
         $category->title = $request->title;
-        $category->icon = $path_icon ?? '';
+        $category->icon = $path_icon ?? null;
         $category->sort = $request->sort ?? 0;
         $category->thumb = $path_thumb ?? '';
         $category->status = $request->status ?? 0;

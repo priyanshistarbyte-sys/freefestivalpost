@@ -71,7 +71,6 @@
                 autoWidth: false,
                 scrollX: false,
                 responsive: true,
-                pageLength: 100,
                 ajax: {
                     url: '{{ route("users.transactions.list") }}',
                     data: function (d) {

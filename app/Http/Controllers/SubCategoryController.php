@@ -68,6 +68,14 @@ class SubCategoryController extends Controller
                                 <span class="switch-slider"></span>
                             </label>';
                 })
+                ->addColumn('is_show_on_home', function ($subCategory) {
+                       $checked = $subCategory->is_show_on_home == 1 ? 'checked' : '';
+                        return '
+                            <label class="custom-switch">
+                                <input type="checkbox" class="show-on-home-toggle" data-id="'.$subCategory->id.'" '.$checked.'>
+                                <span class="switch-slider"></span>
+                            </label>';
+                })
                 ->addColumn('actions', function ($subCategory) {
                     $buttons = '';
                     $editUrl = route('sub-category.edit', $subCategory->id);
@@ -87,7 +95,7 @@ class SubCategoryController extends Controller
 
                     return $buttons;
                 })
-                ->rawColumns(['category', 'image', 'noti_banner', 'status','is_trending','actions'])
+                ->rawColumns(['category', 'image', 'noti_banner', 'status','is_trending','is_show_on_home','actions'])
                 ->make(true);
         }
         return view('sub-category.index');
@@ -137,6 +145,7 @@ class SubCategoryController extends Controller
         $subCategory->noti_banner = $path_banner ?? '';
         $subCategory->noti_quote = $request->noti_quote ?? '';
         $subCategory->mask = $request->mask ?? '';
+        $subCategory->is_show_on_home = $request->is_show_on_home ?? 0;
         $subCategory->save();
 
         // IF PARENT CATEGORY SELECTED → UPDATE ITS is_child
@@ -236,6 +245,7 @@ class SubCategoryController extends Controller
         $subCategory->lablebg = $request->label_bg ?? '';
         $subCategory->noti_quote = $request->noti_quote ?? '';
         $subCategory->mask = $request->mask ?? '';
+        $subCategory->is_show_on_home = $request->is_show_on_home ?? 0;
         $subCategory->save();
 
          // IF PARENT CATEGORY SELECTED → UPDATE ITS is_child
@@ -253,8 +263,7 @@ class SubCategoryController extends Controller
     public function destroy($id)
     {
         $subCategory = SubCategory::findOrFail($id);
-        $home_category = HomeCategory::where('sub_category_id', $subCategory->id)->count();
-        if ($home_category == 0) {
+       
                // Delete image
                 if ($subCategory->image && Storage::disk('public')->exists($subCategory->image)) {
                     Storage::disk('public')->delete($subCategory->image);
@@ -264,10 +273,7 @@ class SubCategoryController extends Controller
                 }
                 $subCategory->delete();
                 return redirect()->route('sub-category.index')->with('success', 'Sub Category deleted successfully.');
-        } 
-        else {
-            return redirect()->back()->with('error', 'This Sub Category is used in one or more Home Category.');
-        }
+        
     }
 
     public function getSubcategories($cid)
@@ -391,4 +397,18 @@ class SubCategoryController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Trending updated successfully']);
     }
+    public function updateShowonHome(Request $request)
+    {
+        $subCategory = SubCategory::find($request->id);
+        if (!$subCategory) {
+            return response()->json(['success' => false, 'message' => 'Sub Category not found']);
+        }
+
+        $subCategory->is_show_on_home = $request->is_show_on_home;
+        $subCategory->save();
+
+        return response()->json(['success' => true, 'message' => 'Show on Home updated successfully']);
+    }
+
+    
 }

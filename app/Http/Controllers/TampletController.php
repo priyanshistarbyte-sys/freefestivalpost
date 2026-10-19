@@ -41,7 +41,7 @@ class TampletController extends Controller
                     ';
                 })
                 ->addColumn('mask', function ($tamplet) {
-                    $masks = $tamplet->planImgName;
+                    $masks = $tamplet->mask;
                     if (empty($masks)) {
                         return '<span class="badge bg-danger">No Mask</span>';
                     }
@@ -139,7 +139,7 @@ class TampletController extends Controller
                 $tamplet->has_mask        = $request->has('has_mask') ? 1 : 0;
 
                 // Store all mask paths as array (model cast handles JSON encoding)
-                $tamplet->planImgName = !empty($maskPaths) ? array_values($maskPaths) : null;
+                $tamplet->mask = !empty($maskPaths) ? array_values($maskPaths) : null;
 
                 $imgName = $mslug . '_' . time() . '_' . $index . '_' . $img->getClientOriginalName();
                 $stored  = $img->storeAs('uploads/tamplet/images', $imgName, 'public');
@@ -203,16 +203,16 @@ class TampletController extends Controller
         $tamplet->has_mask = $request->has('has_mask') ? 1 : 0;
 
         if ($request->has('has_mask') && $request->hasFile('mask')) {
-            $maskPaths = $tamplet->planImgName ?? [];
+            $maskPaths = $tamplet->mask ?? [];
             foreach ($request->file('mask') as $index => $mask) {
                 $maskPaths[] = $mask->storeAs('uploads/tamplet/masks', $mask->getClientOriginalName(), 'public');
             }
-            $tamplet->planImgName = array_values($maskPaths);
+            $tamplet->mask = array_values($maskPaths);
         } elseif (!$request->has('has_mask')) {
-            foreach ($tamplet->planImgName ?? [] as $oldMask) {
+            foreach ($tamplet->mask ?? [] as $oldMask) {
                 Storage::disk('public')->delete($oldMask);
             }
-            $tamplet->planImgName = null;
+            $tamplet->mask = null;
         }
         
         $tamplet->save();
@@ -227,8 +227,8 @@ class TampletController extends Controller
         if ($tamplet->path) {
             Storage::disk('public')->delete($tamplet->path);
         }
-        // Delete planImgName files
-        $masks = is_array($tamplet->planImgName) ? $tamplet->planImgName : ($tamplet->planImgName ? [$tamplet->planImgName] : []);
+        // Delete mask files
+        $masks = is_array($tamplet->mask) ? $tamplet->mask : ($tamplet->mask ? [$tamplet->mask] : []);
         foreach ($masks as $mask) {
             if ($mask && Storage::disk('public')->exists($mask)) {
                 Storage::disk('public')->delete($mask);

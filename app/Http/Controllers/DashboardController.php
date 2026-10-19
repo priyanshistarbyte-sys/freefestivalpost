@@ -27,140 +27,163 @@ class DashboardController extends Controller
     
     public function index()
     {
-        if(\Auth::user()->role == 'Admin'){
-            $totalUser              = DB::table('admin')->count();
-            $totalDeactiveUser      = DB::table('admin')->where('status', 0)->count();
-            $totalTodayNewUser      = DB::table('admin') ->whereDate('created_at', '<=', date('Y-m-d'))->whereDate('created_at', '>=', date('Y-m-d'))->count();
-            $totalUserPost          = DB::table('makepost')->count();
-            $totalUserPostToday     = DB::table('makepost')->whereDate('created_at', '=', date('Y-m-d'))->count();
-            $videoanalytics         = DB::table('videoanalytics')->sum('count');
-            $videoanalyticsToday    = DB::table('videoanalytics')->whereDate('date', date('Y-m-d'))->sum('count');
-            $totalTamplate          = DB::table('tamplet')->count();
-            $totalCategory          = DB::table('categories')->count();
-            $totalSubCategory       = DB::table('sub_categories')->count();
-            $totalPremiumUser       = DB::table('admin')->where('planStatus', 2)->count();
-            $totalActivePremiumUser = DB::table('admin')->where('ispaid', 1)->where('planStatus', 2)->count();
-            $totalTodayPremiumUser  = DB::table('admin as a')->leftJoin('payments as p', 'a.id', '=', 'p.user_id')->where('a.ispaid', 1)
-                                    ->whereDate('p.date', Carbon::today())
-                                    ->where('p.packageid', '!=', 1)
-                                    ->count('a.id');
-            $totalExpiredTodayUser = DB::table('admin')
-                                    ->whereDate('expdate', date('Y-m-d'))
-                                    ->where('ispaid', 1)
-                                    ->where('planStatus', 2)
-                                    ->count();
-            $totalExpiredUser     = DB::table('admin')->whereDate('expdate', '<' , date('Y-m-d'))->where('ispaid', 0)->where('planStatus', 2)->count();
-            $totalTrialUser       = DB::table('admin')->where('planStatus', 1)->count();
-            $totalActiveTrialUser = DB::table('admin')->where('ispaid', 1)->where('planStatus', 1)->count();
-            $totalTodayTrialUser  = DB::table('admin as a')->leftJoin('payments as p', 'a.id', '=', 'p.user_id')->where('a.ispaid', 1)
-                                    ->whereDate('p.date', Carbon::today())->where('a.planStatus', 1)
-                                    ->where('p.packageid', '!=', 1)
-                                    ->count('a.id'); 
-            $totalExpiredTodayTrialUser = DB::table('admin')->whereDate('expdate', date('Y-m-d'))->where('ispaid', 1)->where('planStatus', 1)->count();
-            $totalExpiredTrialUser      = DB::table('admin')->where('ispaid', 0)->where('planStatus', 1)->count();
-            $versionwiseUserCount       = DB::table('notification')->select('app_version', DB::raw('COUNT(id) as totalUser'))->groupBy('app_version')->orderBy('app_version', 'DESC')->get();
-            /* Delete Video Analytics older than 60 days */
-            $deleteBeforeDate = Carbon::today()->subDays(60)->toDateString();
-            DB::table('videoanalytics')
-                ->where('date', '<', $deleteBeforeDate)
-                ->delete();
-            /* Get Last 7 Video Analytics Records */
-            $videoanalyticsLast7Days = DB::table('videoanalytics')->orderBy('date', 'DESC')->limit(7)->get()
+        $today = date('Y-m-d');
+
+        /* Delete Video Analytics older than 60 days (shared for both roles) */
+        DB::table('videoanalytics')->where('date', '<', Carbon::today()->subDays(60)->toDateString())->delete();
+
+        $videoanalyticsLast7Days = DB::table('videoanalytics')->orderBy('date', 'DESC')->limit(7)->get()
             ->map(function ($row) {
                 $row->date = (!empty($row->date) && $row->date !== '0000-00-00')
-                    ? Carbon::parse($row->date)->format('d/m/Y')
-                    : '';
+                    ? Carbon::parse($row->date)->format('d/m/Y') : '';
                 return $row;
             });
-            $croneReportFetch = DB::table('crone_report')->orderBy('id','DESC')->limit(10) ->get();
-            $todayPaidSubscriptionUser = DB::table('payments as p')->leftJoin('admin as u', 'p.user_id', '=', 'u.id')->where('p.month', '!=', 0)->orderBy('p.id', 'DESC')->limit(10)
-                                        ->select('p.id','p.date','u.mobile','p.transactionid','p.price','p.month' )->get();
-            $todayTrialSubscriptionUser = DB::table('payments as p')->leftJoin('admin as u', 'p.user_id', '=', 'u.id')->where('p.month', '=', 0)->orderBy('p.id', 'DESC')->limit(10)
-                                        ->select('p.id','p.date','u.mobile','p.transactionid','p.price','p.month' )->get();
-            $posts = DB::table('makepost')
-                    ->selectRaw('DATE(created_at) as report_date, COUNT(id) as totalPost')
-                    ->groupBy('report_date')
-                    ->orderBy('report_date', 'DESC')
-                    ->limit(30)
-                    ->get();
+        $versionwiseUserCount = DB::table('notification')->select('app_version', DB::raw('COUNT(id) as totalUser'))->groupBy('app_version')->orderBy('app_version', 'DESC')->get();
+        $croneReportFetch     = DB::table('crone_report')->orderBy('id', 'DESC')->limit(10)->get();
 
-            $customReport = [];
-
-            foreach ($posts as $row) {
-                $date = $row->report_date;
-
-                $totalRegister = DB::table('admin')
-                    ->whereDate('created_at', $date)
-                    ->count();
-
-                $totalPaid = DB::table('payments')
-                    ->whereDate('date', $date)
-                    ->where('packageid', '!=', 1)
-                    ->where('price', '!=', 0)
-                    ->count();
-
-                $totalFail = DB::table('webhook_failed')
-                    ->whereDate('date', $date)
-                    ->distinct('mobile')
-                    ->count('mobile');
-
-                $totalTrial = DB::table('payments')
-                    ->whereDate('date', $date)
-                    ->where('packageid', 1)
-                    ->where('price', 0)
-                    ->distinct('user_id')
-                    ->count('user_id');
-
-                $totalRevenue = DB::table('payments')
-                    ->whereDate('date', $date)
-                    ->sum('price');
-
-                $totalVideo = DB::table('videoanalytics')
-                    ->whereDate('date', $date)
-                    ->sum('count');
-
-                $customReport[] = [
-                    'date'          => Carbon::parse($date)->format('d-m-Y'),
-                    'totalPost'     => $row->totalPost,
-                    'totalVideo'    => $totalVideo ?? 0,
-                    'totalRegister' => $totalRegister,
-                    'totalPaid'     => $totalPaid,
-                    'totalFail'     => $totalFail,
-                    'totalTrial'    => $totalTrial,
-                    'totalRevenue'  => $totalRevenue ?? 0,
-                ];
-            }
-
-            $smsReport = DB::table('sms_log')
-                        ->selectRaw("
-                            date,
-                            COUNT(IF(type = 'forgotpass', 1, NULL)) AS total_forgot_sms,
-                            COUNT(IF(type = 'signup', 1, NULL)) AS total_signup_sms,
-                            COUNT(DISTINCT IF(type = 'signup', mobile, NULL)) AS total_unique_signup_sms
-                        ")
-                        ->groupBy('date')->orderBy('id', 'DESC')->limit(7)->get();
-                       
-            return view('admin.dashboard',compact('totalUser','totalDeactiveUser','totalTodayNewUser','totalUserPost','totalUserPostToday','videoanalytics','videoanalyticsToday','totalTamplate','totalCategory','totalSubCategory','totalPremiumUser','totalActivePremiumUser','totalTodayPremiumUser','totalExpiredTodayUser','totalExpiredUser','totalTrialUser','totalActiveTrialUser','totalTodayTrialUser','totalExpiredTodayTrialUser','totalExpiredTrialUser','versionwiseUserCount','videoanalyticsLast7Days','croneReportFetch','todayPaidSubscriptionUser','todayTrialSubscriptionUser','customReport','smsReport'));
-        }elseif(\Auth::user()->role == 'Sub Admin')
-        {
-            $versionwiseUserCount       = DB::table('notification')->select('app_version', DB::raw('COUNT(id) as totalUser'))->groupBy('app_version')->orderBy('app_version', 'DESC')->get();
-            /* Delete Video Analytics older than 60 days */
-            $deleteBeforeDate = Carbon::today()->subDays(60)->toDateString();
-            DB::table('videoanalytics')
-                ->where('date', '<', $deleteBeforeDate)
-                ->delete();
-            /* Get Last 7 Video Analytics Records */
-            $videoanalyticsLast7Days = DB::table('videoanalytics')->orderBy('date', 'DESC')->limit(7)->get()
-            ->map(function ($row) {
-                $row->date = (!empty($row->date) && $row->date !== '0000-00-00')
-                    ? Carbon::parse($row->date)->format('d/m/Y')
-                    : '';
-                return $row;
-            });
-            $croneReportFetch = DB::table('crone_report')->orderBy('id','DESC')->limit(10) ->get();
-            
-            return view('admin.sub-admin-dashboard',compact('versionwiseUserCount','videoanalyticsLast7Days','croneReportFetch'));
+        if (\Auth::user()->role == 'Sub Admin') {
+            return view('admin.sub-admin-dashboard', compact('versionwiseUserCount', 'videoanalyticsLast7Days', 'croneReportFetch'));
         }
+
+        if (\Auth::user()->role != 'Admin') {
+            return redirect()->back();
+        }
+
+        // --- 1. All admin table stats in ONE query ---
+        $adminStats = DB::table('admin')->selectRaw("
+            COUNT(*) as totalUser,
+            SUM(status = 0) as totalDeactiveUser,
+            SUM(DATE(created_at) = ?) as totalTodayNewUser,
+            SUM(planStatus = 2) as totalPremiumUser,
+            SUM(ispaid = 1 AND planStatus = 2) as totalActivePremiumUser,
+            SUM(DATE(expdate) = ? AND ispaid = 1 AND planStatus = 2) as totalExpiredTodayUser,
+            SUM(DATE(expdate) < ? AND ispaid = 0 AND planStatus = 2) as totalExpiredUser,
+            SUM(planStatus = 1) as totalTrialUser,
+            SUM(ispaid = 1 AND planStatus = 1) as totalActiveTrialUser,
+            SUM(DATE(expdate) = ? AND ispaid = 1 AND planStatus = 1) as totalExpiredTodayTrialUser,
+            SUM(ispaid = 0 AND planStatus = 1) as totalExpiredTrialUser
+        ", [$today, $today, $today, $today])->first();
+
+        // --- 2. Today paid/trial users via payments (2 queries, unavoidable join) ---
+        $totalTodayPremiumUser = DB::table('admin as a')
+            ->leftJoin('payments as p', 'a.id', '=', 'p.user_id')
+            ->where('a.ispaid', 1)->whereDate('p.date', $today)->where('p.packageid', '!=', 1)
+            ->count('a.id');
+
+        $totalTodayTrialUser = DB::table('admin as a')
+            ->leftJoin('payments as p', 'a.id', '=', 'p.user_id')
+            ->where('a.ispaid', 1)->whereDate('p.date', $today)->where('a.planStatus', 1)->where('p.packageid', '!=', 1)
+            ->count('a.id');
+
+        // --- 3. makepost counts in ONE query ---
+        $postStats = DB::table('makepost')->selectRaw("
+            COUNT(*) as totalUserPost,
+            SUM(DATE(created_at) = ?) as totalUserPostToday
+        ", [$today])->first();
+
+        // --- 4. videoanalytics totals in ONE query ---
+        $videoStats = DB::table('videoanalytics')->selectRaw("
+            SUM(`count`) as total,
+            SUM(CASE WHEN date = ? THEN `count` ELSE 0 END) as today
+        ", [$today])->first();
+
+        // --- 5. Simple counts ---
+        $totalTamplate   = DB::table('tamplet')->count();
+        $totalCategory   = DB::table('categories')->count();
+        $totalSubCategory = DB::table('sub_categories')->count();
+
+        // --- 6. customReport: replace N×6 queries with 4 bulk queries ---
+        $reportDates = DB::table('makepost')
+            ->selectRaw('DATE(created_at) as report_date, COUNT(id) as totalPost')
+            ->groupBy('report_date')->orderBy('report_date', 'DESC')->limit(30)
+            ->pluck('totalPost', 'report_date');
+
+        $dateList = $reportDates->keys()->toArray();
+        $minDate  = end($dateList);
+
+        $registerByDate = DB::table('admin')
+            ->selectRaw('DATE(created_at) as d, COUNT(id) as cnt')
+            ->whereDate('created_at', '>=', $minDate)->whereDate('created_at', '<=', $today)
+            ->groupBy('d')->pluck('cnt', 'd');
+
+        $paymentByDate = DB::table('payments')
+            ->selectRaw("
+                DATE(date) as d,
+                SUM(packageid != 1 AND price != 0) as totalPaid,
+                SUM(packageid = 1 AND price = 0) as totalTrial,
+                SUM(price) as totalRevenue
+            ")
+            ->whereDate('date', '>=', $minDate)->whereDate('date', '<=', $today)
+            ->groupBy('d')->get()->keyBy('d');
+
+        $failByDate = DB::table('webhook_failed')
+            ->selectRaw('DATE(date) as d, COUNT(DISTINCT mobile) as cnt')
+            ->whereDate('date', '>=', $minDate)->whereDate('date', '<=', $today)
+            ->groupBy('d')->pluck('cnt', 'd');
+
+        $videoByDate = DB::table('videoanalytics')
+            ->selectRaw('date as d, SUM(`count`) as cnt')
+            ->whereDate('date', '>=', $minDate)->whereDate('date', '<=', $today)
+            ->groupBy('d')->pluck('cnt', 'd');
+
+        $customReport = [];
+        foreach ($reportDates as $date => $totalPost) {
+            $pay = $paymentByDate->get($date);
+            $customReport[] = [
+                'date'          => Carbon::parse($date)->format('d-m-Y'),
+                'totalPost'     => $totalPost,
+                'totalVideo'    => $videoByDate->get($date, 0),
+                'totalRegister' => $registerByDate->get($date, 0),
+                'totalPaid'     => $pay->totalPaid ?? 0,
+                'totalFail'     => $failByDate->get($date, 0),
+                'totalTrial'    => $pay->totalTrial ?? 0,
+                'totalRevenue'  => $pay->totalRevenue ?? 0,
+            ];
+        }
+
+        // --- 7. Remaining queries ---
+        $todayPaidSubscriptionUser  = DB::table('payments as p')->leftJoin('admin as u', 'p.user_id', '=', 'u.id')
+            ->where('p.month', '!=', 0)->orderBy('p.id', 'DESC')->limit(10)
+            ->select('p.id', 'p.date', 'u.mobile', 'p.transactionid', 'p.price', 'p.month')->get();
+
+        $todayTrialSubscriptionUser = DB::table('payments as p')->leftJoin('admin as u', 'p.user_id', '=', 'u.id')
+            ->where('p.month', '=', 0)->orderBy('p.id', 'DESC')->limit(10)
+            ->select('p.id', 'p.date', 'u.mobile', 'p.transactionid', 'p.price', 'p.month')->get();
+
+        $smsReport = DB::table('sms_log')
+            ->selectRaw("date, COUNT(IF(type='forgotpass',1,NULL)) AS total_forgot_sms, COUNT(IF(type='signup',1,NULL)) AS total_signup_sms, COUNT(DISTINCT IF(type='signup',mobile,NULL)) AS total_unique_signup_sms")
+            ->groupBy('date')->orderBy('id', 'DESC')->limit(7)->get();
+
+        // Unpack aggregated stats
+        $totalUser              = $adminStats->totalUser;
+        $totalDeactiveUser      = $adminStats->totalDeactiveUser;
+        $totalTodayNewUser      = $adminStats->totalTodayNewUser;
+        $totalPremiumUser       = $adminStats->totalPremiumUser;
+        $totalActivePremiumUser = $adminStats->totalActivePremiumUser;
+        $totalExpiredTodayUser  = $adminStats->totalExpiredTodayUser;
+        $totalExpiredUser       = $adminStats->totalExpiredUser;
+        $totalTrialUser         = $adminStats->totalTrialUser;
+        $totalActiveTrialUser   = $adminStats->totalActiveTrialUser;
+        $totalExpiredTodayTrialUser = $adminStats->totalExpiredTodayTrialUser;
+        $totalExpiredTrialUser  = $adminStats->totalExpiredTrialUser;
+        $totalUserPost          = $postStats->totalUserPost;
+        $totalUserPostToday     = $postStats->totalUserPostToday;
+        $videoanalytics         = $videoStats->total ?? 0;
+        $videoanalyticsToday    = $videoStats->today ?? 0;
+
+        return view('admin.dashboard', compact(
+            'totalUser', 'totalDeactiveUser', 'totalTodayNewUser',
+            'totalUserPost', 'totalUserPostToday',
+            'videoanalytics', 'videoanalyticsToday',
+            'totalTamplate', 'totalCategory', 'totalSubCategory',
+            'totalPremiumUser', 'totalActivePremiumUser', 'totalTodayPremiumUser',
+            'totalExpiredTodayUser', 'totalExpiredUser',
+            'totalTrialUser', 'totalActiveTrialUser', 'totalTodayTrialUser',
+            'totalExpiredTodayTrialUser', 'totalExpiredTrialUser',
+            'versionwiseUserCount', 'videoanalyticsLast7Days',
+            'croneReportFetch', 'todayPaidSubscriptionUser', 'todayTrialSubscriptionUser',
+            'customReport', 'smsReport'
+        ));
     }
 
     public function todayFestivalPosts(Request $request)
@@ -172,7 +195,7 @@ class DashboardController extends Controller
                 ->whereDate('s.event_date', date('Y-m-d'))
                 ->select(
                     't.id as tid',
-                    't.planImgName',
+                    't.mask',
                     't.path',
                     's.id as mid',
                     's.event_date',
@@ -218,7 +241,7 @@ class DashboardController extends Controller
                 ->whereDate('s.event_date', $dt)
                 ->select(
                     't.id as tid',
-                    't.planImgName',
+                    't.mask',
                     't.path',
                     's.id as mid',
                     's.event_date',
@@ -452,7 +475,7 @@ class DashboardController extends Controller
         $nextYear = $currentYear + 1;
         
         $created = 0;
-        $abc = Tamplet::select(['sub_category_id', 'font_color', 'lablebg', 'font_size', 'lable', 'font_type', 'language', 'event_date', 'event', 'free_paid', 'planImgName', 'path'])
+        $abc = Tamplet::select(['sub_category_id', 'font_color', 'lablebg', 'font_size', 'lable', 'font_type', 'language', 'event_date', 'event', 'free_paid', 'mask', 'path'])
             ->where('event', 1)
             ->whereYear('event_date', $currentYear)
             ->whereNotExists(function ($query) use ($nextYear) {
@@ -479,7 +502,7 @@ class DashboardController extends Controller
                         'event_date' => $nextYearDate,
                         'event' => $template->event,
                         'free_paid' => $template->free_paid,
-                        'planImgName' => $template->planImgName,
+                        'mask' => $template->mask,
                         'path' => $template->path,
                         'created_at' => now(),
                         'updated_at' => now(),

@@ -81,7 +81,6 @@
                 autoWidth: false,
                 scrollX: false,
                 responsive: true,
-                pageLength: 100,
                 ajax: {
                     url: '{{ route("complain.list") }}',
                     data: function (d) {

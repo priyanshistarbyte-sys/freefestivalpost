@@ -96,6 +96,9 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::post('/sub-category-import', [SubCategoryController::class, 'import'])->name('subcategory.import');
     Route::get('/sub-category-template', [SubCategoryController::class, 'downloadTemplate'])->name('subcategory.template');
     Route::post('/sub-category/trending/update', [SubCategoryController::class, 'updateTrending'])->name('subcategory.updateTrending');
+    Route::post('/sub-category/ShowonHome/update', [SubCategoryController::class, 'updateShowonHome'])->name('subcategory.updateShowonHome');
+
+    
 
     // Role
      Route::resource('roles', RoleController::class);

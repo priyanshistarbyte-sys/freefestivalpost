@@ -65,7 +65,6 @@
                 autoWidth: false,
                 scrollX: false,
                 responsive: true,
-                pageLength: 100,
                 ajax: '{{ route('user.customframe',$user->id) }}',
                 dom: '<"d-flex justify-content-between align-items-center mb-3"<"d-flex align-items-center gap-2"Bl><f>>rtip',
                 lengthMenu: [[10, 25, 50, 100, 500, 1000], [10, 25, 50, 100, 500, 1000]],

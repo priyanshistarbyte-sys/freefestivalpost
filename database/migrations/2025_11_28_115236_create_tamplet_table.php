@@ -21,7 +21,7 @@ return new class extends Migration
                 $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('cascade');
                 $table->text('path')->nullable(); 
                 $table->integer('has_mask')->default(0); // 1 for mask, 0 no mask
-                $table->text('mask')->nullable(0); 
+                $table->text('mask')->nullable(); 
                 $table->string('font_type')->nullable();
                 $table->string('font_size')->nullable();
                 $table->string('font_color')->nullable();

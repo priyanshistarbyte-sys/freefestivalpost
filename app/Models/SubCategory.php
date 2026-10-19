@@ -26,6 +26,7 @@ class SubCategory extends Model
         'mask',
         'noti_quote',
         'plan_auto',
+        'is_show_on_home',
         'created_at',
         'updated_at'
     ];

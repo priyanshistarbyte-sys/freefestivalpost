@@ -23,6 +23,7 @@
                 <div class="row">
                     <div class="mb-3 col-md-3 form-group">
                         <label for="category_id" class="form-label">Category</label>
+                        <input type="text" id="category_search" class="form-control mb-2" placeholder="Search category by title...">
                         <select class="form-select" name="category_id" id="category_id" required>
                             @foreach ($categories ?? [] as $category)
                                 <option value="{{ $category->id }}">{{ $category->title }}</option>
@@ -108,13 +109,19 @@
                         </label>
                     </div>
                     <div class="mb-3 col-md-2 form-group">
+                        <label class="form-label" for="is_show_on_home">Show on Home</label></br>
+                        <label class="custom-switch">
+                            <input type="checkbox" name="is_show_on_home" value="1" checked>
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    <div class="mb-3 col-md-2 form-group">
                         <label class="form-label" for="is_trending">Trending</label></br>
                         <label class="custom-switch">
                             <input type="checkbox" name="is_trending" value="1" checked>
                             <span class="switch-slider"></span>
                         </label>
                     </div>
-                    
                     <div class="mb-3 col-md-3 form-group">
                         <label class="form-label" for="plan_auto">Plan / Auto</label>
                         <div class="radio-group">
@@ -212,6 +219,39 @@
                     });
             }
         });
+    </script>
+    <script>
+        (function() {
+            const select = document.getElementById('category_id');
+            const search = document.getElementById('category_search');
+            if (!select || !search) return;
+
+            // cache original options
+            const originalOptions = Array.from(select.options).map(o => ({ value: o.value, text: o.text }));
+
+            search.addEventListener('input', function() {
+                const q = this.value.trim().toLowerCase();
+                select.innerHTML = '';
+
+                const matches = originalOptions.filter(o => o.text.toLowerCase().includes(q));
+
+                if (matches.length === 0) {
+                    const opt = document.createElement('option');
+                    opt.value = '';
+                    opt.text = 'No categories found';
+                    opt.disabled = true;
+                    select.appendChild(opt);
+                    return;
+                }
+
+                matches.forEach(o => {
+                    const opt = document.createElement('option');
+                    opt.value = o.value;
+                    opt.text = o.text;
+                    select.appendChild(opt);
+                });
+            });
+        })();
     </script>
     <script>
         function previewImage(input, previewId) {

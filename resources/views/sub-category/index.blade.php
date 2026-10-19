@@ -33,6 +33,7 @@
                             <th>TagBG</th>
                             <th>Status</th>
                             <th>Is Trending</th>
+                            <th>Show On Home</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -133,6 +134,12 @@
                         searchable: false
                     },
                     {
+                        data: 'is_show_on_home',
+                        name: 'is_show_on_home',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
                         data: 'actions',
                         name: 'actions',
                         orderable: false,
@@ -215,6 +222,30 @@
                 success: function (response) {
                     if (response.success) {
                         toastr.success('Trending updated successfully');
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function () {
+                    toastr.error('Something went wrong!');
+                }
+            });
+        });
+        $(document).on('change', '.show-on-home-toggle', function () {
+            let is_show_on_home = $(this).is(':checked') ? 1 : 0;
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: "{{ route('subcategory.updateShowonHome') }}",
+                type: "POST",
+                data: {
+                    id: id,
+                    is_show_on_home: is_show_on_home,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success('Show on home updated successfully');
                     } else {
                         toastr.error(response.message);
                     }

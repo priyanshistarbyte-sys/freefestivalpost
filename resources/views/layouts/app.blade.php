@@ -22,6 +22,16 @@
         <link rel="stylesheet" href="{{ asset('assets/css/spacing-override.css') }}">
         <script src="{{ asset('assets/js/jquery.min.js') }}" defer></script>
         <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}" defer></script>
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-0RLRV7EJXN"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-0RLRV7EJXN');
+        </script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">

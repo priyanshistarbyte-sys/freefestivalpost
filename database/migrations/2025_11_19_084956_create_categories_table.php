@@ -17,7 +17,7 @@ return new class extends Migration
                 $table->string('title');
                 $table->integer('sort')->default(0);
                 $table->integer('sub')->default(0);
-                $table->string('icon');
+                $table->string('icon')->nullable();
                 $table->text('thumb');
                 $table->integer('status')->default('0');
                 $table->integer('is_show_on_home')->default('0');

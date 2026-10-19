@@ -14,6 +14,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="sub_category_id" class="form-label">Category</label>
+                        <input type="text" id="sub_category_search" class="form-control mb-2" placeholder="Search sub category by mtitle...">
                         <select class="form-select" name="sub_category_id" id="sub_category_id" required>
                             @foreach ($categories ?? [] as $category)
                                 <option value="{{ $category->id }}" {{ $tamplet->sub_category_id == $category->id ? 'selected' : '' }}>{{ $category->mtitle }}</option>
@@ -94,9 +95,9 @@
                         <input type="file" name="mask[]" id="mask" multiple accept="image/*" {{ !$tamplet->has_mask ? 'disabled' : '' }}>
 
                         {{-- ✅ SHOW MASK IMAGES --}}
-                        @if(!empty($tamplet->planImgName) && count($tamplet->planImgName) > 0)
+                        @if(!empty($tamplet->mask) && count($tamplet->mask) > 0)
                             <div class="mt-2 d-flex flex-wrap">
-                                @foreach($tamplet->planImgName as $maskPath)
+                                @foreach($tamplet->mask as $maskPath)
                                     <div style="position: relative;">
                                         <img src="{{ asset('storage/' . $maskPath) }}" 
                                             width="60" height="60" 
@@ -152,5 +153,42 @@ document.addEventListener('DOMContentLoaded', function() {
         eventDiv.style.display = 'block';
     }
 });
+</script>
+<script>
+    (function() {
+        const select = document.getElementById('sub_category_id');
+        const search = document.getElementById('sub_category_search');
+        if (!select || !search) return;
+
+        // preserve currently selected value
+        const selectedValue = "{{ $tamplet->sub_category_id }}";
+
+        // cache original options
+        const originalOptions = Array.from(select.options).map(o => ({ value: o.value, text: o.text }));
+
+        search.addEventListener('input', function() {
+            const q = this.value.trim().toLowerCase();
+            select.innerHTML = '';
+
+            const matches = originalOptions.filter(o => o.text.toLowerCase().includes(q));
+
+            if (matches.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.text = 'No categories found';
+                opt.disabled = true;
+                select.appendChild(opt);
+                return;
+            }
+
+            matches.forEach(o => {
+                const opt = document.createElement('option');
+                opt.value = o.value;
+                opt.text = o.text;
+                if (o.value == selectedValue) opt.selected = true;
+                select.appendChild(opt);
+            });
+        });
+    })();
 </script>
 @endpush

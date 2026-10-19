@@ -31,6 +31,7 @@ return new class extends Migration
                     $table->text('mask')->nullable();
                     $table->text('noti_quote')->nullable();
                     $table->tinyInteger('plan_auto')->nullable();
+                    $table->integer('is_show_on_home')->default('0');
                     $table->timestamps();
             });
         }

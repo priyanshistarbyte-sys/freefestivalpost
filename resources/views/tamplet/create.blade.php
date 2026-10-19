@@ -13,6 +13,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="sub_category_id" class="form-label">Category</label>
+                        <input type="text" id="sub_category_search" class="form-control mb-2" placeholder="Search sub category by mtitle...">
                         <select class="form-select" name="sub_category_id" id="sub_category_id" required>
                             @foreach ($categories ?? [] as $category)
                                 <option value="{{ $category->id }}">{{ $category->mtitle }}</option>
@@ -129,5 +130,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+</script>
+<script>
+    (function() {
+        const select = document.getElementById('sub_category_id');
+        const search = document.getElementById('sub_category_search');
+        if (!select || !search) return;
+
+        // cache original options
+        const originalOptions = Array.from(select.options).map(o => ({ value: o.value, text: o.text }));
+
+        search.addEventListener('input', function() {
+            const q = this.value.trim().toLowerCase();
+            select.innerHTML = '';
+
+            const matches = originalOptions.filter(o => o.text.toLowerCase().includes(q));
+
+            if (matches.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.text = 'No sub categories found';
+                opt.disabled = true;
+                select.appendChild(opt);
+                return;
+            }
+
+            matches.forEach(o => {
+                const opt = document.createElement('option');
+                opt.value = o.value;
+                opt.text = o.text;
+                select.appendChild(opt);
+            });
+        });
+    })();
 </script>
 @endpush
