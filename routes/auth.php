@@ -40,6 +40,10 @@ Route::prefix('admin')->group(function () {
             ->name('otp.verify');
 
         Route::post('verify-otp', [OtpController::class, 'verifyOtp']);
+
+        Route::post('resend-otp', [OtpController::class, 'resendOtp'])
+            ->middleware('throttle:5,10')
+            ->name('otp.resend');
     });
 
     Route::middleware('auth')->group(function () {

@@ -5,11 +5,11 @@
         </div>
         <h2 style="font-size: 1.75rem; font-weight: 700; color: #000e3d; margin-bottom: 0.5rem;">Verify OTP</h2>
         <p style="color: #666; font-size: 0.875rem;">Enter the 6-digit code sent to your mobile</p>
-        @if(session('success'))
+        {{-- @if(session('success'))
             <div style="background: #e8f5e9; border: 1px solid #4caf50; border-radius: 6px; padding: 0.75rem; font-size: 0.875rem; color: #2e7d32; font-weight: 600;">
                 {{ session('success') }}
             </div>
-        @endif
+        @endif --}}
     </div>
 
     <form method="POST" action="{{ route('otp.verify') }}">
@@ -29,8 +29,48 @@
             </button>
         </div>
 
+    </form>
+
+    <form method="POST" action="{{ route('otp.resend') }}" id="resend-otp-form">
+        @csrf
         <div style="text-align: center; margin-top: 1rem;">
-            <p style="color: #666; font-size: 0.875rem;">Didn't receive the code? <a href="#" style="color: #000e3d; text-decoration: none; font-weight: 500;">Resend</a></p>
+            <p style="color: #666; font-size: 0.875rem;">
+                Didn't receive the code or OTP expired?
+                <button type="submit" id="resend-otp-btn" style="background: none; border: none; padding: 0; color: #000e3d; font-weight: 500; cursor: pointer;">Resend</button>
+                <span id="resend-otp-timer" style="color: #999;"></span>
+            </p>
         </div>
     </form>
+
+    <script>
+        (function () {
+            var btn = document.getElementById('resend-otp-btn');
+            var timer = document.getElementById('resend-otp-timer');
+            var form = document.getElementById('resend-otp-form');
+            var left = {{ $resendIn ?? 0 }};
+
+            function tick() {
+                if (left > 0) {
+                    btn.disabled = true;
+                    btn.style.color = '#999';
+                    btn.style.cursor = 'not-allowed';
+                    timer.textContent = 'in ' + left + 's';
+                    left--;
+                    setTimeout(tick, 1000);
+                } else {
+                    btn.disabled = false;
+                    btn.style.color = '#000e3d';
+                    btn.style.cursor = 'pointer';
+                    timer.textContent = '';
+                }
+            }
+            tick();
+
+            // Prevent double click sending two OTPs
+            form.addEventListener('submit', function () {
+                btn.disabled = true;
+                btn.textContent = 'Sending...';
+            });
+        })();
+    </script>
 </x-guest-layout>

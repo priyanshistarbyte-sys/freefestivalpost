@@ -196,6 +196,8 @@
                                     Google</option>
                                 <option value="msg91" {{ $settings['sms_gateway_type'] == 'msg91' ? 'selected' : '' }}>
                                     Facebook</option>
+                                <option value="2factor" {{ $settings['sms_gateway_type'] == '2factor' ? 'selected' : '' }}>
+                                    2Factor</option>
                             </select>
                         </div>
                     </div>

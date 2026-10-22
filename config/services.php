@@ -42,6 +42,11 @@ return [
         'template_id' => env('MSG91_TEMPLATE_ID'),
     ],
 
+    'twofactor' => [
+        'api_key' => env('TWOFACTOR_API_KEY'),
+        'otp_template' => env('TWOFACTOR_OTP_TEMPLATE'),
+    ],
+
     'razorpay' => [
         'key' => env('RAZORPAY_KEY'),
         'secret' => env('RAZORPAY_SECRET'),
