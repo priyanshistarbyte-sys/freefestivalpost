@@ -7,7 +7,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('login') }}" id="login-form">
         @csrf
         
         <!-- Email Address -->
@@ -34,10 +34,13 @@
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
+        <!-- Mobile / OTP SMS errors -->
+        <x-input-error :messages="$errors->get('mobile')" class="mt-2" />
+
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
             <a href="{{ route('register') }}" style="color: #000e3d; text-decoration: none; font-size: 0.875rem; font-weight: 500;">Need an account?</a>
             
-            <button type="submit" class="btn btn-primary" style="background-color: #000e3d; border: none; padding: 0.75rem 2rem; border-radius: 6px; font-weight: 600; transition: all 0.3s ease;">
+            <button type="submit" id="login-btn" class="btn btn-primary" style="background-color: #000e3d; border: none; padding: 0.75rem 2rem; border-radius: 6px; font-weight: 600; transition: all 0.3s ease;">
                 <i class="fas fa-sign-in-alt" style="margin-right: 0.5rem;"></i>
                 {{ __('Sign In') }}
             </button>
@@ -57,5 +60,31 @@
                 toggleIcon.className = 'fas fa-eye';
             }
         }
+
+        // Disable Sign In button after click so user can't submit again and again
+        (function () {
+            var form = document.getElementById('login-form');
+            var btn = document.getElementById('login-btn');
+            var btnHtml = btn.innerHTML;
+
+            form.addEventListener('submit', function (e) {
+                if (btn.disabled) {
+                    e.preventDefault();
+                    return;
+                }
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+                btn.style.cursor = 'not-allowed';
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 0.5rem;"></i>Signing in...';
+            });
+
+            // Enable again if user comes back to this page with browser Back button
+            window.addEventListener('pageshow', function () {
+                btn.disabled = false;
+                btn.style.opacity = '';
+                btn.style.cursor = '';
+                btn.innerHTML = btnHtml;
+            });
+        })();
     </script>
 </x-guest-layout>
