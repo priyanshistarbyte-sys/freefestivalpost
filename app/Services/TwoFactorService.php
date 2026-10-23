@@ -35,7 +35,7 @@ class TwoFactorService
             $response = Http::timeout(15)->get($url);
 
             if ($response->successful() && $response->json('Status') === 'Success') {
-                Log::info("2Factor OTP sent successfully to: {$mobile}");
+                Log::info("2Factor OTP sent successfully to: {$mobile} | 2Factor ID: " . $response->json('Details'));
                 return true;
             }
 
