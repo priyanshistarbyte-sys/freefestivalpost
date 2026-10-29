@@ -19,6 +19,9 @@ class TampletController extends Controller
             $query = Tamplet::with(['category'])->orderBy('id', 'desc');
             return DataTables::of($query)
                 ->addIndexColumn()
+                ->addColumn('checkbox', function ($tamplet) {
+                    return '<input type="checkbox" class="form-check-input row-checkbox" value="' . $tamplet->id . '">';
+                })
                 ->addColumn('category', function ($tamplet) {
                         return $tamplet->category ? $tamplet->category->mtitle : '-';
                 })
@@ -81,7 +84,7 @@ class TampletController extends Controller
                             ';
                     return $buttons;
                 })
-                ->rawColumns(['category','image','mask','free_paid','actions'])
+                ->rawColumns(['checkbox','category','image','mask','free_paid','actions'])
                 ->make(true);
         }
         return view('tamplet.index');
@@ -222,7 +225,33 @@ class TampletController extends Controller
     public function destroy($id)
     {
         $tamplet = Tamplet::findOrFail($id);
+        $this->deleteTampletWithFiles($tamplet);
+        return redirect()->route('tamplet.index')->with('success', 'Tamplet deleted successfully..');
+    }
 
+    public function bulkDestroy(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'ids'   => ['required', 'array'],
+            'ids.*' => ['integer'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => 'Please select at least one tamplet.'], 422);
+        }
+
+        $tamplets = Tamplet::whereIn('id', $request->ids)->get();
+        foreach ($tamplets as $tamplet) {
+            $this->deleteTampletWithFiles($tamplet);
+        }
+
+        return response()->json([
+            'status'  => true,
+            'message' => $tamplets->count() . ' tamplet(s) deleted successfully.',
+        ]);
+    }
+
+    private function deleteTampletWithFiles(Tamplet $tamplet)
+    {
         // Delete image file
         if ($tamplet->path) {
             Storage::disk('public')->delete($tamplet->path);
@@ -236,6 +265,5 @@ class TampletController extends Controller
         }
 
         $tamplet->delete();
-        return redirect()->route('tamplet.index')->with('success', 'Tamplet deleted successfully..');
     }
 }

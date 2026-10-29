@@ -155,6 +155,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::post('/videogif/status/update', [VideogifController::class, 'updateStatus'])->name('videogif.updateStatus');
 
     //tamplet
+    Route::post('/tamplet/bulk-delete', [TampletController::class, 'bulkDestroy'])->name('tamplet.bulkDestroy');
     Route::resource('tamplet', TampletController::class);
 
     //photo category
